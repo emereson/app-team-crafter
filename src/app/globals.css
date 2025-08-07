@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@plugin '../../hero.ts';
+/* Note: You may need to change the path to fit your project structure */
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-VariableFont.ttf") format("opentype");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Reboto";
+  src: url("/fonts/Reboto.ttf") format("opentype");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+body {
+  width: 100vw;
+  overflow-x: hidden;
+  font-family: "Montserrat";
+  height: 100%;
+}
+
+.background-login {
+  background-color: #ffffff;
+
+  background-image: radial-gradient(
+      57.6% 88.49% at 6.88% 121.95%,
+      #ffb4df 0%,
+      rgba(255, 180, 223, 0) 100%
+    ),
+    radial-gradient(
+      86.29% 131.74% at -12.05% -25.22%,
+      #c3f3f3 0%,
+      rgba(195, 243, 243, 0) 100%
+    ),
+    radial-gradient(
+      68.93% 110.29% at 77.15% 24.39%,
+      #ffe1f2 0%,
+      rgba(255, 225, 242, 0.866549) 0%,
+      rgba(255, 225, 242, 0.746159) 0%,
+      rgba(255, 225, 242, 0) 100%
+    );
+
+  background-repeat: no-repeat;
+}
+
+.text-gray {
+  color: #8a8a8a;
+}
+
+.color-pink {
+  color: #fc68b9;
+}
+
+.shadow-rigth-yellow {
+  box-shadow: 5px 2px 3px 2px #ffee9700;
+  transition: 0.4s ease;
+}
+
+.shadow-rigth-yellow:hover {
+  box-shadow: 5px 2px 3px 2px #ffee97;
+}
+
+.swiper-pagination {
+  bottom: 0px !important;
+}
+
+.swiper-pagination-bullet {
+  width: 18px !important;
+  height: 18px !important;
+  background-color: #ffb4df !important; /* Tailwind gray-300 */
+  opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #fc68b9 !important; /* Tailwind gray-800 */
+}
