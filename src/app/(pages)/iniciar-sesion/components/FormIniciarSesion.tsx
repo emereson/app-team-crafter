@@ -91,10 +91,7 @@ export default function FormIniciarSesion() {
       </form>
       <div className="text-sm flex gap-2">
         <p className="text-gray ">¿No tienes una cuenta?</p>
-        <Link
-          href="/recuperar-contraseña"
-          className="color-pink  font-semibold"
-        >
+        <Link href="/cambiar-password" className="color-pink  font-semibold">
           Suscríbete
         </Link>
       </div>
