@@ -1,0 +1,146 @@
+import { Button } from "@heroui/react";
+import Image from "next/image";
+import { useState } from "react";
+import { IoIosArrowUp } from "react-icons/io";
+import { IoCloseOutline } from "react-icons/io5";
+
+interface Props {
+  setOpenFilter: (open: boolean) => void;
+  openFilter?: boolean;
+}
+export default function FiltrarRecursos({ setOpenFilter, openFilter }: Props) {
+  const [openCategorias, setOpenCategorias] = useState(true);
+  const [categoria, setCategoria] = useState("todos");
+
+  const [openRecursos, setOpenRecursos] = useState(true);
+  const [recurso, setRecurso] = useState("todos");
+
+  const categorias = [
+    { id: "Todos", label: "Todos" },
+    { id: "Cake Toppers", label: "Cake Toppers" },
+    { id: "Cajitas Temáticas", label: "Cajitas Temáticas" },
+    { id: "Cartonaje", label: "Cartonaje" },
+    { id: "Tarjetas Invitación", label: "Tarjetas Invitación" },
+    { id: "Proyectos Varios", label: "Proyectos Varios" },
+  ];
+
+  const recursos = [
+    { id: "Todos", label: "Todos" },
+    { id: "Exclusivos", label: "Exclusivos" },
+    { id: "Adicionales", label: "Adicionales" },
+  ];
+  return (
+    <section
+      className={`fixed top-0 right-0 w-full max-w-[383px] h-screen py-10 px-5 bg-white z-[60] flex flex-col items-center gap-6
+    ${
+      openFilter ? "translate-x-0" : "translate-x-full"
+    } transition-transform duration-300 ease-in-out
+    `}
+    >
+      <button
+        className="absolute top-5 right-5 cursor-pointer"
+        onClick={() => setOpenFilter(false)}
+      >
+        <IoCloseOutline className="text-[#FC68B9] text-4xl" />
+      </button>
+
+      {/* Título */}
+      <div className="flex items-center gap-3 text-[#FC68B9]">
+        <Image
+          src="/icons/grid-pink.svg"
+          alt="FILTROS"
+          width={40}
+          height={40}
+        />
+        <h2 className="text-lg font-semibold">FILTROS</h2>
+      </div>
+
+      <article className="w-full">
+        <Button
+          className="w-full bg-white text-[#FC68B9] text-lg font-semibold flex justify-between border border-[#FC68B9]"
+          endContent={<IoIosArrowUp className="text-xl" />}
+          radius="full"
+          onPress={() => setOpenRecursos(!openRecursos)}
+        >
+          Tutoriales y Tips
+        </Button>
+
+        {/* Lista de categorías */}
+        <div className="mt-4 space-y-2 pl-2">
+          {openRecursos &&
+            recursos.map((item) => (
+              <label
+                key={item.id}
+                htmlFor={item.id}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  id={item.id}
+                  name="itemegoria"
+                  value={item.id}
+                  checked={recurso === item.id}
+                  onChange={() => setRecurso(item.id)}
+                  className="appearance-none w-5 h-5 border-2 border-pink-500 rounded-full grid place-content-center
+                  before:content-[''] before:w-2.5 before:h-2.5 before:rounded-full before:scale-0 
+                  before:transition-transform before:duration-200 before:bg-pink-500
+                  checked:before:scale-100"
+                />
+                <span className="text-medium font-semibold text-gray-500">
+                  {item.label}
+                </span>
+              </label>
+            ))}
+        </div>
+      </article>
+
+      <article className="w-full">
+        <Button
+          className="w-full bg-white text-[#FC68B9] text-lg font-semibold flex justify-between border border-[#FC68B9]"
+          endContent={<IoIosArrowUp className="text-xl" />}
+          radius="full"
+          onPress={() => setOpenCategorias(!openCategorias)}
+        >
+          Categorías
+        </Button>
+
+        {/* Lista de categorías */}
+
+        <div className="mt-4 space-y-2 pl-2">
+          {openCategorias &&
+            categorias.map((cat) => (
+              <label
+                key={cat.id}
+                htmlFor={cat.id}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  id={cat.id}
+                  name="categoria"
+                  value={cat.id}
+                  checked={categoria === cat.id}
+                  onChange={() => setCategoria(cat.id)}
+                  className="appearance-none w-5 h-5 border-2 border-pink-500 rounded-full grid place-content-center
+                  before:content-[''] before:w-2.5 before:h-2.5 before:rounded-full before:scale-0 
+                  before:transition-transform before:duration-200 before:bg-pink-500
+                  checked:before:scale-100"
+                />
+                <span className="text-medium font-semibold text-gray-500">
+                  {cat.label}
+                </span>
+              </label>
+            ))}
+        </div>
+      </article>
+
+      <div className="flex-1"></div>
+      <Button
+        className="w-full py-6 bg-[#FC68B9] text-white text-lg font-bold"
+        radius="full"
+      >
+        Aplicar
+      </Button>
+    </section>
+  );
+}

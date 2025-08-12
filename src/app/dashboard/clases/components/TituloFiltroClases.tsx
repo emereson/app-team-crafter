@@ -1,8 +1,11 @@
-"use client";
 import { BreadcrumbItem, Breadcrumbs, Button } from "@heroui/react";
 import Image from "next/image";
 
-export default function TitleFilterClases() {
+interface Props {
+  setOpenFilter: (open: boolean) => void;
+}
+
+export default function TituloFiltroClases({ setOpenFilter }: Props) {
   return (
     <section>
       <Breadcrumbs
@@ -21,7 +24,7 @@ export default function TitleFilterClases() {
         <p className="text-[#8A8A8A]">
           Revisa todas las clases grabadas, tanto recientes como anteriores.
         </p>
-        <div>
+        <div className="flex gap-2 ">
           <Button
             className="bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold mt-4 hover:bg-[#fc68b939] m-0"
             radius="full"
@@ -36,6 +39,22 @@ export default function TitleFilterClases() {
             }
           >
             Más reciente
+          </Button>
+          <Button
+            className="bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold mt-4 hover:bg-[#fc68b939] m-0"
+            radius="full"
+            startContent={
+              <Image
+                className="text-xs"
+                src={"/icons/grid.svg"}
+                alt={`Filtros `}
+                width={22}
+                height={22}
+              />
+            }
+            onPress={() => setOpenFilter(true)}
+          >
+            Filtros
           </Button>
         </div>
       </article>

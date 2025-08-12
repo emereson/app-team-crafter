@@ -3,6 +3,7 @@
 import CardClases from "../../components/CardClases";
 import { cn, Pagination, PaginationItemType } from "@heroui/react";
 import type { PaginationItemRenderProps } from "@heroui/react";
+import Image from "next/image";
 
 export default function ListaClases() {
   const productos = [
@@ -147,19 +148,28 @@ export default function ListaClases() {
         ref={ref}
         className={cn(
           className,
-          isActive &&
-            "text-white bg-linear-to-br from-indigo-500 to-pink-500 font-bold"
+          "relative  min-w-[40px] min-h-[40px] text-[#68E1E0] font-black text-xl flex items-center justify-center  cursor-pointer ",
+          isActive && "text-white "
         )}
         onClick={() => setPage(value)}
       >
-        {value}
+        {isActive && (
+          <Image
+            className="absolute  min-w-[38px] min-h-[38px]"
+            src="/icons/starPage.svg"
+            alt=" select page"
+            width={20}
+            height={20}
+          />
+        )}
+        <p className="z-10">{value}</p>
       </button>
     );
   };
 
   return (
-    <section className="w-full flex flex-col gap-8 pt-10">
-      <div className="flex flex-wrap gap-[20px] ">
+    <section className="w-full flex flex-col items-center gap-8 pt-10">
+      <div className="w-full flex flex-wrap gap-[20px] ">
         {productos.map((producto) => (
           <CardClases
             key={producto.id}
@@ -171,11 +181,11 @@ export default function ListaClases() {
       <Pagination
         disableCursorAnimation
         showControls
-        className="gap-2"
+        className="gap-4 mt-8"
         initialPage={1}
-        radius="full"
         renderItem={renderItem}
-        total={10}
+        total={8}
+        boundaries={3}
         variant="light"
       />
     </section>

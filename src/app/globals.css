@@ -12,7 +12,14 @@
 
 @font-face {
   font-family: "Reboto";
-  src: url("/fonts/Reboto.ttf") format("opentype");
+  src: url("/fonts/Roboto.ttf") format("opentype");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "LearningCurve";
+  src: url("/fonts/LearningCurve.ttf") format("opentype");
   font-weight: 100 900;
   font-style: normal;
 }

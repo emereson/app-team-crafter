@@ -7,6 +7,7 @@ import {
   DropdownTrigger,
 } from "@heroui/react";
 import Image from "next/image";
+import Link from "next/link";
 import { RiArrowDownSLine } from "react-icons/ri";
 
 export default function Header() {
@@ -37,16 +38,18 @@ export default function Header() {
         </button>
       </form>
       <div className="flex items-center gap-2">
-        <Image
-          className="h-[40px] w-auto"
-          src="/icons/notification.svg"
-          alt="notificaciones"
-          width={100}
-          height={100}
-        />
+        <Link href={"/dashboard/notificaciones"}>
+          <Image
+            className="h-[40px] w-auto"
+            src="/icons/notification.svg"
+            alt="notificaciones"
+            width={100}
+            height={100}
+          />
+        </Link>
         <Dropdown
           classNames={{
-            base: "before:bg-[#FFE1F2]", // change arrow background
+            base: "before:bg-[#FFE1F2]",
             content:
               " bg-[#FFE1F2] from-white to-default-100 dark:from-default-50 dark:to-black",
           }}
@@ -68,6 +71,7 @@ export default function Header() {
             <DropdownItem
               className=" px-6 py-1.5 data-[hover=true]:bg-[#ffcce9]"
               key="mi-cuenta"
+              href="/dashboard/mi-cuenta"
               startContent={
                 <Image
                   className="h-[40px] w-[40px]"

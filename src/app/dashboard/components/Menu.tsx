@@ -12,7 +12,7 @@ const MENU_CONFIG = {
     { href: "/dashboard/inicio", label: "Inicio", icon: "home" },
     { href: "/dashboard/clases", label: "Clases", icon: "clases" },
     { href: "/dashboard/recursos", label: "Recursos", icon: "recursos" },
-    { href: "/dashboard/descuento", label: "Descuentos", icon: "descuento" },
+    { href: "/dashboard/descuentos", label: "Descuentos", icon: "descuento" },
     { href: "/dashboard/foro", label: "Foro", icon: "foro" },
   ],
   colors: {
