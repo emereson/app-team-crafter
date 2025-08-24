@@ -5,7 +5,7 @@ import RecursosMesInicio from "./components/RecursosMesInicio";
 
 export default function Inicio() {
   return (
-    <main className="w-full p-10">
+    <main className="w-full p-4 sm:p-6 md:p-8 lg:p-10">
       <BannerInicio />
       <ClasesRecientesInicio />
       <RecursosMesInicio />

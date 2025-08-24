@@ -68,27 +68,27 @@ const ComentarioAcciones: React.FC<ComentarioAccionesProps> = ({
   onResponder,
   isLiked,
 }) => (
-  <div className="flex gap-4 mt-2">
+  <div className="flex gap-2 sm:gap-4 mt-2">
     <Button
       variant="light"
       size="sm"
-      className="p-0 h-auto min-w-0 gap-2 text-[#FC68B9] hover:bg-[#FC68B9]/10"
+      className="p-0 h-auto min-w-0 gap-1 sm:gap-2 text-[#FC68B9] hover:bg-[#FC68B9]/10"
       onPress={onLike}
       startContent={
         isLiked ? (
-          <PiHeartFill className="text-xl text-[#FC68B9]" />
+          <PiHeartFill className="text-lg sm:text-xl text-[#FC68B9]" />
         ) : (
-          <PiHeart className="text-xl text-[#FC68B9]" />
+          <PiHeart className="text-lg sm:text-xl text-[#FC68B9]" />
         )
       }
     >
-      <span className="text-sm font-medium">{likes}</span>
+      <span className="text-xs sm:text-sm font-medium">{likes}</span>
     </Button>
 
     <Button
       variant="light"
       size="sm"
-      className="p-0 h-auto min-w-0 gap-2 text-[#FC68B9] hover:bg-[#FC68B9]/10"
+      className="p-0 h-auto min-w-0 gap-1 sm:gap-2 text-[#FC68B9] hover:bg-[#FC68B9]/10"
       onPress={onResponder}
       startContent={
         <Image
@@ -100,7 +100,7 @@ const ComentarioAcciones: React.FC<ComentarioAccionesProps> = ({
         />
       }
     >
-      <span className="text-sm font-medium">Responder</span>
+      <span className="text-xs sm:text-sm font-medium">Responder</span>
     </Button>
   </div>
 );
@@ -123,15 +123,15 @@ const RespuestaItem: React.FC<RespuestaItemProps> = ({
   }, [respuesta.id, onLikeRespuesta]);
 
   return (
-    <article className="flex gap-3">
+    <article className="flex gap-2 sm:gap-3">
       <Avatar
-        className="w-8 h-8 flex-shrink-0"
+        className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0"
         src={respuesta.usuario.avatar}
         alt={`Avatar de ${respuesta.usuario.nombre}`}
       />
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <p className="text-[#8A8A8A] font-semibold text-sm truncate">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-1">
+          <p className="text-[#8A8A8A] font-semibold text-xs sm:text-sm truncate">
             {respuesta.usuario.nombre}
           </p>
           <time className="text-[#8A8A8A] text-xs font-light flex-shrink-0">
@@ -148,7 +148,7 @@ const RespuestaItem: React.FC<RespuestaItemProps> = ({
               @{respuesta.usuario_repuesta.usuario.nombre}
             </Link>
           )}
-          <p className="text-sm text-[#8A8A8A] leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#8A8A8A] leading-relaxed">
             {respuesta.texto}
           </p>
         </div>
@@ -156,13 +156,13 @@ const RespuestaItem: React.FC<RespuestaItemProps> = ({
         <Button
           variant="light"
           size="sm"
-          className="p-0 h-auto min-w-0 gap-1.5 text-[#FC68B9] hover:bg-[#FC68B9]/10"
+          className="p-0 h-auto min-w-0 gap-1 sm:gap-1.5 text-[#FC68B9] hover:bg-[#FC68B9]/10"
           onPress={handleLike}
           startContent={
             isLiked ? (
-              <PiHeartFill className="text-lg text-[#FC68B9]" />
+              <PiHeartFill className="text-sm sm:text-lg text-[#FC68B9]" />
             ) : (
-              <PiHeart className="text-lg text-[#FC68B9]" />
+              <PiHeart className="text-sm sm:text-lg text-[#FC68B9]" />
             )
           }
         >
@@ -369,8 +369,8 @@ const ComentariosClase: React.FC<ComentariosClaseProps> = ({
   // Early return con tipado
   if (!comentarios.length) {
     return (
-      <section className={`w-full mt-12 ${className}`}>
-        <p className="text-center text-[#8A8A8A] py-8">
+      <section className={`w-full mt-8 sm:mt-12 ${className}`}>
+        <p className="text-center text-[#8A8A8A] py-6 sm:py-8 text-sm sm:text-base">
           No hay comentarios aún. ¡Sé el primero en comentar!
         </p>
       </section>
@@ -379,11 +379,11 @@ const ComentariosClase: React.FC<ComentariosClaseProps> = ({
 
   return (
     <section
-      className={`w-full mt-12 ${className}`}
+      className={`w-full mt-8 sm:mt-12 ${className}`}
       role="region"
       aria-label="Sección de comentarios"
     >
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         {comentarios.map((comentario: Comentario) => (
           <ComentarioItem
             key={comentario.id}

@@ -59,10 +59,11 @@ export default function Footer() {
       text: "Configuración de Cookies",
     },
   ];
+  
   return (
-    <footer className=" bg-[#FC68B9]">
-      <section className="w-full p-10 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+    <footer className="w-full bg-[#FC68B9] overflow-hidden flex-shrink-0">
+      <section className="w-full p-4 sm:p-6 md:p-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-2 flex-wrap justify-center">
           {links.map((link) => (
             <Link
               key={link.id}
@@ -75,7 +76,7 @@ export default function Footer() {
             </Link>
           ))}
         </div>
-        <article className="flex items-center gap-4">
+        <article className="flex items-center gap-4 flex-shrink-0">
           <Image
             src="/icons/libroReclamaciones.svg"
             alt="Libro de reclamaciones"
@@ -83,7 +84,7 @@ export default function Footer() {
             height={28}
           />
           <Link
-            className="text-white font-bold underline"
+            className="text-white font-bold underline text-sm sm:text-base text-center"
             href="/libro-reclamaciones"
             target="_blank"
             rel="noopener noreferrer"
@@ -92,18 +93,18 @@ export default function Footer() {
           </Link>
         </article>
       </section>
-      <Divider className="bg-white  " />
-      <section className="w-full p-10 flex flex-col items-center justify-center gap-3 ">
-        <h2 className="text-white  font-[Reboto]">
+      <Divider className="bg-white" />
+      <section className="w-full p-4 sm:p-6 md:p-10 flex flex-col items-center justify-center gap-3 text-center">
+        <h2 className="text-white font-[Reboto] text-sm sm:text-base leading-tight">
           © 2024 - GLORIA LOBATÓN DISEÑO & SCRAP - MODO CRAFTER / TODOS LOS
           DERECHOS RESERVADOS.
         </h2>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 sm:gap-6 flex-wrap justify-center">
           {links2.map((link) => (
             <Link
               key={link.id}
               href={link.href}
-              className="text-white  text-sm font-medium underline"
+              className="text-white text-xs sm:text-sm font-medium underline"
               target="_blank"
               rel="noopener noreferrer"
             >

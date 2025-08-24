@@ -24,11 +24,30 @@
   font-style: normal;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  font-family: "Montserrat";
+  height: 100%;
+}
+
 body {
   width: 100vw;
   overflow-x: hidden;
   font-family: "Montserrat";
   height: 100%;
+}
+
+/* Prevenir scroll horizontal en todos los contenedores */
+#__next, .dashboard-layout {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .background-login {

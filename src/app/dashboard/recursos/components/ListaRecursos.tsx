@@ -252,8 +252,9 @@ export default function ListaRecursos() {
   };
 
   return (
-    <section className="w-full flex flex-col items-center gap-8 pt-10">
-      <div className="w-full flex flex-wrap gap-[20px] ">
+    <section className="w-full flex flex-col items-center gap-6 sm:gap-8 pt-6 sm:pt-8 md:pt-10">
+          <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-5">        
+
         {recursos.map((recurso) => (
           <CardRecursos key={recurso.id} recurso={recurso} />
         ))}
@@ -261,12 +262,13 @@ export default function ListaRecursos() {
       <Pagination
         disableCursorAnimation
         showControls
-        className="gap-4 mt-8"
+        className="gap-2 sm:gap-4 mt-6 sm:mt-8"
         initialPage={1}
         renderItem={renderItem}
         total={8}
-        boundaries={3}
+        boundaries={2}
         variant="light"
+        size="sm"
       />
     </section>
   );

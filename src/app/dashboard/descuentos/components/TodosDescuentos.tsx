@@ -34,19 +34,21 @@ const descuentos = [
     codigo: "CLASE10",
   },
 ];
+
 export default function TodosDescuentos() {
   return (
-    <section className="w-full flex flex-col gap-7 mt-16">
+    <section className="w-full flex flex-col gap-5 sm:gap-7 mt-8 sm:mt-12 md:mt-16">
       <Button
-        className="w-fit bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold mt-4 hover:bg-[#fc68b939] m-0"
+        className="w-fit bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold hover:bg-[#fc68b939] text-sm sm:text-base"
         radius="full"
+        size="sm"
         startContent={
           <Image
-            className="text-xs"
             src={"/icons/arrows.svg"}
             alt={`Más reciente `}
-            width={20}
-            height={20}
+            width={18}
+            height={18}
+            className="w-4 h-4 sm:w-5 sm:h-5"
           />
         }
       >

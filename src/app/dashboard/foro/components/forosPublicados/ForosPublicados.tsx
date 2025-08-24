@@ -96,23 +96,23 @@ export default function ForosPublicados() {
   const [selectForo, setSelectForo] = useState<Foro | null>(null);
   const colores = ["bg-[#FFEE97]", "bg-[#C3F3F3]", "bg-[#FFE1F2]"];
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-3 sm:gap-4">
       {forosData.map((foro, index) => {
         const bgColor = colores[index % colores.length];
         return (
           <article
             key={foro.id}
-            className={`w-full p-5 ${bgColor} flex flex-col gap-2 rounded-2xl`}
+            className={`w-full p-3 sm:p-5 ${bgColor} flex flex-col gap-2 rounded-2xl`}
           >
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
               <div className="flex items-center gap-2">
                 <Avatar
-                  className="w-8 h-8 flex-shrink-0"
+                  className="w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0"
                   src={foro.usuario.avatar}
                   alt={`Avatar de ${foro.usuario.nombre}`}
                 />
                 <div className="flex flex-col">
-                  <h3 className="text-[#8A8A8A] font-bold text-sm truncate">
+                  <h3 className="text-[#8A8A8A] font-bold text-xs sm:text-sm truncate">
                     {foro.usuario.nombre}
                   </h3>
                   <time className="text-[#8A8A8A] text-xs font-light flex-shrink-0">
@@ -120,12 +120,12 @@ export default function ForosPublicados() {
                   </time>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-4">
                 <Button
                   variant="light"
                   size="sm"
-                  className="p-0 h-auto min-w-0 gap-1.5 text-[#FC68B9] hover:bg-[#FC68B9]/10"
-                  startContent={<PiHeart className="text-xl text-[#FC68B9]" />}
+                  className="p-0 h-auto min-w-0 gap-1 sm:gap-1.5 text-[#FC68B9] hover:bg-[#FC68B9]/10"
+                  startContent={<PiHeart className="text-lg sm:text-xl text-[#FC68B9]" />}
                 >
                   <span className="text-xs font-semibold">
                     {foro.likes.toLocaleString("es-ES")}
@@ -134,18 +134,18 @@ export default function ForosPublicados() {
                 <Button
                   variant="light"
                   size="sm"
-                  className="p-0 h-auto min-w-0 gap-1.5 text-[#FC68B9] hover:bg-[#FC68B9]/10"
+                  className="p-0 h-auto min-w-0 gap-1 sm:gap-1.5 text-[#FC68B9] hover:bg-[#FC68B9]/10"
                   startContent={
                     <Image
                       src="/icons/message.svg"
                       alt=""
-                      width={20}
-                      height={20}
-                      className="opacity-80"
+                      width={18}
+                      height={18}
+                      className="opacity-80 w-4 h-4 sm:w-5 sm:h-5"
                     />
                   }
                 >
-                  <span className="text-sm font-medium">
+                  <span className="text-xs sm:text-sm font-medium">
                     {foro.respuestas.length}
                   </span>
                 </Button>
@@ -162,13 +162,13 @@ export default function ForosPublicados() {
               />
             )}
 
-            <h3 className="text-xl text-[#8A8A8A] font-bold">{foro.titulo}</h3>
-            <p className="text-medium text-[#8A8A8A] font-medium">
+            <h3 className="text-lg sm:text-xl text-[#8A8A8A] font-bold leading-tight">{foro.titulo}</h3>
+            <p className="text-sm sm:text-medium text-[#8A8A8A] font-medium leading-relaxed">
               {foro.texto}
             </p>
             <Divider />
             <button
-              className="w-min text-medium text-[#FC68B9] font-semibold underline cursor-pointer"
+              className="w-min text-sm sm:text-medium text-[#FC68B9] font-semibold underline cursor-pointer"
               onClick={() => {
                 setSelectForo(foro);
                 onOpen();
