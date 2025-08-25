@@ -1,21 +1,17 @@
+import { Clase } from "@/interfaces/clase.interface";
+import { formatDate } from "@/utils/formatDate";
 import Image from "next/image";
 import Link from "next/link";
 
 interface Props {
-  producto: {
-    id: number;
-    titulo: string;
-    fecha_inicio: string;
-    fecha_final: string;
-    premium?: boolean;
-  };
+  clase: Clase;
   width?: string;
   icon_favoritos?: false;
   hegiht_portada?: string;
 }
 
 export default function CardClases({
-  producto,
+  clase,
   width,
   icon_favoritos,
   hegiht_portada,
@@ -26,51 +22,50 @@ export default function CardClases({
         width ? width : "w-[calc(50%_-_15px)]"
       } flex flex-col gap-3"`}
     >
-      <div className="w-full relative rounded-2xl overflow-hidden">
-        <Image
-          className={`w-full ${
-            hegiht_portada ? hegiht_portada : "h-[300px]"
-          } object-cover`}
-          src={"/inicio/producto1.png"}
-          alt={producto.titulo}
-          width={500}
-          height={500}
-        />
-        <Link
-          href={`/dashboard/clases/${producto.id}`}
-          className="absolute right-4 bottom-4"
-        >
+      <Link href={`/dashboard/clases/${clase?.id}`}>
+        <div className="w-full relative rounded-2xl overflow-hidden">
           <Image
-            className=" w-14"
+            className={`w-full ${
+              hegiht_portada ? hegiht_portada : "h-[300px]"
+            } object-cover`}
+            src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${clase.image_clase}`}
+            alt={clase.titulo_clase}
+            width={500}
+            height={500}
+          />
+          <Image
+            className="absolute right-4 bottom-4  w-14"
             src={"/icons/playVideo.svg"}
-            alt={`reproducir ${producto.titulo}`}
+            alt={`reproducir ${clase.descripcion_clase}`}
             width={100}
             height={100}
           />
-        </Link>
-      </div>
+        </div>
+      </Link>
       <div className="flex justify-between mt-2">
         <section className="flex gap-4">
           <div className="flex items-center gap-1.5">
             <Image
               className="w-6"
               src={"/icons/clock.svg"}
-              alt={`reproducir ${producto.titulo}`}
+              alt={`reproducir ${clase.descripcion_clase}`}
               width={100}
               height={100}
             />
-            <p className="text-medium text-[#FFB4DF] font-semibold">1:19:51</p>
+            <p className="text-medium text-[#FFB4DF] font-semibold">
+              {clase.duracion_video}
+            </p>
           </div>
           <div className="flex items-center gap-1.5">
             <Image
               className="w-5"
               src={"/icons/calendario.svg"}
-              alt={`reproducir ${producto.titulo}`}
+              alt={`reproducir ${clase.descripcion_clase}`}
               width={100}
               height={100}
             />
             <p className="text-medium text-[#FFB4DF] font-semibold">
-              10 Oct 2024
+              {formatDate(clase.createdAt)}
             </p>
           </div>
         </section>
@@ -79,7 +74,7 @@ export default function CardClases({
             <Image
               className="w-6"
               src={"/icons/favoritos-no.svg"}
-              alt={`reproducir ${producto.titulo}`}
+              alt={`reproducir ${clase.descripcion_clase}`}
               width={100}
               height={100}
             />
@@ -87,7 +82,7 @@ export default function CardClases({
         )}
       </div>
       <h3 className="mt-2 text-medium   font-semibold text-[#8A8A8A] uppercase">
-        {producto.titulo}
+        {clase.descripcion_clase}
       </h3>
     </article>
   );

@@ -1,11 +1,13 @@
 "use client";
+import { Clase } from "@/interfaces/clase.interface";
 import { useState } from "react";
 
-export default function DescripcionClase() {
-  const [expanded, setExpanded] = useState(false);
+interface Props {
+  clase: Clase;
+}
 
-  const texto =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas iaculis magna risus, ut egestas tortor convallis vel. Sed sit amet ullamcorper nisl, ut feugiat justo. Nunc gravida est et consequat pulvinar. Suspendisse nec dictum lorem. Vivamus sagittis turpis a diam luctus, at lacinia nunc bibendum. Nulla facilisi. Donec at metus eget justo suscipit suscipit. Praesent ut sem sed velit aliquet blandit.";
+export default function DescripcionClase({ clase }: Props) {
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <section className="w-full flex flex-col gap-2">
@@ -16,7 +18,7 @@ export default function DescripcionClase() {
           expanded ? "line-clamp-none" : "line-clamp-4"
         }`}
       >
-        {texto}
+        {clase.descripcion_clase}
       </p>
 
       <button

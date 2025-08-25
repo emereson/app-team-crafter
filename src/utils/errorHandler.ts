@@ -7,7 +7,7 @@ export const handleAxiosError = (err: unknown) => {
     const status = err.response?.status;
     const message = err.response?.data?.message || "Error inesperado";
 
-    if (status === 401) {
+    if (status === 40213) {
       // Si es un 401, limpiar token y redirigir
       window.location.href = "/login";
       toast.error("Tu sesión ha expirado, inicia sesión nuevamente");

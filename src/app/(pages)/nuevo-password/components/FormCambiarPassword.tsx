@@ -1,11 +1,14 @@
 "use client";
 
+import { nuevoPassword } from "@/services/auth/auth.service";
 import { inputClassNames } from "@/utils/classNames";
 import { Button, Input, Link } from "@heroui/react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { toast } from "sonner";
 
 type PasswordFormInputs = {
   nueva_password: string;
@@ -13,6 +16,9 @@ type PasswordFormInputs = {
 };
 
 export default function FormCambiarPassword() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
   const {
     register,
     handleSubmit,
@@ -53,28 +59,18 @@ export default function FormCambiarPassword() {
   };
 
   const onSubmit = async (data: PasswordFormInputs) => {
-    try {
-      // Aquí iría la lógica para cambiar la contraseña
-      console.log("Datos a enviar:", data);
-
-      // Ejemplo de llamada a API
-      // const response = await fetch('/api/change-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ password: data.nueva_password })
-      // });
-
-      // if (!response.ok) {
-      //   throw new Error('Error al cambiar la contraseña');
-      // }
-      setPasswordCambiado(true);
-      alert("Contraseña cambiada exitosamente");
-    } catch (error) {
-      console.error("Error:", error);
-      setError("root", {
-        type: "manual",
-        message: "Error al cambiar la contraseña. Intenta nuevamente.",
-      });
+    if (token) {
+      try {
+        nuevoPassword(data.nueva_password, token);
+        setPasswordCambiado(true);
+        toast.success("Contraseña cambiada exitosamente");
+      } catch (error) {
+        console.error("Error:", error);
+        setError("root", {
+          type: "manual",
+          message: "Error al cambiar la contraseña. Intenta nuevamente.",
+        });
+      }
     }
   };
 

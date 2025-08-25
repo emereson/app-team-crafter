@@ -1,29 +1,42 @@
 "use client";
 
+import { postLogin } from "@/services/auth/auth.service";
+import { Login } from "@/interfaces/auth.type";
 import { inputClassNames } from "@/utils/classNames";
-import { Button, Input } from "@heroui/react";
+import { handleAxiosError } from "@/utils/errorHandler";
+import { Button, Input, Spinner, useDisclosure } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import ModalOlvideContraseña from "./ModalOlvideContraseña";
 
-type LoginFormInputs = {
-  correo: string;
-  password: string;
-};
 export default function FormIniciarSesion() {
-  const { register, handleSubmit } = useForm<LoginFormInputs>();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const router = useRouter();
+
+  const { register, handleSubmit } = useForm<Login>();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const onSubmit = async (data: LoginFormInputs) => {
-    console.log(data);
-  };
-
+  const onSubmit = useCallback(async (data: Login) => {
+    setLoading(true);
+    try {
+      await postLogin(data);
+      router.push("/");
+      window.location.reload();
+    } catch (err: unknown) {
+      handleAxiosError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
   return (
     <section className="w-full min-w-[300px]  h-full bg-white p-6  rounded-2xl  flex flex-col justify-center items-center  gap-10 ">
       <Image
@@ -75,26 +88,32 @@ export default function FormIniciarSesion() {
             radius="full"
           />
         </div>
-        <Link
-          href="/recuperar-contraseña"
-          className="color-pink text-base font-semibold"
+        <button
+          className="color-pink text-base font-semibold cursor-pointer"
+          onClick={onOpen}
+          type="button"
         >
           Olvidaste tu contraseña?
-        </Link>
+        </button>
+
         <Button
           className="bg-[#E2E6F5] text-white text-xl font-semibold px-8 py-6 border-3 border-[#E2E6F5] hover:bg-[#fc68b9] hover:border-[#FFEE97] hover:text-[#ffee97] shadow-rigth-yellow duration-500"
           radius="full"
           type="submit"
         >
-          Iniciar sesión
+          {loading ? <Spinner /> : "Iniciar sesión"}
         </Button>
       </form>
       <div className="text-sm flex gap-2">
         <p className="text-gray ">¿No tienes una cuenta?</p>
-        <Link href="/cambiar-password" className="color-pink  font-semibold">
+        <Link
+          href="/crea-tu-cuenta?plan=1"
+          className="color-pink  font-semibold"
+        >
           Suscríbete
         </Link>
       </div>
+      <ModalOlvideContraseña onOpenChange={onOpenChange} isOpen={isOpen} />
     </section>
   );
 }

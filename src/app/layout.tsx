@@ -1,3 +1,4 @@
+"use client";
 import { Toaster } from "sonner";
 import "@/app/globals.css";
 import "swiper/css";

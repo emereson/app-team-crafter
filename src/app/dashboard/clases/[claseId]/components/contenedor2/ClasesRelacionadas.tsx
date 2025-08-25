@@ -1,26 +1,9 @@
 "use client";
 
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper } from "swiper/react";
 import { Navigation, A11y, Autoplay, Pagination } from "swiper/modules";
-import CardClases from "@/app/dashboard/components/CardClases";
 
 export default function ClasesRelacionadas() {
-  const imagenesCarrusel = [
-    {
-      id: 1,
-      guid: "/inicio/banner1.png",
-      titulo: "Hemos preparado estos 3 archivos gratis para halloween",
-      fecha_inicio: "2025-07-25 16:16:25",
-      fecha_final: "2025-07-26 16:16:25",
-    },
-    {
-      id: 2,
-      guid: "/inicio/banner1.png",
-      titulo: "Hemos preparado estos 3 archivos gratis para halloween",
-      fecha_inicio: "2025-07-25 16:16:25",
-      fecha_final: "2025-07-26 16:16:25",
-    },
-  ];
   return (
     <section className="w-full flex flex-col gap-4 ">
       <h2 className="text-lg text-[#68E1E0] font-semibold">
@@ -38,7 +21,7 @@ export default function ClasesRelacionadas() {
         }}
         pagination={true}
       >
-        {imagenesCarrusel.map((item) => (
+        {/* {imagenesCarrusel.map((item) => (
           <SwiperSlide key={item.id} className="!w-full !h-full pb-10">
             <CardClases
               key={item.id}
@@ -47,7 +30,7 @@ export default function ClasesRelacionadas() {
               hegiht_portada="h-[157px]"
             />
           </SwiperSlide>
-        ))}
+        ))} */}
       </Swiper>
     </section>
   );
