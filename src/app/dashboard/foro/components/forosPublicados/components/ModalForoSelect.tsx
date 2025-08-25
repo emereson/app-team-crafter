@@ -1,4 +1,3 @@
-import { RespuestaItemProps } from "@/app/dashboard/clases/[claseId]/components/contenedor1/ComentariosClase";
 import {
   Avatar,
   Button,

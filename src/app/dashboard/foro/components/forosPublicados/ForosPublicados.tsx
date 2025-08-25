@@ -1,8 +1,7 @@
-import { Avatar, Button, Divider, useDisclosure } from "@heroui/react";
+import { Avatar, Button, Divider } from "@heroui/react";
 import Image from "next/image";
-import { useState } from "react";
 import { PiHeart } from "react-icons/pi";
-import ModalForoSelect from "./components/ModalForoSelect";
+// import ModalForoSelect from "./components/ModalForoSelect";
 
 interface Usuario {
   nombre: string;
@@ -92,8 +91,8 @@ const forosData: Foro[] = [
 ];
 
 export default function ForosPublicados() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [selectForo, setSelectForo] = useState<Foro | null>(null);
+  // const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  // const [selectForo, setSelectForo] = useState<Foro | null>(null);
   const colores = ["bg-[#FFEE97]", "bg-[#C3F3F3]", "bg-[#FFE1F2]"];
   return (
     <section className="flex flex-col gap-4">
@@ -169,23 +168,23 @@ export default function ForosPublicados() {
             <Divider />
             <button
               className="w-min text-medium text-[#FC68B9] font-semibold underline cursor-pointer"
-              onClick={() => {
-                setSelectForo(foro);
-                onOpen();
-              }}
+              // onClick={() => {
+              //   setSelectForo(foro);
+              //   onOpen();
+              // }}
             >
               Comentar
             </button>
           </article>
         );
       })}
-      {selectForo && (
+      {/* {selectForo && (
         <ModalForoSelect
           onOpenChange={onOpenChange}
           isOpen={isOpen}
           selectForo={selectForo}
         />
-      )}
+      )} */}
     </section>
   );
 }
