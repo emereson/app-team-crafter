@@ -4,11 +4,15 @@ import Hls from "hls.js";
 interface VideoPlayerProps {
   hlsUrl: string;
   autoPlay?: boolean;
+  showControls?: boolean;
+  mode?: "video" | "poster"; // "video" = normal, "poster" = solo playsInline
 }
 
 export default function VideoPlayer({
   hlsUrl,
   autoPlay = true,
+  showControls = true,
+  mode = "video",
 }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -27,42 +31,37 @@ export default function VideoPlayer({
       hls.attachMedia(video);
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        if (autoPlay) {
-          video.play().catch((error) => {
-            console.log("Auto-play prevented:", error);
-          });
+        if (mode === "video" && autoPlay) {
+          video
+            .play()
+            .catch((error) => console.log("Auto-play prevented:", error));
         }
       });
 
       hls.on(Hls.Events.ERROR, (event, data) => {
-        if (data.fatal) {
-          console.error("HLS Error:", data);
-        }
+        if (data.fatal) console.error("HLS Error:", data);
       });
 
-      // Cleanup
       return () => {
         hls.destroy();
       };
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      // Safari native HLS support
       video.src = hlsUrl;
-
       video.addEventListener("loadedmetadata", () => {
-        if (autoPlay) {
-          video.play().catch((error) => {
-            console.log("Auto-play prevented:", error);
-          });
+        if (mode === "video" && autoPlay) {
+          video
+            .play()
+            .catch((error) => console.log("Auto-play prevented:", error));
         }
       });
     }
-  }, [hlsUrl, autoPlay]);
+  }, [hlsUrl, autoPlay, mode]);
 
   return (
     <video
       ref={videoRef}
-      controls
-      className="w-full h-full object-contain rounded-2xl"
+      controls={mode === "video" ? showControls : false}
+      className="w-full h-auto object-contain rounded-2xl"
       playsInline
       preload="metadata"
     />

@@ -69,13 +69,7 @@ export default function VideoClase({ clase }: Props) {
               : "opacity-100 scale-100"
           }`}
         >
-          <Image
-            className="w-full "
-            src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${clase.image_clase}`}
-            alt="Hemos preparado estos 3 archivos gratis para halloween"
-            width={1000}
-            height={1000}
-          />
+          <VideoPlayer hlsUrl={clase.video_clase} mode="poster" />
         </div>
 
         {/* Botón de play con animación */}

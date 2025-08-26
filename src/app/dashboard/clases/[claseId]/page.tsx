@@ -55,7 +55,7 @@ export default function ClasesId() {
   return (
     <>
       {clase && (
-        <main className="w-full p-10 py-14 flex gap-8">
+        <main className="w-full max-w-7xl  mx-auto p-10 py-14 flex gap-8">
           <div className="w-full">
             <VideoClase clase={clase} />
             <ComentarClase

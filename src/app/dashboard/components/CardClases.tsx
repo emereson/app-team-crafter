@@ -2,6 +2,7 @@ import { Clase } from "@/interfaces/clase.interface";
 import { formatDate } from "@/utils/formatDate";
 import Image from "next/image";
 import Link from "next/link";
+import VideoPlayer from "./VideoPlayer";
 
 interface Props {
   clase: Clase;
@@ -10,12 +11,7 @@ interface Props {
   hegiht_portada?: string;
 }
 
-export default function CardClases({
-  clase,
-  width,
-  icon_favoritos,
-  hegiht_portada,
-}: Props) {
+export default function CardClases({ clase, width, icon_favoritos }: Props) {
   return (
     <article
       className={`${
@@ -24,15 +20,7 @@ export default function CardClases({
     >
       <Link href={`/dashboard/clases/${clase?.id}`}>
         <div className="w-full relative rounded-2xl overflow-hidden">
-          <Image
-            className={`w-full ${
-              hegiht_portada ? hegiht_portada : "h-[300px]"
-            } object-cover`}
-            src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${clase.image_clase}`}
-            alt={clase.titulo_clase}
-            width={500}
-            height={500}
-          />
+          <VideoPlayer hlsUrl={clase.video_clase} mode="poster" />
           <Image
             className="absolute right-4 bottom-4  w-14"
             src={"/icons/playVideo.svg"}
