@@ -25,18 +25,21 @@ export default function FormIniciarSesion() {
     setShowPassword((prev) => !prev);
   };
 
-  const onSubmit = useCallback(async (data: Login) => {
-    setLoading(true);
-    try {
-      await postLogin(data);
-      router.push("/");
-      window.location.reload();
-    } catch (err: unknown) {
-      handleAxiosError(err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async (data: Login) => {
+      setLoading(true);
+      try {
+        await postLogin(data);
+        router.push("/");
+        window.location.reload();
+      } catch (err: unknown) {
+        handleAxiosError(err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [router]
+  );
   return (
     <section className="w-full min-w-[300px]  h-full bg-white p-6  rounded-2xl  flex flex-col justify-center items-center  gap-10 ">
       <Image

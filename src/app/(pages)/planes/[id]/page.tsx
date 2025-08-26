@@ -4,38 +4,9 @@ import PsAi from "@/app/components/PsAi";
 import TuPedido from "./components/TuPedido";
 import Link from "next/link";
 import useSuscripcionStore from "@/stores/SuscripcionContext";
-import { useEffect, useState } from "react";
-import { User } from "@/interfaces/user.type";
-import { getPerfil } from "@/services/auth/auth.service";
-import CorreoNoVerificado from "@/app/components/CorreoNoVerificado";
-import Loading from "@/app/components/Loading";
 
 export default function PlanId() {
   const { suscripcion } = useSuscripcionStore();
-  const [perfil, setPerfil] = useState<User | null>(null); // 👈 inicializar como null
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPerfil = async () => {
-      try {
-        const res = await getPerfil();
-        setPerfil(res);
-      } catch (error) {
-        console.error("Error cargando perfil:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPerfil();
-  }, []);
-
-  if (loading) return <Loading />;
-  if (perfil && perfil.emailVerified === false) {
-    <CorreoNoVerificado perfil={perfil} />;
-  }
-
-  console.log(suscripcion);
 
   return (
     <main className="w-full p-10 py-14 flex gap-8 background-login">

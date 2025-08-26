@@ -4,16 +4,17 @@ import { Button } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-
 import { FcGoogle } from "react-icons/fc";
 import { IoMailOutline } from "react-icons/io5";
+import Loading from "@/app/components/Loading";
+import { Suspense } from "react";
 
-export default function MetodosRegistro() {
+function MetodosRegistroContent() {
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan");
 
   return (
-    <section className="w-full min-w-[300px]  h-full bg-white p-6  rounded-2xl  flex flex-col justify-center items-center  gap-10 ">
+    <section className="w-full min-w-[300px] h-full bg-white p-6 rounded-2xl flex flex-col justify-center items-center gap-10">
       <Image
         className="w-[190px]"
         src="/logo.png"
@@ -31,7 +32,7 @@ export default function MetodosRegistro() {
       </article>
       <div className="w-full max-w-[510px] flex flex-col gap-4">
         <Button
-          className="bg-white text-[#8A8A8A] p-6 border-1  border-neutral-300 "
+          className="bg-white text-[#8A8A8A] p-6 border-1 border-neutral-300"
           startContent={<FcGoogle className="absolute left-6 text-2xl" />}
           radius="full"
         >
@@ -39,12 +40,20 @@ export default function MetodosRegistro() {
         </Button>
         <Link
           href={`/crea-tu-cuenta/correo?plan=${plan}`}
-          className="relative bg-white text-sm text-[#8A8A8A] text-center p-4 border-1  border-neutral-300 rounded-full "
+          className="relative bg-white text-sm text-[#8A8A8A] text-center p-4 border-1 border-neutral-300 rounded-full"
         >
-          <IoMailOutline className="absolute left-6 text-2xl tex-[#8A8A8A] " />
+          <IoMailOutline className="absolute left-6 text-2xl tex-[#8A8A8A]" />
           Continuar con correo
         </Link>
       </div>
     </section>
+  );
+}
+
+export default function MetodosRegistro() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <MetodosRegistroContent />
+    </Suspense>
   );
 }

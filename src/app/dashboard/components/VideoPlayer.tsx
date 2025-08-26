@@ -62,7 +62,7 @@ export default function VideoPlayer({
     <video
       ref={videoRef}
       controls
-      className="w-full h-full object-cover rounded-2xl"
+      className="w-full h-full object-contain rounded-2xl"
       playsInline
       preload="metadata"
     />

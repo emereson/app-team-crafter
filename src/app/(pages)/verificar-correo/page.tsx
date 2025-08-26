@@ -5,9 +5,9 @@ import { verificarCorreo } from "@/services/auth/auth.service";
 import { User } from "@/interfaces/user.type";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
-export default function VerificarCorreo() {
+function VerificarCorreoContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
@@ -58,5 +58,13 @@ export default function VerificarCorreo() {
         </span>
       </p>
     </div>
+  );
+}
+
+export default function VerificarCorreoPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <VerificarCorreoContent />
+    </Suspense>
   );
 }

@@ -8,7 +8,7 @@ export default function DatosCompra() {
 
   useEffect(() => {
     forceRefetch();
-  }, []);
+  }, [forceRefetch]);
 
   const { suscripcion } = useSuscripcionStore();
 

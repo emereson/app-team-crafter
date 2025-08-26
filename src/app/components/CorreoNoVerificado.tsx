@@ -1,4 +1,5 @@
 import { User } from "@/interfaces/user.type";
+import { removeToken } from "@/utils/authUtils";
 import Image from "next/image";
 
 interface Props {
@@ -6,6 +7,10 @@ interface Props {
 }
 
 export default function CorreoNoVerificado({ perfil }: Props) {
+  const handleLogout = () => {
+    removeToken();
+    window.location.reload();
+  };
   return (
     <div
       className="fixed inset-0 w-screen h-screen background-login z-50 flex flex-col items-center justify-center backdrop-blur-sm text-center px-4"
@@ -30,6 +35,9 @@ export default function CorreoNoVerificado({ perfil }: Props) {
           {perfil.correo}
         </span>
       </p>
+      <button className="mt-10 cursor-pointer" onClick={handleLogout}>
+        <p className="text-[#FC68B9] text-sm font-semibold">Cerrar Sesión</p>
+      </button>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { inputClassNames, inputClassNames2 } from "@/utils/classNames";
 import { Button, Input } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useState, Suspense } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import PhoneInput from "react-phone-input-2";
@@ -16,9 +16,8 @@ import { handleAxiosError } from "@/utils/errorHandler";
 import Loading from "@/app/components/Loading";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function FormRegistroCorreo() {
+function FormRegistroCorreoContent() {
   const router = useRouter();
-
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan");
 
@@ -31,10 +30,8 @@ export default function FormRegistroCorreo() {
     formState: { errors },
   } = useForm<Signup>();
   const [loading, setLoading] = useState<boolean>(false);
-
   const [showPassword, setShowPassword] = useState(false);
 
-  // Observar todos los campos del formulario
   const watchedFields = watch([
     "nombre",
     "apellidos",
@@ -44,7 +41,6 @@ export default function FormRegistroCorreo() {
     "codigo_pais",
   ]);
 
-  // Verificar si todos los campos están completos
   const isFormValid = watchedFields.every((field) => {
     if (typeof field === "string") {
       return field && field.trim() !== "";
@@ -61,7 +57,7 @@ export default function FormRegistroCorreo() {
       setLoading(true);
       try {
         await postSignup(data);
-        toast.success("Se registro correctamente");
+        toast.success("Se registró correctamente");
         reset();
         router.push(`/planes/${plan}`);
       } catch (err: unknown) {
@@ -86,7 +82,7 @@ export default function FormRegistroCorreo() {
   };
 
   return (
-    <section className="w-full min-w-[300px] h-fit bg-white p-6 rounded-2xl flex flex-col justify-tart items-center gap-10 ">
+    <section className="w-full min-w-[300px] h-fit bg-white p-6 rounded-2xl flex flex-col justify-start items-center gap-10 ">
       {loading && <Loading />}
 
       <Image
@@ -105,12 +101,13 @@ export default function FormRegistroCorreo() {
           en un minuto
         </h2>
       </article>
+
+      {/* Formulario */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-[500px] flex flex-col justify-center items-center gap-6"
       >
         <div className="w-full flex flex-col gap-8">
-          {" "}
           <Input
             isRequired
             classNames={inputClassNames}
@@ -121,7 +118,7 @@ export default function FormRegistroCorreo() {
             {...register("nombre", { required: true })}
             errorMessage="El nombre es obligatorio"
             radius="full"
-          />{" "}
+          />
           <Input
             isRequired
             classNames={inputClassNames}
@@ -175,10 +172,11 @@ export default function FormRegistroCorreo() {
             }
             radius="full"
           />
-          {/* Campo de teléfono personalizado */}
+
+          {/* Campo de teléfono */}
           <div className="relative flex flex-col gap-1">
             <Input
-              className="absolute right-0 w-[calc(100%-95px)] bottom-0 z-10 "
+              className="absolute right-0 w-[calc(100%-95px)] bottom-0 z-10"
               classNames={inputClassNames2}
               isRequired
               label=""
@@ -199,13 +197,13 @@ export default function FormRegistroCorreo() {
               }) => (
                 <div className="relative">
                   <PhoneInput
-                    country={"af"} // País por defecto (Perú)
+                    country={"pe"}
                     value={value}
                     onChange={(phone) => onChange(phone)}
                     inputStyle={{
                       width: "150px",
-                      height: "48px", // Altura similar a tus otros inputs
-                      borderRadius: "9999px", // radius="full"
+                      height: "48px",
+                      borderRadius: "9999px",
                       paddingLeft: "60px",
                       fontSize: "14px",
                       fontWeight: "400",
@@ -229,16 +227,6 @@ export default function FormRegistroCorreo() {
                       border: "2px solid #e4e4e7",
                       boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
                     }}
-                    inputProps={{
-                      placeholder: "Número de teléfono",
-                      className: `
-                
-                        focus:bg-white 
-                        hover:bg-white
-                        transition-all 
-                        duration-200
-                      `,
-                    }}
                   />
                   {error && (
                     <p className="text-xs text-red-500 mt-1 ml-3">
@@ -255,7 +243,7 @@ export default function FormRegistroCorreo() {
           href="/recuperar-contraseña"
           className="color-pink text-base font-semibold"
         >
-          Olvidaste tu contraseña?
+          ¿Olvidaste tu contraseña?
         </Link>
 
         <Button
@@ -268,7 +256,7 @@ export default function FormRegistroCorreo() {
           type="submit"
           disabled={!isFormValid || loading}
         >
-          Registrarse y continuar{" "}
+          Registrarse y continuar
         </Button>
       </form>
 
@@ -279,5 +267,13 @@ export default function FormRegistroCorreo() {
         </Link>
       </div>
     </section>
+  );
+}
+
+export default function FormRegistroCorreo() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <FormRegistroCorreoContent />
+    </Suspense>
   );
 }
