@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   devIndicators: false,
   images: {
-    domains: ["localhost"], // 👈 agrega aquí el dominio permitido
+    domains: ["https://end-point.team-crafter.com"], // 👈 agrega aquí el dominio permitido
   },
 };
 
