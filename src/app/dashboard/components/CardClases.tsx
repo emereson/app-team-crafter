@@ -13,11 +13,7 @@ interface Props {
 
 export default function CardClases({ clase, width, icon_favoritos }: Props) {
   return (
-    <article
-      className={`${
-        width ? width : "w-[calc(50%_-_15px)]"
-      } flex flex-col gap-3"`}
-    >
+    <article className={`${width}   aspect-[1.5/1] flex flex-col gap-3 "`}>
       <Link href={`/dashboard/clases/${clase?.id}`}>
         <div className="w-full relative rounded-2xl overflow-hidden">
           <VideoPlayer hlsUrl={clase.video_clase} mode="poster" />

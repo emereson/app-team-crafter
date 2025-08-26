@@ -4,7 +4,8 @@ import Menu from "./components/Menu";
 import Footer from "./components/Footer";
 import SuscripcionVencida from "./components/SuacripcionVencida";
 import { useAutoRefetch } from "@/stores/SuscripcionContext";
-import { useLikeClasesInitializer } from "@/stores/likeClases.store";
+import useLikedClasesStore from "@/stores/likeClases.store";
+import { useEffect } from "react";
 
 export default function DashboardLayout({
   children,
@@ -12,7 +13,12 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   useAutoRefetch();
-  useLikeClasesInitializer();
+  const fetchLikes = useLikedClasesStore((s) => s.fetchLikes);
+
+  useEffect(() => {
+    fetchLikes();
+  }, [fetchLikes]);
+
   return (
     <div className="w-screen h-screen flex flex-col">
       <SuscripcionVencida />

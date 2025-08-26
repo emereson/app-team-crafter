@@ -46,7 +46,7 @@ export default function ClasesRecientesInicio() {
       </div>
       <div className="flex flex-wrap gap-[30px] ">
         {clases.map((clase) => (
-          <CardClases key={clase.id} clase={clase} />
+          <CardClases key={clase.id} clase={clase} width="w-[calc(50%-15px)]" />
         ))}
       </div>
     </section>
