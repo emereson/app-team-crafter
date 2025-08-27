@@ -1,7 +1,19 @@
 import instance from "./auth/axiosInstance";
 
-export async function getClases() {
-  const res = await instance.get(`/clase`);
+interface GetClasesParams {
+  categoria_clase?: string | null;
+  tutoriales_tips?: string | null;
+  cuatro_ultimos?: string;
+}
+
+export async function getClases(params: GetClasesParams = {}) {
+  const query = new URLSearchParams({
+    categoria_clase: params.categoria_clase || "",
+    tutoriales_tips: params.tutoriales_tips || "",
+    cuatro_ultimos: params.cuatro_ultimos || "",
+  }).toString();
+
+  const res = await instance.get(`/clase?${query}`);
 
   return res.data.clases;
 }

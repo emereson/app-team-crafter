@@ -6,6 +6,7 @@ import SuscripcionVencida from "./components/SuacripcionVencida";
 import { useAutoRefetch } from "@/stores/SuscripcionContext";
 import useLikedClasesStore from "@/stores/likeClases.store";
 import { useEffect } from "react";
+import useLikeComentarioClaseStore from "@/stores/likeComentarioClase.store";
 
 export default function DashboardLayout({
   children,
@@ -14,10 +15,14 @@ export default function DashboardLayout({
 }) {
   useAutoRefetch();
   const fetchLikes = useLikedClasesStore((s) => s.fetchLikes);
+  const fetchLikesComentarioClases = useLikeComentarioClaseStore(
+    (s) => s.fetchLikes
+  );
 
   useEffect(() => {
     fetchLikes();
-  }, [fetchLikes]);
+    fetchLikesComentarioClases();
+  }, [fetchLikes, fetchLikesComentarioClases]);
 
   return (
     <div className="w-screen h-screen flex flex-col">

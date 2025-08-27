@@ -1,9 +1,28 @@
 "use client";
 
-import { Swiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, A11y, Autoplay, Pagination } from "swiper/modules";
+import { useCallback, useEffect, useState } from "react";
+import { Clase } from "@/interfaces/clase.interface";
+import { getClases } from "@/services/clases.service";
+import CardClases from "@/app/dashboard/components/CardClases";
 
-export default function ClasesRelacionadas() {
+interface Props {
+  clase: Clase;
+}
+
+export default function ClasesRelacionadas({ clase }: Props) {
+  const [clases, setClases] = useState<Clase[]>([]);
+
+  const gfindClases = useCallback(async () => {
+    const res = await getClases({ categoria_clase: clase.categoria_clase });
+    setClases(res);
+  }, [clase.categoria_clase]);
+
+  useEffect(() => {
+    gfindClases();
+  }, [gfindClases]);
+
   return (
     <section className="w-full flex flex-col gap-4 ">
       <h2 className="text-lg text-[#68E1E0] font-semibold">
@@ -21,16 +40,16 @@ export default function ClasesRelacionadas() {
         }}
         pagination={true}
       >
-        {/* {imagenesCarrusel.map((item) => (
-          <SwiperSlide key={item.id} className="!w-full !h-full pb-10">
+        {clases.map((clase) => (
+          <SwiperSlide key={clase.id} className="!w-full !h-full pb-10">
             <CardClases
-              key={item.id}
-              producto={item}
+              key={clase.id}
+              clase={clase}
               width="w-full"
-              hegiht_portada="h-[157px]"
+              hegiht_portada="h-[150px]"
             />
           </SwiperSlide>
-        ))} */}
+        ))}
       </Swiper>
     </section>
   );

@@ -1,3 +1,5 @@
+import { Recurso } from "./recurso.interface";
+
 export interface FormClase {
   image_clase: File[] | null;
   video_clase: string;
@@ -20,4 +22,5 @@ export interface Clase {
   duracion_video: string;
   status: "active" | "disabled";
   createdAt: string;
+  recurso?: Recurso;
 }

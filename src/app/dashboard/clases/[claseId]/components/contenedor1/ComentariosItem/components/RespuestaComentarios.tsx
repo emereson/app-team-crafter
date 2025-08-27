@@ -1,6 +1,6 @@
 import { RespuestaComentario } from "@/interfaces/comentario.interface";
-import { Avatar, Button, Link } from "@heroui/react";
-import { PiHeart } from "react-icons/pi";
+import { Avatar, Link } from "@heroui/react";
+// import { PiHeart } from "react-icons/pi";
 
 interface Props {
   respuesta: RespuestaComentario;
@@ -40,7 +40,7 @@ export default function RespuestaComentarios({ respuesta }: Props) {
           </p>
         </div>
 
-        <Button
+        {/* <Button
           variant="light"
           size="sm"
           className="p-0 h-auto min-w-0 gap-1.5 text-[#FC68B9] hover:bg-[#FC68B9]/10"
@@ -55,7 +55,7 @@ export default function RespuestaComentarios({ respuesta }: Props) {
           <span className="text-xs font-medium">
             {respuesta.nro_likes.toLocaleString()}
           </span>
-        </Button>
+        </Button> */}
       </div>
     </article>
   );

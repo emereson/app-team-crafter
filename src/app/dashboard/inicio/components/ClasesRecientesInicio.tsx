@@ -15,7 +15,7 @@ export default function ClasesRecientesInicio() {
   const gfindClases = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await getClases();
+      const res = await getClases({ cuatro_ultimos: "true" });
       setClases(res);
     } catch (err) {
       handleAxiosError(err);
@@ -27,6 +27,7 @@ export default function ClasesRecientesInicio() {
   useEffect(() => {
     gfindClases();
   }, [gfindClases]);
+
   if (loading) {
     return <Loading />;
   }

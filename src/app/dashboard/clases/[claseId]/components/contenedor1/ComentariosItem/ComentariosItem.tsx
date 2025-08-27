@@ -6,25 +6,28 @@ import { Avatar, Button } from "@heroui/react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { PiHeart } from "react-icons/pi";
+import { FaHeart } from "react-icons/fa";
 import ComentarClase from "../ComentarClase";
 import { getRespuestaComentario } from "@/services/comentarios.service";
 import { handleAxiosError } from "@/utils/errorHandler";
 import RespuestaComentarios from "./components/RespuestaComentarios";
+import useLikeComentarioClaseStore from "@/stores/likeComentarioClase.store";
 
 interface Props {
   comentario: Comentario;
 }
 
 export default function ComentarioItem({ comentario }: Props) {
+  const { isLiked, toggleLike } = useLikeComentarioClaseStore();
+  const [isLoadingLike, setIsLoadingLike] = useState(false);
+  const [likesCount, setLikesCount] = useState<number>(comentario.nro_likes);
+
   const [openResponder, setOpenResponder] = useState<boolean>(false);
-  // const [isLiked, setIsLiked] = useState<boolean>(false);
-  // const [mostrarRespuestas, setMostrarRespuestas] = useState<boolean>(true);
   const [respuestacomentarios, setRespuestaComentarios] = useState<
     RespuestaComentario[]
   >([]);
 
-  //   const tieneRespuestas: boolean = comentario.respuestas?.length > 0;
-  //   const cantidadRespuestas: number = comentario.respuestas?.length || 0;
+  const classText = "text-lg text-[#FFB4DF] font-medium";
 
   const findRespuestaComentarios = useCallback(async () => {
     try {
@@ -38,6 +41,23 @@ export default function ComentarioItem({ comentario }: Props) {
   useEffect(() => {
     findRespuestaComentarios();
   }, [findRespuestaComentarios, comentario.id]);
+
+  const handleToggleLike = async () => {
+    if (isLoadingLike) return;
+    setIsLoadingLike(true);
+
+    const alreadyLiked = isLiked(comentario.id);
+
+    try {
+      await toggleLike(comentario.id);
+
+      setLikesCount((prev) => (alreadyLiked ? prev - 1 : prev + 1));
+    } catch (error) {
+      console.error("Error al dar like:", error);
+    } finally {
+      setIsLoadingLike(false);
+    }
+  };
 
   return (
     <article className="w-full">
@@ -64,21 +84,21 @@ export default function ComentarioItem({ comentario }: Props) {
             {comentario.comentario}
           </p>
 
-          <div className="flex gap-4 mt-2">
-            <Button
-              variant="light"
-              size="sm"
-              className="p-0 h-auto min-w-0 gap-2 text-[#FC68B9] hover:bg-[#FC68B9]/10"
-              startContent={
-                // isLiked ? (
-                //   <PiHeartFill className="text-xl text-[#FC68B9]" />
-                // ) : (
-                <PiHeart className="text-xl text-[#FC68B9]" />
-                // )
-              }
+          <div className="flex gap-4 mt-2 items-center">
+            <button
+              onClick={handleToggleLike}
+              disabled={isLoadingLike}
+              className={`transition-transform duration-200 ${
+                isLoadingLike ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
-              <span className="text-sm font-medium">0</span>
-            </Button>
+              {isLiked(comentario.id) ? (
+                <FaHeart className="text-2xl text-[#FC68B9] cursor-pointer" />
+              ) : (
+                <PiHeart className="text-2xl text-[#FFB4DF] cursor-pointer" />
+              )}
+            </button>
+            <p className={classText}>{likesCount}</p>
 
             <Button
               variant="light"
@@ -98,6 +118,7 @@ export default function ComentarioItem({ comentario }: Props) {
               <span className="text-sm font-medium">Responder</span>
             </Button>
           </div>
+
           {openResponder && (
             <ComentarClase
               claseId={comentario.clase_id}
@@ -109,6 +130,7 @@ export default function ComentarioItem({ comentario }: Props) {
           )}
         </div>
       </div>
+
       <div className="ml-10 mt-4">
         {respuestacomentarios.map((respuesta) => (
           <RespuestaComentarios key={respuesta.id} respuesta={respuesta} />

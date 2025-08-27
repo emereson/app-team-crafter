@@ -19,7 +19,8 @@ export default function VideoClase({ clase }: Props) {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isLoadingLike, setIsLoadingLike] = useState(false); // loading para el botón de like
+  const [isLoadingLike, setIsLoadingLike] = useState(false);
+  const [likesCount, setLikesCount] = useState<number>(clase.nro_likes);
 
   const classIcons = "w-[22px] h-[22px]";
   const classText = "text-lg text-[#FFB4DF] font-medium";
@@ -42,13 +43,18 @@ export default function VideoClase({ clase }: Props) {
     }
   };
 
-  // Función para toggle de like con loading
+  // Toggle like con conteo dinámico
   const handleToggleLike = async () => {
-    if (isLoadingLike) return; // evita clicks múltiples
+    if (isLoadingLike) return;
     setIsLoadingLike(true);
+
+    const alreadyLiked = isLiked(clase.id);
 
     try {
       await toggleLike(clase.id);
+
+      // Actualiza conteo
+      setLikesCount((prev) => (alreadyLiked ? prev - 1 : prev + 1));
     } catch (error) {
       console.error("Error al dar like:", error);
     } finally {
@@ -63,7 +69,6 @@ export default function VideoClase({ clase }: Props) {
         className="w-full max-h-[467px] relative rounded-2xl overflow-hidden flex items-center justify-center cursor-pointer"
         onClick={handlePlayVideo}
       >
-        {/* Imagen de fondo */}
         <div
           className={`w-full transition-all duration-500 ease-in-out ${
             isAnimating
@@ -76,7 +81,6 @@ export default function VideoClase({ clase }: Props) {
           <VideoPlayer hlsUrl={clase.video_clase} mode="poster" />
         </div>
 
-        {/* Botón de play */}
         <button
           className={`w-14 absolute z-10 transition-all duration-300 ease-in-out transform hover:scale-110 ${
             isAnimating
@@ -96,7 +100,6 @@ export default function VideoClase({ clase }: Props) {
           />
         </button>
 
-        {/* VideoPlayer animado */}
         <div
           className={`absolute inset-0 transition-all duration-500 ease-in-out ${
             isPlaying
@@ -107,7 +110,6 @@ export default function VideoClase({ clase }: Props) {
           {isPlaying && <VideoPlayer hlsUrl={clase.video_clase} />}
         </div>
 
-        {/* Overlay de carga */}
         {isAnimating && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FFB4DF]"></div>
@@ -163,9 +165,7 @@ export default function VideoClase({ clase }: Props) {
               <PiHeart className="text-2xl text-[#FFB4DF] cursor-pointer" />
             )}
           </button>
-          <p className={classText}>
-            {isLiked(clase.id) ? clase.nro_likes + 1 : clase.nro_likes}
-          </p>
+          <p className={classText}>{likesCount}</p>
         </div>
       </article>
     </section>

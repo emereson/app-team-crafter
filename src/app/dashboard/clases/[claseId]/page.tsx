@@ -67,9 +67,9 @@ export default function ClasesId() {
           </div>
 
           <div className="min-w-[312px] max-w-[312px] flex flex-col gap-6">
-            <RecursoDescargable />
+            <RecursoDescargable clase={clase} />
             <DescripcionClase clase={clase} />
-            <ClasesRelacionadas />
+            <ClasesRelacionadas clase={clase} />
           </div>
         </main>
       )}
