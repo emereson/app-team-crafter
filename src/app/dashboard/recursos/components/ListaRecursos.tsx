@@ -4,36 +4,13 @@ import { cn, Pagination, PaginationItemType } from "@heroui/react";
 import type { PaginationItemRenderProps } from "@heroui/react";
 import Image from "next/image";
 import CardRecursos from "../../components/CardRecursos";
-import { useCallback, useEffect, useState } from "react";
 import { Recurso } from "@/interfaces/recurso.interface";
-import { getRecursos } from "@/services/recursos.service";
-import { handleAxiosError } from "@/utils/errorHandler";
-import Loading from "@/app/components/Loading";
 
-export default function ListaRecursos() {
-  const [recursos, setRecursos] = useState<Recurso[]>([]);
-  const [loading, setLoading] = useState(true);
+interface Props {
+  recursos: Recurso[];
+}
 
-  const gfindRecursos = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await getRecursos({ cuatro_ultimos: "true" });
-      setRecursos(res);
-    } catch (err) {
-      handleAxiosError(err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    gfindRecursos();
-  }, [gfindRecursos]);
-
-  if (loading) {
-    return <Loading />;
-  }
-
+export default function ListaRecursos({ recursos }: Props) {
   const renderItem = ({
     ref,
     key,
@@ -115,7 +92,7 @@ export default function ListaRecursos() {
         className="gap-4 mt-8"
         initialPage={1}
         renderItem={renderItem}
-        total={8}
+        total={1}
         boundaries={3}
         variant="light"
       />

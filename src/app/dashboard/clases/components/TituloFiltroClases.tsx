@@ -3,9 +3,19 @@ import Image from "next/image";
 
 interface Props {
   setOpenFilter: (open: boolean) => void;
+  order: "asc" | "desc";
+  setOrder: (order: "asc" | "desc") => void;
 }
 
-export default function TituloFiltroClases({ setOpenFilter }: Props) {
+export default function TituloFiltroClases({
+  setOpenFilter,
+  order,
+  setOrder,
+}: Props) {
+  const toggleOrder = () => {
+    setOrder(order === "desc" ? "asc" : "desc");
+  };
+
   return (
     <section>
       <Breadcrumbs
@@ -17,9 +27,11 @@ export default function TituloFiltroClases({ setOpenFilter }: Props) {
         <BreadcrumbItem key="inicio">Inicio</BreadcrumbItem>
         <BreadcrumbItem>Clases</BreadcrumbItem>
       </Breadcrumbs>
-      <h1 className=" mt-6 text-4xl font-black text-[#96EAEA] ">
+
+      <h1 className="mt-6 text-4xl font-black text-[#96EAEA]">
         Nuestras clases
       </h1>
+
       <article className="w-full flex justify-between items-end">
         <p className="text-[#8A8A8A]">
           Revisa todas las clases grabadas, tanto recientes como anteriores.
@@ -28,18 +40,20 @@ export default function TituloFiltroClases({ setOpenFilter }: Props) {
           <Button
             className="bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold mt-4 hover:bg-[#fc68b939] m-0"
             radius="full"
+            onPress={toggleOrder}
             startContent={
               <Image
                 className="text-xs"
                 src={"/icons/arrows.svg"}
-                alt={`Más reciente `}
+                alt="Ordenar"
                 width={20}
                 height={20}
               />
             }
           >
-            Más reciente
+            {order === "desc" ? "Más reciente" : "Más antiguo"}
           </Button>
+
           <Button
             className="bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold mt-4 hover:bg-[#fc68b939] m-0"
             radius="full"
@@ -47,7 +61,7 @@ export default function TituloFiltroClases({ setOpenFilter }: Props) {
               <Image
                 className="text-xs"
                 src={"/icons/grid.svg"}
-                alt={`Filtros `}
+                alt="Filtros"
                 width={22}
                 height={22}
               />

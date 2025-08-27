@@ -1,25 +1,15 @@
-import Loading from "@/app/components/Loading";
-import useSuscripcionStore from "@/stores/SuscripcionContext";
 import { removeToken } from "@/utils/authUtils";
 import { Link } from "@heroui/react";
 import Image from "next/image";
 
 export default function SuscripcionVencida() {
-  const { suscripcion, isLoading } = useSuscripcionStore();
-
   const handleLogout = () => {
     removeToken();
     window.location.reload();
   };
-
-  if (isLoading) {
-    return <Loading />;
-  }
   return (
     <div
-      className={`${
-        suscripcion ? "hidden" : "fixed"
-      }  w-screen h-screen bg-[#FC68B94D] z-20 flex items-center justify-center backdrop-blur-sm`}
+      className={`fixed  w-screen h-screen bg-[#FC68B94D] z-20 flex items-center justify-center backdrop-blur-sm`}
     >
       <section className="w-full max-w-xl bg-white py-10 px-6  rounded-2xl flex flex-col  items-center gap-6 text-center">
         <Image

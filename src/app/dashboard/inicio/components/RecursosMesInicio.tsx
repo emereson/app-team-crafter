@@ -6,31 +6,22 @@ import { useCallback, useEffect, useState } from "react";
 import { Recurso } from "@/interfaces/recurso.interface";
 import { getRecursos } from "@/services/recursos.service";
 import { handleAxiosError } from "@/utils/errorHandler";
-import Loading from "@/app/components/Loading";
 
 export default function RecursosMesInicio() {
   const [recursos, setRecursos] = useState<Recurso[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const gfindRecursos = useCallback(async () => {
-    setLoading(true);
     try {
       const res = await getRecursos({ cuatro_ultimos: "true" });
       setRecursos(res);
     } catch (err) {
       handleAxiosError(err);
-    } finally {
-      setLoading(false);
     }
   }, []);
 
   useEffect(() => {
     gfindRecursos();
   }, [gfindRecursos]);
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <section className="w-full flex flex-col gap-8 pt-16">

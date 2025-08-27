@@ -4,6 +4,7 @@ interface GetClasesParams {
   categoria_clase?: string | null;
   tutoriales_tips?: string | null;
   cuatro_ultimos?: string;
+  order?: string;
 }
 
 export async function getClases(params: GetClasesParams = {}) {
@@ -11,6 +12,7 @@ export async function getClases(params: GetClasesParams = {}) {
     categoria_clase: params.categoria_clase || "",
     tutoriales_tips: params.tutoriales_tips || "",
     cuatro_ultimos: params.cuatro_ultimos || "",
+    order: params.order || "",
   }).toString();
 
   const res = await instance.get(`/clase?${query}`);

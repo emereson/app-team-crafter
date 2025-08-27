@@ -1,6 +1,7 @@
 import VideoPlayer from "@/app/dashboard/components/VideoPlayer";
 import { Clase } from "@/interfaces/clase.interface";
 import { getViewClase } from "@/services/clases.service";
+import useFavoritosStore from "@/stores/favoritos.store";
 import useLikedClasesStore from "@/stores/likeClases.store";
 
 import { formatDate } from "@/utils/formatDate";
@@ -17,9 +18,13 @@ interface Props {
 export default function VideoClase({ clase }: Props) {
   const { isLiked, toggleLike } = useLikedClasesStore();
 
+  const { isFavorito, toggleFavorito } = useFavoritosStore();
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isLoadingLike, setIsLoadingLike] = useState(false);
+  const [isLoadingFavorito, setIsLoadingFavorito] = useState(false);
+
   const [likesCount, setLikesCount] = useState<number>(clase.nro_likes);
 
   const classIcons = "w-[22px] h-[22px]";
@@ -59,6 +64,19 @@ export default function VideoClase({ clase }: Props) {
       console.error("Error al dar like:", error);
     } finally {
       setIsLoadingLike(false);
+    }
+  };
+
+  const handleToggleFavorite = async () => {
+    if (isLoadingFavorito) return;
+    setIsLoadingFavorito(true);
+
+    try {
+      await toggleFavorito(clase.id);
+    } catch (error) {
+      console.error("Error al dar like:", error);
+    } finally {
+      setIsLoadingFavorito(false);
     }
   };
 
@@ -122,7 +140,28 @@ export default function VideoClase({ clase }: Props) {
         <h1 className="text-xl text-[#8A8A8A] font-bold">
           {clase.titulo_clase}
         </h1>
-        <div className="w-12 h-12 bg-[url(/icons/favoritos-no.svg)] bg-fill bg-no-repeat bg-center hover:bg-[url(/icons/favoritos.svg)] duration-300 rounded-lg -mt-2" />
+        <button
+          className=" duration-300 rounded-lg cursor-pointer mr-2"
+          onClick={handleToggleFavorite}
+        >
+          {isFavorito(clase.id) ? (
+            <Image
+              className="w-8"
+              src={"/icons/favoritos.svg"}
+              alt="agregar a favorito"
+              width={70}
+              height={70}
+            />
+          ) : (
+            <Image
+              className="w-6"
+              src={"/icons/favoritos-no.svg"}
+              alt="agregar a favorito"
+              width={50}
+              height={50}
+            />
+          )}
+        </button>
       </article>
 
       {/* Info del video */}

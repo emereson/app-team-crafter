@@ -1,16 +1,18 @@
 import instance from "./auth/axiosInstance";
 
 interface GetRecursoParams {
-  categoria_clase?: string | null;
-  tutoriales_tips?: string | null;
+  categoria_recurso?: string | null;
+  tipo_recurso?: string | null;
   cuatro_ultimos?: string;
+  order?: string;
 }
 
 export async function getRecursos(params: GetRecursoParams = {}) {
   const query = new URLSearchParams({
-    categoria_clase: params.categoria_clase || "",
-    tutoriales_tips: params.tutoriales_tips || "",
+    categoria_recurso: params.categoria_recurso || "",
+    tipo_recurso: params.tipo_recurso || "",
     cuatro_ultimos: params.cuatro_ultimos || "",
+    order: params.order || "",
   }).toString();
 
   const res = await instance.get(`/recurso?${query}`);

@@ -33,6 +33,7 @@ interface SuscripcionState {
   // Estado
   suscripcion: Suscripcion | null;
   isLoading: boolean;
+  isInitialLoading: boolean; // Nuevo estado para primera carga
   message: string;
   error: string | null;
   lastUpdated: number | null;
@@ -61,9 +62,10 @@ interface SuscripcionState {
 }
 
 const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
-  // Estado inicial
+  // Estado inicial - isInitialLoading en true para mostrar loading inicial
   suscripcion: null,
   isLoading: false,
+  isInitialLoading: true, // Nuevo estado inicial
   message: "",
   error: null,
   lastUpdated: null,
@@ -111,6 +113,7 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
       suscripcion,
       lastUpdated: Date.now(),
       error: null,
+      isInitialLoading: false, // Marcar que ya no es carga inicial
     });
   },
 
@@ -158,7 +161,8 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
         setMessage("");
       }
     } finally {
-      setLoading(false);
+      setLoading(false); // Siempre termina en false
+      set({ isInitialLoading: false }); // También terminar carga inicial
     }
   },
 
@@ -171,6 +175,8 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
       message: "",
       error: null,
       lastUpdated: null,
+      isLoading: false, // Asegurar que esté en false al limpiar
+      isInitialLoading: true, // Reset para próxima sesión
     });
   },
 

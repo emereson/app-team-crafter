@@ -1,6 +1,5 @@
 import { Recurso } from "@/interfaces/recurso.interface";
 import Image from "next/image";
-import VideoPlayer from "./VideoPlayer";
 import Countdown, { useCountdown } from "@/hooks/Countdown";
 import { deleteRecurso } from "@/services/recursos.service";
 import { formatDate } from "@/utils/formatDate";
@@ -41,7 +40,13 @@ export default function CardRecursos({ recurso }: Props) {
         )}
 
         <div className="w-full aspect-[1/0.8] object-cover">
-          <VideoPlayer hlsUrl={recurso.clase.video_clase} mode="poster" />
+          <Image
+            className="h-full w-full"
+            src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/doc/${recurso.img_recurso}`}
+            alt={`caducado ${recurso.nombre_recurso}`}
+            width={500}
+            height={500}
+          />{" "}
         </div>
 
         {!isExpired && (

@@ -3,9 +3,18 @@ import Image from "next/image";
 
 interface Props {
   setOpenFilter: (open: boolean) => void;
+  order: "asc" | "desc";
+  setOrder: (order: "asc" | "desc") => void;
 }
 
-export default function TituloFiltroRecursos({ setOpenFilter }: Props) {
+export default function TituloFiltroRecursos({
+  setOpenFilter,
+  order,
+  setOrder,
+}: Props) {
+  const toggleOrder = () => {
+    setOrder(order === "desc" ? "asc" : "desc");
+  };
   return (
     <section>
       <Breadcrumbs
@@ -27,17 +36,18 @@ export default function TituloFiltroRecursos({ setOpenFilter }: Props) {
           <Button
             className="bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold mt-4 hover:bg-[#fc68b939] m-0"
             radius="full"
+            onPress={toggleOrder}
             startContent={
               <Image
                 className="text-xs"
                 src={"/icons/arrows.svg"}
-                alt={`Más reciente `}
+                alt="Ordenar"
                 width={20}
                 height={20}
               />
             }
           >
-            Más reciente
+            {order === "desc" ? "Más reciente" : "Más antiguo"}
           </Button>
           <Button
             className="bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold mt-4 hover:bg-[#fc68b939] m-0"

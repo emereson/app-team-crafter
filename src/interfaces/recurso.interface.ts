@@ -5,6 +5,7 @@ export interface FormClase {
   video_clase: string;
   titulo_clase: string;
   descripcion_clase: string;
+
   categoria_clase: string;
   tutoriales_tips: string;
 }
@@ -14,6 +15,7 @@ export interface Recurso {
   clase_id: string;
   nombre_recurso: string;
   link_recurso: string;
+  img_recurso: string;
   fecha_caducidad: string;
   tipo_recurso: string;
   categoria_recurso: string;

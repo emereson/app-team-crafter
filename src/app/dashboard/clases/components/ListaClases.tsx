@@ -1,9 +1,15 @@
 "use client";
+import { Clase } from "@/interfaces/clase.interface";
 import { cn, Pagination, PaginationItemType } from "@heroui/react";
 import type { PaginationItemRenderProps } from "@heroui/react";
 import Image from "next/image";
+import CardClases from "../../components/CardClases";
 
-export default function ListaClases() {
+interface Props {
+  clases: Clase[];
+}
+
+export default function ListaClases({ clases }: Props) {
   const renderItem = ({
     ref,
     key,
@@ -74,22 +80,22 @@ export default function ListaClases() {
 
   return (
     <section className="w-full flex flex-col items-center gap-8 pt-10">
-      {/* <div className="w-full flex flex-wrap gap-[20px] ">
-        {productos.map((producto) => (
+      <div className="w-full flex flex-wrap gap-[20px] ">
+        {clases.map((clase) => (
           <CardClases
-            key={producto.id}
-            producto={producto}
-            width="w-[calc(33%_-_10px)]"
+            key={clase.id}
+            clase={clase}
+            width="w-[calc(33%_-_15px)]"
           />
         ))}
-      </div> */}
+      </div>
       <Pagination
         disableCursorAnimation
         showControls
         className="gap-4 mt-8"
         initialPage={1}
         renderItem={renderItem}
-        total={8}
+        total={1}
         boundaries={3}
         variant="light"
       />
