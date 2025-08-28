@@ -22,5 +22,5 @@ export interface Clase {
   duracion_video: string;
   status: "active" | "disabled";
   createdAt: string;
-  recurso?: Recurso;
+  recurso: Recurso;
 }
