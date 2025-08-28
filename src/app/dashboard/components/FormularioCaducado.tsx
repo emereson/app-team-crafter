@@ -1,20 +1,35 @@
 import { Recurso } from "@/interfaces/recurso.interface";
+import { postExpirado } from "@/services/recursos.service";
 import { inputClassNames } from "@/utils/classNames";
-import { Textarea } from "@heroui/react";
+import { Spinner, Textarea } from "@heroui/react";
 import Image from "next/image";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface Props {
   recurso: Recurso;
+  onOpenChange: (i: boolean) => void;
 }
-export default function FormularioCaducado({ recurso }: Props) {
-  const { register, handleSubmit } = useForm<{ mensaje: string }>();
+export default function FormularioCaducado({ recurso, onOpenChange }: Props) {
+  const [loading, setLoading] = useState(false);
+  const { register, handleSubmit, reset } = useForm<{ mensaje: string }>();
 
   const onSubmit = async (data: { mensaje: string }) => {
-    console.log(data);
+    setLoading(true);
+    try {
+      await postExpirado(recurso.id, data.mensaje);
 
-    // try {
-    // } catch (error) {}
+      toast.success(
+        "La solicitud se envio correctamente, pronto nos pondremos en contacto con usted"
+      );
+      reset();
+      onOpenChange(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="w-full flex flex-col gap-2">
@@ -51,7 +66,7 @@ export default function FormularioCaducado({ recurso }: Props) {
           className="w-full p-3  text-xl bg-[#FC68B9] rounded-full text-[#FFFFFF] font-bold cursor-pointer "
           type="submit"
         >
-          Envíar
+          {loading ? <Spinner color="danger" /> : "Envíar"}
         </button>
       </form>
     </div>

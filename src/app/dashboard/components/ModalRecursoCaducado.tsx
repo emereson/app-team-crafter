@@ -27,7 +27,7 @@ export default function ModalRecursoCaducado({
         }`}
       >
         {verFormulario ? (
-          <FormularioCaducado recurso={recurso} />
+          <FormularioCaducado recurso={recurso} onOpenChange={onOpenChange} />
         ) : (
           <div className="text-center text-[#FC68B9] font-bold flex flex-col items-center gap-3">
             <BsExclamationCircle className="text-2xl m-auto" />

@@ -20,8 +20,10 @@ export async function getRecursos(params: GetRecursoParams = {}) {
   return res.data.recursos;
 }
 
-// export async function updateClase(data: FormClase, id: number) {
-//   const res = await instance.patch(`/clase/${id}`, data);
+export async function postExpirado(id: number, mensaje: string) {
+  const res = await instance.post(`/recurso/expirado/${id}`, {
+    mensaje: mensaje,
+  });
 
-//   return res.data.clase;
-// }
+  return res.data.clase;
+}
