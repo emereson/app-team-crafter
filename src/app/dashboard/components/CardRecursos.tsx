@@ -1,28 +1,19 @@
 import { Recurso } from "@/interfaces/recurso.interface";
 import Image from "next/image";
 import Countdown, { useCountdown } from "@/hooks/Countdown";
-import { deleteRecurso } from "@/services/recursos.service";
 import { formatDate } from "@/utils/formatDate";
+import { useDisclosure } from "@heroui/react";
+import ModalRecursoCaducado from "./ModalRecursoCaducado";
 
 interface Props {
   recurso: Recurso;
 }
 
 export default function CardRecursos({ recurso }: Props) {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const { isExpired } = useCountdown(recurso.fecha_caducidad);
 
-  const handleDelete = async () => {
-    if (recurso) {
-      try {
-        await deleteRecurso(recurso.id);
-        console.log("Recurso eliminado por caducidad");
-        // Aquí puedes actualizar el estado para remover el elemento de la UI
-        // Por ejemplo, llamar a una función para refrescar la lista
-      } catch (error) {
-        console.error("Error al eliminar recurso:", error);
-      }
-    }
-  };
   return (
     <article
       key={recurso.id}
@@ -46,7 +37,7 @@ export default function CardRecursos({ recurso }: Props) {
             alt={`caducado ${recurso.nombre_recurso}`}
             width={500}
             height={500}
-          />{" "}
+          />
         </div>
 
         {!isExpired && (
@@ -60,7 +51,10 @@ export default function CardRecursos({ recurso }: Props) {
           </a>
         )}
         {isExpired && (
-          <div className="absolute w-full h-full top-0 left-0 bg-[#FC68B980] flex items-center justify-center cursor-no-drop z-20">
+          <div
+            className="absolute w-full h-full top-0 left-0 bg-[#FC68B980] flex items-center justify-center cursor-pointer z-20"
+            onClick={onOpen}
+          >
             <Image
               src={"/icons/candado.svg"}
               alt={`caducado ${recurso.nombre_recurso}`}
@@ -97,16 +91,18 @@ export default function CardRecursos({ recurso }: Props) {
             width={100}
             height={100}
           />
-          <Countdown
-            fechaCaducidad={recurso?.fecha_caducidad}
-            onDelete={handleDelete}
-          />
+          <Countdown fechaCaducidad={recurso?.fecha_caducidad} />
         </div>
       )}
 
       <h3 className="text-medium font-semibold text-[#8A8A8A] uppercase">
         {recurso.nombre_recurso}
       </h3>
+      <ModalRecursoCaducado
+        onOpenChange={onOpenChange}
+        isOpen={isOpen}
+        recurso={recurso}
+      />
     </article>
   );
 }

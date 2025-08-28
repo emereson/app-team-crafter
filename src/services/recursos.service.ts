@@ -20,12 +20,6 @@ export async function getRecursos(params: GetRecursoParams = {}) {
   return res.data.recursos;
 }
 
-export async function deleteRecurso(id: number) {
-  const res = await instance.delete(`/recurso/${id}`);
-
-  return res.data.clase;
-}
-
 // export async function updateClase(data: FormClase, id: number) {
 //   const res = await instance.patch(`/clase/${id}`, data);
 
