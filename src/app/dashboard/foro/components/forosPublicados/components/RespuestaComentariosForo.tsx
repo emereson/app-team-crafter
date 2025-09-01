@@ -6,9 +6,7 @@ interface Props {
   respuesta: RespuestaComentario;
 }
 
-export default function RespuestaComentarios({ respuesta }: Props) {
-  // const [isLiked, setIsLiked] = useState<boolean>(false);
-
+export default function RespuestaComentariosForo({ respuesta }: Props) {
   return (
     <article className="flex gap-3">
       <Avatar

@@ -2,7 +2,15 @@ import { Button } from "@heroui/react";
 import Image from "next/image";
 import { ImClock } from "react-icons/im";
 
-export default function FiltrarForo() {
+interface Props {
+  order: string;
+  setOrder: (i: "asc" | "desc") => void;
+}
+
+export default function FiltrarForo({ order, setOrder }: Props) {
+  const toggleOrder = () => {
+    setOrder(order === "desc" ? "asc" : "desc");
+  };
   return (
     <section className="w-full flex justify-between items-center">
       <div className="flex items-center gap-2">
@@ -29,19 +37,20 @@ export default function FiltrarForo() {
         </Button>
       </div>
       <Button
-        className="bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold hover:bg-[#fc68b939]"
+        className="bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold mt-4 hover:bg-[#fc68b939] m-0"
         radius="full"
+        onPress={toggleOrder}
         startContent={
           <Image
             className="text-xs"
             src={"/icons/arrows.svg"}
-            alt={`Más reciente `}
-            width={18}
-            height={18}
+            alt="Ordenar"
+            width={20}
+            height={20}
           />
         }
       >
-        Más reciente
+        {order === "desc" ? "Más reciente" : "Más antiguo"}
       </Button>
     </section>
   );

@@ -1,11 +1,13 @@
 "use client";
+import { User } from "@/interfaces/user.type";
+import { getPerfil } from "@/services/auth/auth.service";
 import {
   postComentario,
   postRespuestaComentario,
 } from "@/services/comentarios.service";
 import { handleAxiosError } from "@/utils/errorHandler";
 import { Avatar, Button, Textarea } from "@heroui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface Props {
@@ -27,6 +29,20 @@ export default function ComentarClase({
 }: Props) {
   const [value, setValue] = useState("");
   const [isLoading, setIsLoading] = useState(false); // 🆕 Estado de carga
+  const [perfil, setPerfil] = useState<User | null>(null); // 👈 inicializar como null
+
+  useEffect(() => {
+    const fetchPerfil = async () => {
+      try {
+        const res = await getPerfil();
+        setPerfil(res);
+      } catch (error) {
+        console.error("Error cargando perfil:", error);
+      }
+    };
+
+    fetchPerfil();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,7 +81,7 @@ export default function ComentarClase({
     >
       <Avatar
         className="w-10 h-10"
-        src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+        src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${perfil?.foto_perfil}`}
       />
       <form
         onSubmit={handleSubmit}

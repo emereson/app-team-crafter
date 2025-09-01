@@ -1,26 +1,26 @@
-import {
-  Comentario,
-  RespuestaComentario,
-} from "@/interfaces/comentario.interface";
+import { RespuestaComentario } from "@/interfaces/comentario.interface";
 import { Avatar, Button } from "@heroui/react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { PiHeart } from "react-icons/pi";
 import { FaHeart } from "react-icons/fa";
-import ComentarClase from "../ComentarClase";
-import { getRespuestaComentario } from "@/services/comentarios.service";
 import { handleAxiosError } from "@/utils/errorHandler";
-import RespuestaComentarios from "./components/RespuestaComentarios";
-import useLikeComentarioClaseStore from "@/stores/likeComentarioClase.store";
+import type { ComentarioForo } from "@/interfaces/foro.interface";
+import { getRespuestaComentarioForo } from "@/services/foro.service";
+import RespuestaComentariosForo from "./RespuestaComentariosForo";
+import FormComentarForo from "./FormComentarForo";
+import useLikeComentarioForoStore from "@/stores/likeComentarioForo.store";
 
 interface Props {
-  comentario: Comentario;
+  comentario: ComentarioForo;
 }
 
-export default function ComentarioItem({ comentario }: Props) {
-  const { isLiked, toggleLike } = useLikeComentarioClaseStore();
+export default function CardComentarioForo({ comentario }: Props) {
+  const { isLiked, toggleLike } = useLikeComentarioForoStore();
   const [isLoadingLike, setIsLoadingLike] = useState(false);
-  const [likesCount, setLikesCount] = useState<number>(comentario.nro_likes);
+  const [likesCount, setLikesCount] = useState<number>(
+    comentario.likes_comentario_foro
+  );
 
   const [openResponder, setOpenResponder] = useState<boolean>(false);
   const [respuestacomentarios, setRespuestaComentarios] = useState<
@@ -31,7 +31,7 @@ export default function ComentarioItem({ comentario }: Props) {
 
   const findRespuestaComentarios = useCallback(async () => {
     try {
-      const res = await getRespuestaComentario(comentario.id);
+      const res = await getRespuestaComentarioForo(comentario.id);
       setRespuestaComentarios(res);
     } catch (err) {
       handleAxiosError(err);
@@ -59,6 +59,8 @@ export default function ComentarioItem({ comentario }: Props) {
     }
   };
 
+  console.log(comentario);
+
   return (
     <article className="w-full">
       <div className="flex gap-4">
@@ -84,45 +86,55 @@ export default function ComentarioItem({ comentario }: Props) {
             {comentario.comentario}
           </p>
 
-          <div className="flex gap-4 mt-2 items-center">
-            <button
-              onClick={handleToggleLike}
-              disabled={isLoadingLike}
-              className={`transition-transform duration-200 ${
-                isLoadingLike ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-            >
-              {isLiked(comentario.id) ? (
-                <FaHeart className="text-2xl text-[#FC68B9] cursor-pointer" />
-              ) : (
-                <PiHeart className="text-2xl text-[#FFB4DF] cursor-pointer" />
-              )}
-            </button>
-            <p className={classText}>{likesCount}</p>
-
+          <div className="w-full flex justify-between">
+            <div className="flex gap-4  items-center">
+              <button
+                onClick={handleToggleLike}
+                disabled={isLoadingLike}
+                className={`transition-transform duration-200 ${
+                  isLoadingLike ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                {isLiked(comentario.id) ? (
+                  <FaHeart className="text-2xl text-[#FC68B9] cursor-pointer" />
+                ) : (
+                  <PiHeart className="text-2xl text-[#FFB4DF] cursor-pointer" />
+                )}
+              </button>
+              <p className={classText}>{likesCount}</p>
+              <Button
+                variant="light"
+                size="sm"
+                className="p-0 h-auto min-w-0 w-fit gap-1.5 text-[#FC68B9] hover:bg-[#FC68B9]/10"
+                startContent={
+                  <Image
+                    src="/icons/message.svg"
+                    alt=""
+                    width={20}
+                    height={20}
+                    className="opacity-80"
+                  />
+                }
+              >
+                <span className="text-sm font-medium">
+                  {comentario.respuesta_comentarios_foros?.length}
+                </span>
+              </Button>
+            </div>
             <Button
               variant="light"
               size="sm"
               className="p-0 h-auto min-w-0 gap-2 text-[#FC68B9] hover:bg-[#FC68B9]/10"
               onPress={() => setOpenResponder(!openResponder)}
-              startContent={
-                <Image
-                  src="/icons/message.svg"
-                  alt=""
-                  width={20}
-                  height={20}
-                  className="opacity-80"
-                />
-              }
             >
               <span className="text-sm font-medium">Responder</span>
             </Button>
           </div>
 
           {openResponder && (
-            <ComentarClase
-              claseId={comentario.clase_id}
-              findComentarios={findRespuestaComentarios}
+            <FormComentarForo
+              foroId={comentario.foro_id}
+              reloadForo={findRespuestaComentarios}
               respuestaComentario={true}
               comentarioId={comentario.id}
               user_comentario_id={comentario.user_id}
@@ -133,7 +145,7 @@ export default function ComentarioItem({ comentario }: Props) {
 
       <div className="ml-10 mt-4">
         {respuestacomentarios.map((respuesta) => (
-          <RespuestaComentarios key={respuesta.id} respuesta={respuesta} />
+          <RespuestaComentariosForo key={respuesta.id} respuesta={respuesta} />
         ))}
       </div>
     </article>

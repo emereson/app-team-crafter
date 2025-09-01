@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import useLikeComentarioClaseStore from "@/stores/likeComentarioClase.store";
 import useFavoritosStore from "@/stores/favoritos.store";
 import Loading from "../components/Loading";
+import useLikedForoStore from "@/stores/likeForos.store";
 
 export default function DashboardLayout({
   children,
@@ -26,12 +27,14 @@ export default function DashboardLayout({
   const fetchLikesComentarioClases = useLikeComentarioClaseStore(
     (s) => s.fetchLikes
   );
+  const fetchLikesForos = useLikedForoStore((s) => s.fetchLikes);
 
   useEffect(() => {
     fetchFavoritos();
     fetchLikes();
     fetchLikesComentarioClases();
-  }, [fetchLikes, fetchLikesComentarioClases, fetchFavoritos]);
+    fetchLikesForos();
+  }, [fetchLikes, fetchLikesComentarioClases, fetchFavoritos, fetchLikesForos]);
 
   // Mostrar loading durante la carga inicial O durante refetches
   if (isInitialLoading || isLoading) {

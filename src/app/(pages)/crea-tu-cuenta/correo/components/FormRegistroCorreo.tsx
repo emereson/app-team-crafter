@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { handleAxiosError } from "@/utils/errorHandler";
 import Loading from "@/app/components/Loading";
 import { useRouter, useSearchParams } from "next/navigation";
+import { usePerfilStore } from "@/stores/perfil.store";
 
 function FormRegistroCorreoContent() {
   const router = useRouter();
@@ -31,6 +32,7 @@ function FormRegistroCorreoContent() {
   } = useForm<Signup>();
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
+  const setPerfil = usePerfilStore((state) => state.setPerfil);
 
   const watchedFields = watch([
     "nombre",
@@ -56,9 +58,10 @@ function FormRegistroCorreoContent() {
     async (data: Signup) => {
       setLoading(true);
       try {
-        await postSignup(data);
+        const res = await postSignup(data);
         toast.success("Se registró correctamente");
         reset();
+        setPerfil(res.user);
         router.push(`/planes/${plan}`);
       } catch (err: unknown) {
         handleAxiosError(err);
@@ -197,7 +200,6 @@ function FormRegistroCorreoContent() {
               }) => (
                 <div className="relative">
                   <PhoneInput
-                    country={"pe"}
                     value={value}
                     onChange={(phone) => onChange(phone)}
                     inputStyle={{

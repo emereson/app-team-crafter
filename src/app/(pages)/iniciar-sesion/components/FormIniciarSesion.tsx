@@ -12,9 +12,12 @@ import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import ModalOlvideContraseña from "./ModalOlvideContraseña";
+import { usePerfilStore } from "@/stores/perfil.store";
 
 export default function FormIniciarSesion() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const setPerfil = usePerfilStore((state) => state.setPerfil);
+
   const router = useRouter();
 
   const { register, handleSubmit } = useForm<Login>();
@@ -29,8 +32,9 @@ export default function FormIniciarSesion() {
     async (data: Login) => {
       setLoading(true);
       try {
-        await postLogin(data);
+        const res = await postLogin(data);
         router.push("/");
+        setPerfil(res.user);
         window.location.reload();
       } catch (err: unknown) {
         handleAxiosError(err);

@@ -32,7 +32,7 @@ export default function Clases() {
   }, [order]);
 
   return (
-    <main className="w-full p-10 py-8">
+    <main className="w-full  max-w-7xl  mx-auto  px-10 py-8">
       <TituloFiltroClases
         setOpenFilter={setOpenFilter}
         order={order}

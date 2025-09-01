@@ -36,6 +36,16 @@ export async function getPerfil() {
   }
 }
 
+export async function updatePerfil(id: string, data: FormData) {
+  try {
+    const res = await instance.patch(`/user/${id}`, data);
+
+    return res.data.user;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function verificarCorreo(token: string) {
   try {
     const res = await instance.get(`/user/verificar-correo/${token}`);

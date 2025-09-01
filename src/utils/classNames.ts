@@ -38,3 +38,29 @@ export const inputClassNames2 = {
   ],
   label: "text-gray text-base font-medium pb-1",
 };
+
+export const inputClassNames3 = {
+  inputWrapper:
+    "bg-[#ffffff] data-[hover=true]:bg-[#ffffff] h-12 border-1 border-[#8A8A8A] ",
+  input: [
+    "text-gray",
+    "text-base",
+    "font-semibold",
+    "bg-transparent",
+    "placeholder:text-gray",
+  ],
+  label: "text-gray text-base font-medium pb-1",
+};
+
+export const inputClassNames4 = {
+  inputWrapper:
+    "bg-[#ffffff] data-[hover=true]:bg-[#ffffff] h-12 border-1 border-[#8A8A8A]   border-l-0  rounded-l-none",
+  input: [
+    "text-gray",
+    "text-base",
+    "font-semibold",
+    "bg-transparent",
+    "placeholder:text-gray",
+  ],
+  label: "text-gray text-base font-medium pb-1",
+};

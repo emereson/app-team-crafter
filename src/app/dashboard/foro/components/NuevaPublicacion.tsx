@@ -11,14 +11,25 @@ import {
 } from "@heroui/react";
 import Image from "next/image";
 import { LuPlus } from "react-icons/lu";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import { FormForo } from "@/interfaces/foro.interface";
+import { useForm } from "react-hook-form";
+import { postForo } from "@/services/foro.service";
+import { toast } from "sonner";
+import { handleAxiosError } from "@/utils/errorHandler";
 
-export default function NuevaPublicacion() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+interface Props {
+  gfindForos: () => void;
+}
+
+export default function NuevaPublicacion({ gfindForos }: Props) {
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { register, handleSubmit, reset } = useForm<FormForo>();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -51,6 +62,34 @@ export default function NuevaPublicacion() {
     }
   };
 
+  const onSubmit = useCallback(
+    async (data: FormForo) => {
+      setLoading(true);
+      try {
+        const formData = new FormData();
+        formData.append("titulo_foro", data.titulo_foro);
+        formData.append("contenido_foro", data.contenido_foro);
+        formData.append("categoria_foro", data.categoria_foro);
+
+        if (selectedImage) {
+          formData.append("img", selectedImage);
+        }
+
+        await postForo(formData);
+        gfindForos();
+        reset();
+        toast.success("El foro se publico correctamente");
+        removeImage();
+        onClose();
+      } catch (err: unknown) {
+        handleAxiosError(err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [selectedImage]
+  );
+
   return (
     <section className="w-full flex flex-col gap-4 -mt-2">
       <div className="w-full h-[70px] flex justify-end items-center border-1 border-[#FFB4DF] rounded-2xl px-4">
@@ -65,7 +104,10 @@ export default function NuevaPublicacion() {
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
         <ModalContent className="w-full p-4">
           {(onClose) => (
-            <form className="w-full p-4 flex flex-col gap-4 ">
+            <form
+              className="w-full p-4 flex flex-col gap-4 "
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <h2 className="text-2xl text-[#68E1E0] font-bold">
                 Nueva publicación
               </h2>
@@ -78,6 +120,7 @@ export default function NuevaPublicacion() {
                 labelPlacement="outside"
                 type="text"
                 errorMessage="El titular es obligatorio"
+                {...register("titulo_foro")}
                 radius="full"
               />
 
@@ -88,6 +131,7 @@ export default function NuevaPublicacion() {
                 placeholder="Describe tu idea o pregunta aquí..."
                 labelPlacement="outside"
                 errorMessage="El contenido es obligatorio"
+                {...register("contenido_foro")}
                 radius="full"
                 minRows={4}
               />
@@ -161,6 +205,7 @@ export default function NuevaPublicacion() {
                   },
                 }}
                 labelPlacement="outside"
+                {...register("categoria_foro")}
                 defaultSelectedKeys={["Consejos"]}
               >
                 <SelectItem key="Consejos">Consejos</SelectItem>
@@ -180,7 +225,7 @@ export default function NuevaPublicacion() {
                   className="bg-[#FC68B9] text-white font-semibold"
                   radius="full"
                 >
-                  Publicar
+                  {loading ? "cargando ... " : "Publicar"}
                 </Button>
               </div>
             </form>
