@@ -17,7 +17,7 @@ interface Usuario {
   correo: string;
 }
 
-interface Suscripcion {
+export interface Suscripcion {
   id: number;
   status: string;
   plan_id: number;

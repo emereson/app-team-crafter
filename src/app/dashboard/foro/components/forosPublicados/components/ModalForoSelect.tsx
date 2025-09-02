@@ -1,18 +1,9 @@
 import { ComentarioForo, Foro } from "@/interfaces/foro.interface";
-import { getComentarioForo, postComentarioForo } from "@/services/foro.service";
+import { getComentarioForo } from "@/services/foro.service";
 import { handleAxiosError } from "@/utils/errorHandler";
-import {
-  Avatar,
-  Button,
-  Divider,
-  Modal,
-  ModalContent,
-  Textarea,
-} from "@heroui/react";
+import { Avatar, Button, Divider, Modal, ModalContent } from "@heroui/react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import CardComentarioForo from "./CardComentarioForo";
 import useLikedForoStore from "@/stores/likeForos.store";
 import { FaHeart } from "react-icons/fa";

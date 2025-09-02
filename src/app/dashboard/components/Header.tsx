@@ -1,6 +1,10 @@
 "use client";
 
+import { Clase } from "@/interfaces/clase.interface";
+import { getBuscar } from "@/services/clases.service";
+import { usePerfilStore } from "@/stores/perfil.store";
 import { removeToken } from "@/utils/authUtils";
+import { handleAxiosError } from "@/utils/errorHandler";
 import {
   Dropdown,
   DropdownItem,
@@ -10,10 +14,18 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { RiArrowDownSLine } from "react-icons/ri";
 
 export default function Header() {
+  const perfil = usePerfilStore((state) => state.perfil);
   const router = useRouter();
+  const [clases, setClases] = useState<Clase[]>([]);
+  const [buscador, setBuscador] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleLogout = () => {
     removeToken();
@@ -21,54 +33,208 @@ export default function Header() {
     window.location.reload();
   };
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // Lógica de búsqueda aquí
-    const formData = new FormData(e.currentTarget);
-    const searchTerm = formData.get("search") as string;
-    console.log("Buscando:", searchTerm);
+  // Cerrar búsqueda al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target as Node)
+      ) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Búsqueda con debounce
+  useEffect(() => {
+    const searchClasses = async () => {
+      if (buscador.length <= 2) {
+        setClases([]);
+        setIsSearchOpen(false);
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const res = await getBuscar(buscador);
+        setClases(res);
+        setIsSearchOpen(res.length > 0);
+      } catch (err) {
+        handleAxiosError(err);
+        setClases([]);
+        setIsSearchOpen(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const debounceTimer = setTimeout(searchClasses, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [buscador]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setBuscador(value);
+
+    if (value.length > 2) {
+      setIsLoading(true);
+    }
+  };
+
+  const handleSearchFocus = () => {
+    if (clases.length > 0 && buscador.length > 2) {
+      setIsSearchOpen(true);
+    }
+  };
+
+  const handleClassClick = () => {
+    setIsSearchOpen(false);
+    setBuscador("");
+    setClases([]);
+  };
+
+  const clearSearch = () => {
+    setBuscador("");
+    setClases([]);
+    setIsSearchOpen(false);
+    inputRef.current?.focus();
   };
 
   return (
-    <header className="w-full h-[80px] px-4 md:px-20 bg-[#fc68b9] flex items-center justify-between">
-      <Image
-        className="h-[54px] w-auto flex-shrink-0"
-        src="/logo.png"
-        alt="Logo PS y AI"
-        width={200}
-        height={54}
-        priority
-      />
-
-      <form
-        onSubmit={handleSearch}
-        className="relative w-full max-w-xl mx-4 md:mx-20 bg-[#FFE1F2] flex items-center rounded-full overflow-hidden"
-      >
-        <input
-          name="search"
-          className="w-full py-2.5 px-5 bg-transparent placeholder:text-[#FFB4DF] text-lg font-bold text-[#fc68b9] focus:outline-none"
-          type="text"
-          placeholder="Buscar"
+    <header className="w-full h-[80px] px-4 md:px-20 bg-[#fc68b9] flex items-center justify-between relative z-50">
+      <Link href={"/dashboard/inicio"}>
+        <Image
+          className="h-[54px] w-auto flex-shrink-0"
+          src="/logo.png"
+          alt="Logo PS y AI"
+          width={200}
+          height={54}
+          priority
         />
-        <button
-          type="submit"
-          className="absolute right-0 h-full p-3 px-5 hover:bg-[#ffd2ec] cursor-pointer transition-colors"
-          aria-label="Buscar"
-        >
-          <Image
-            className="h-full w-auto"
-            src="/icons/search.svg"
-            alt="Buscar"
-            width={24}
-            height={24}
+      </Link>
+
+      <section
+        ref={searchContainerRef}
+        className="relative w-full max-w-xl mx-4 md:mx-20"
+      >
+        <div className="relative bg-[#FFE1F2] flex items-center rounded-full transition-all duration-300 ease-in-out hover:shadow-lg focus-within:shadow-lg focus-within:ring-2 focus-within:ring-white/30">
+          <input
+            ref={inputRef}
+            name="search"
+            className="w-full py-2.5 px-5 bg-transparent placeholder:text-[#FFB4DF] text-lg font-bold text-[#fc68b9] focus:outline-none transition-all duration-200"
+            type="text"
+            placeholder="Buscar clases..."
+            value={buscador}
+            onChange={handleSearchChange}
+            onFocus={handleSearchFocus}
+            autoComplete="off"
           />
-        </button>
-      </form>
+
+          {/* Botón para limpiar búsqueda */}
+          {buscador && (
+            <button
+              onClick={clearSearch}
+              className="absolute right-12 p-1 text-[#FFB4DF] hover:text-[#fc68b9] transition-colors duration-200"
+              aria-label="Limpiar búsqueda"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          )}
+
+          <button
+            className="absolute right-0 h-full p-3 px-5 cursor-pointer transition-all duration-200 hover:scale-105"
+            aria-label="Buscar"
+          >
+            {isLoading ? (
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#fc68b9] border-t-transparent"></div>
+            ) : (
+              <Image
+                className="h-full w-auto"
+                src="/icons/search.svg"
+                alt="Buscar"
+                width={24}
+                height={24}
+              />
+            )}
+          </button>
+        </div>
+
+        {/* Resultados de búsqueda con animaciones */}
+        <div
+          className={`absolute top-[110%] left-0 z-50 bg-[#FFE1F2] rounded-2xl w-full overflow-hidden shadow-xl border border-[#ffcce9] transition-all duration-300 ease-out transform ${
+            isSearchOpen && clases.length > 0
+              ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
+              : "opacity-0 -translate-y-2 scale-95 pointer-events-none"
+          }`}
+        >
+          <div className="max-h-96 overflow-y-auto">
+            {clases.map((clase, index) => (
+              <Link
+                key={clase.id}
+                href={`/dashboard/clases/${clase.id}`}
+                onClick={handleClassClick}
+                className={`block p-4 border-b border-[#ffcce9] last:border-b-0 hover:bg-[#edd5e3] transition-all duration-200 transform hover:scale-[1.02] ${
+                  index === 0 ? "rounded-t-2xl" : ""
+                } ${
+                  index === clases.length - 1 ? "rounded-b-2xl border-b-0" : ""
+                }`}
+                style={{
+                  animationDelay: `${index * 50}ms`,
+                  animation: isSearchOpen ? "slideInUp 0.3s ease-out" : "none",
+                }}
+              >
+                <div className="space-y-1">
+                  <h3 className="text-sm text-[#fc68b9] font-bold leading-tight line-clamp-1">
+                    {clase.titulo_clase}
+                  </h3>
+                  <p className="text-xs text-[#8A8A8A] font-medium line-clamp-2 leading-relaxed">
+                    {clase.descripcion_clase}
+                  </p>
+                  {clase.recurso?.nombre_recurso && (
+                    <p className="text-xs text-[#fc68b9] font-bold bg-[#FFE1F2] inline-block px-2 py-1 rounded-full">
+                      {clase.recurso.nombre_recurso}
+                    </p>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Indicador de más resultados */}
+          {clases.length >= 5 && (
+            <div className="p-2 text-center bg-[#edd5e3]">
+              <p className="text-xs text-[#8A8A8A] font-medium">
+                Mostrando {clases.length} resultados
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Overlay para cerrar en móvil */}
+        {isSearchOpen && (
+          <div
+            className="fixed inset-0 bg-black/20 z-40 md:hidden"
+            onClick={() => setIsSearchOpen(false)}
+          />
+        )}
+      </section>
 
       <div className="flex items-center gap-2 flex-shrink-0">
         <Link href="/dashboard/notificaciones" aria-label="Notificaciones">
           <Image
-            className="h-[40px] w-auto hover:opacity-80 transition-opacity"
+            className="h-[40px] w-auto hover:opacity-80 transition-all duration-200 hover:scale-105"
             src="/icons/notification.svg"
             alt="Notificaciones"
             width={40}
@@ -84,10 +250,10 @@ export default function Header() {
           }}
         >
           <DropdownTrigger>
-            <div className="flex items-center text-white gap-2 cursor-pointer hover:opacity-90 transition-opacity">
+            <div className="flex items-center text-white gap-2 cursor-pointer hover:opacity-90 transition-all duration-200 hover:scale-105">
               <Image
-                className="h-[40px] w-[40px] border-2 border-[#68E1E0] rounded-full object-cover"
-                src="/avatar.png"
+                className="h-[40px] w-[40px] border-2 border-[#68E1E0] rounded-full object-cover transition-all duration-200"
+                src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${perfil?.foto_perfil}`}
                 alt="Avatar usuario"
                 width={40}
                 height={40}
@@ -95,14 +261,14 @@ export default function Header() {
               <p className="text-base font-bold hidden sm:block">
                 Natalia Tobar
               </p>
-              <RiArrowDownSLine className="text-2xl" />
+              <RiArrowDownSLine className="text-2xl transition-transform duration-200 group-hover:rotate-180" />
             </div>
           </DropdownTrigger>
 
           <DropdownMenu aria-label="Menú de usuario" variant="flat">
             <DropdownItem
               key="mi-cuenta"
-              className="px-4 py-3 data-[hover=true]:bg-[#ffcce9] rounded-lg mx-2 my-1"
+              className="px-4 py-3 data-[hover=true]:bg-[#ffcce9] rounded-lg mx-2 my-1 transition-all duration-200"
               startContent={
                 <Image
                   className="h-[24px] w-[24px]"
@@ -123,7 +289,7 @@ export default function Header() {
 
             <DropdownItem
               key="favoritos"
-              className="px-4 py-3 data-[hover=true]:bg-[#ffcce9] rounded-lg mx-2 my-1"
+              className="px-4 py-3 data-[hover=true]:bg-[#ffcce9] rounded-lg mx-2 my-1 transition-all duration-200"
               startContent={
                 <Image
                   className="h-[24px] w-[24px]"
@@ -145,7 +311,7 @@ export default function Header() {
             <DropdownItem
               key="cerrar-sesion"
               onClick={handleLogout}
-              className="px-4 py-3 data-[hover=true]:bg-[#ffcce9] rounded-lg mx-2 my-1"
+              className="px-4 py-3 data-[hover=true]:bg-[#ffcce9] rounded-lg mx-2 my-1 transition-all duration-200"
               startContent={
                 <Image
                   className="h-[24px] w-[24px]"

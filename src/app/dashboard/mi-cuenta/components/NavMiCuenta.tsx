@@ -14,10 +14,6 @@ export default function NavMiCuenta({ navSelect, setNavSelect }: Props) {
       title: "Descargas",
     },
     {
-      id: 3,
-      title: "Notificaciones",
-    },
-    {
       id: 4,
       title: "Membresía",
     },

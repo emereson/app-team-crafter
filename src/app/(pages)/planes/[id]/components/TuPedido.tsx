@@ -46,7 +46,7 @@ export default function TuPedido() {
         const response = await postSuscripcion(productoFind.id);
         console.log(response);
 
-        window.location.href = response.payment.redirectUrl;
+        window.location.href = response.payment.paymentUrl;
       } catch (error) {
         console.error(error);
         handleAxiosError(error);

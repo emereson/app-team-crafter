@@ -1,6 +1,6 @@
 import instance from "./auth/axiosInstance";
 
-interface GetClasesParams {
+export interface GetClasesParams {
   categoria_clase?: string | null;
   tutoriales_tips?: string | null;
   cuatro_ultimos?: string;
@@ -33,8 +33,13 @@ export async function getLikeClase(id: number | string) {
 }
 
 export async function getViewClase(id: number | string) {
-  await instance.get(`/clase/view/${id}`);
-  return true;
+  const res = await instance.get(`/clase/view/${id}`);
+  return res.data.clases;
+}
+
+export async function getBuscar(buscador: string) {
+  const res = await instance.get(`/clase/buscar?buscador=${buscador}`);
+  return res.data.clases;
 }
 
 // export async function postClase(data: FormClase) {

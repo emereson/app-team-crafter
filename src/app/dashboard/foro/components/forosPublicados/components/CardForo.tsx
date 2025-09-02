@@ -111,7 +111,7 @@ export default function CardForo({
           alt={`Imagen del foro ${foro.titulo_foro}`}
           width={600}
           height={300}
-          className="w-full h-auto rounded-lg object-cover"
+          className="w-full h-[280px] rounded-lg object-cover"
         />
       )}
 
