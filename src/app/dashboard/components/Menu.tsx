@@ -31,16 +31,19 @@ const MenuItem = memo(
     label,
     icon,
     isActive,
+    closeMenu,
   }: {
     href: string;
     label: string;
     icon: string;
     isActive: boolean;
+    closeMenu: () => void;
   }) => (
     <Link
       href={href}
       className="flex items-center gap-4 pl-9 group hover:pl-10 transition-all duration-200"
       prefetch={true}
+      onClick={closeMenu}
     >
       {/* Usando Image component en lugar de background-image */}
       <div className="h-10 w-10 relative transition-all duration-200">
@@ -121,6 +124,7 @@ export default function Menu() {
           label={item.label}
           icon={item.icon}
           isActive={pathname === item.href}
+          closeMenu={closeMenu}
         />
       )),
     [pathname]
@@ -135,7 +139,7 @@ export default function Menu() {
 
       {/* Menú */}
       <div
-        className={`min-w-[280px] w-min h-full overflow-auto bg-[#C3F3F3] py-6 flex flex-col gap-4 z-20 
+        className={`min-w-[280px] w-min h-full overflow-auto bg-[#C3F3F3] py-6 flex flex-col gap-4 z-40 
           max-md:fixed max-md:top-[65px] max-md:h-[calc(100vh-65px)]
           transition-opacity duration-300 ease-in-out
           ${
