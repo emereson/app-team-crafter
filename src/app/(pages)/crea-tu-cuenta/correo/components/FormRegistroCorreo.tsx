@@ -76,7 +76,7 @@ function FormRegistroCorreoContent() {
         setLoading(false);
       }
     },
-    [reset, plan, router]
+    [reset, plan, router, setPerfil]
   );
 
   const validatePassword = (password: string) => {

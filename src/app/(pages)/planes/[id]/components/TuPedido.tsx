@@ -13,12 +13,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-// declare global {
-//   interface Window {
-//     Flow: any;
-//   }
-// }
-
 export default function TuPedido() {
   const params = useParams();
   const id = params?.id as string;
@@ -26,7 +20,6 @@ export default function TuPedido() {
   // 🔥 TODOS LOS HOOKS DEBEN IR AL PRINCIPIO, ANTES DE CUALQUIER RETURN
   const [perfil, setPerfil] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tokenTarjeta, setTokenTarjeta] = useState("");
 
   // ✅ TODOS LOS useEffect TAMBIÉN DEBEN IR AQUÍ
   const productoFind = planes.find((p) => p.id === Number(id));
@@ -55,7 +48,6 @@ export default function TuPedido() {
         const res = await getPerfilRegistrarTarjeta();
 
         setPerfil(res.perfil);
-        setTokenTarjeta(res.token);
         window.location.href = res.url;
       } catch (error) {
         console.error("Error cargando perfil:", error);

@@ -52,7 +52,7 @@ function VerificarCorreoContent() {
     }, 1000);
 
     return () => clearInterval(intervalo);
-  }, [loading, perfil, router]);
+  }, [loading, perfil, router, plan]);
 
   if (loading) return <Loading />;
 

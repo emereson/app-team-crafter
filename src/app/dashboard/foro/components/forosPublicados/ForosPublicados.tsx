@@ -1,10 +1,7 @@
 import { Foro } from "@/interfaces/foro.interface";
-import { Avatar, Button, Divider, useDisclosure } from "@heroui/react";
-import Image from "next/image";
+import { useDisclosure } from "@heroui/react";
 import { useState } from "react";
-import { PiHeart } from "react-icons/pi";
 import ModalForoSelect from "./components/ModalForoSelect";
-import useLikedForoStore from "@/stores/likeForos.store";
 import CardForo from "./components/CardForo";
 // import ModalForoSelect from "./components/ModalForoSelect";
 

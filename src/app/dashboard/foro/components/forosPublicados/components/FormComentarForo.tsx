@@ -4,7 +4,7 @@ import {
   postRespuestaComentarioForo,
 } from "@/services/foro.service";
 import { handleAxiosError } from "@/utils/errorHandler";
-import { Avatar, Button, Textarea } from "@heroui/react";
+import { Button, Textarea } from "@heroui/react";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";

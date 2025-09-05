@@ -33,7 +33,7 @@ export default function InformacionSuscripcion() {
 
   useEffect(() => {
     gfindsuscripciones();
-  }, []);
+  }, [getSuscripciones]);
 
   const suscripcionActiva = suscripciones.find((s) => s.status === 1);
 
@@ -42,9 +42,7 @@ export default function InformacionSuscripcion() {
   );
 
   const planSuscripcion = (planExternalId: string) => {
-    const planActivo = planes.find(
-      (p) => p.flow_plan_id === suscripcionActiva?.planExternalId
-    );
+    const planActivo = planes.find((p) => p.flow_plan_id === planExternalId);
 
     return planActivo;
   };

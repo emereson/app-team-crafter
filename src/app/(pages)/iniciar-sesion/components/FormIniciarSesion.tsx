@@ -45,7 +45,7 @@ export default function FormIniciarSesion() {
         setLoading(false);
       }
     },
-    [router]
+    [router, setPerfil]
   );
 
   const watchedFields = watch(["correo", "password"]);
