@@ -18,7 +18,7 @@ export default function RecursoDescargable({ clase }: Props) {
   return (
     <>
       {isExpired ? (
-        <div>
+        <div className="w-full flex flex-col gap-2">
           <h2 className="text-lg text-[#68E1E0] font-semibold">
             Recurso descargable
           </h2>

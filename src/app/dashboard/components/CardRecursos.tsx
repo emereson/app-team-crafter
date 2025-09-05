@@ -7,9 +7,10 @@ import ModalRecursoCaducado from "./ModalRecursoCaducado";
 
 interface Props {
   recurso: Recurso;
+  width?: string;
 }
 
-export default function CardRecursos({ recurso }: Props) {
+export default function CardRecursos({ recurso, width }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const { isExpired } = useCountdown(recurso.fecha_caducidad);
@@ -17,9 +18,11 @@ export default function CardRecursos({ recurso }: Props) {
   return (
     <article
       key={recurso.id}
-      className="w-[calc(33%_-_30px)]  flex flex-col gap-3"
+      className={`${
+        width ? width : "w-[calc(33%_-_20px)]"
+      }   flex flex-col gap-3  max-md:w-full`}
     >
-      <div className="w-full relative rounded-2xl overflow-hidden">
+      <div className="group w-full relative rounded-2xl overflow-hidden">
         {recurso.tipo_recurso === "Exclusivos" && (
           <Image
             className="absolute top-4 left-4 w-10 z-30"
@@ -30,9 +33,9 @@ export default function CardRecursos({ recurso }: Props) {
           />
         )}
 
-        <div className="w-full aspect-[1/0.8] object-cover">
+        <div className="w-full aspect-[1/1] object-cover">
           <Image
-            className="h-full w-full"
+            className="h-full w-full object-cover group-hover:scale-105 duration-300"
             src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/doc/${recurso.img_recurso}`}
             alt={`caducado ${recurso.nombre_recurso}`}
             width={500}
@@ -42,7 +45,7 @@ export default function CardRecursos({ recurso }: Props) {
 
         {!isExpired && (
           <a
-            className="group absolute cursor-pointer right-4 bottom-4 bg-white text-[#FC68B9] font-semibold flex items-center gap-3 p-1.5 px-4 rounded-full hover:bg-[#FC68B9] hover:text-white"
+            className="group absolute cursor-pointer right-4 bottom-4 bg-white text-[#FC68B9] font-semibold flex items-center gap-3 p-1.5 px-4 rounded-full group-hover:bg-[#FC68B9] group-hover:text-white duration-300"
             href={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/doc/${recurso?.link_recurso}`}
             download
           >

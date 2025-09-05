@@ -1,5 +1,3 @@
-import { FaFireFlameCurved } from "react-icons/fa6";
-import { PiLightningFill } from "react-icons/pi";
 import { TbArrowsUpDown } from "react-icons/tb";
 
 export default function FiltrarComentarios() {
@@ -12,14 +10,14 @@ export default function FiltrarComentarios() {
         <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#FC68B9]" />
       </article>
       <div className="h-full flex items-center  z-10">
-        <button className="relative w-8 h-full">
+        {/* <button className="relative w-8 h-full">
           <FaFireFlameCurved className="m-auto text-[#ED0006] text-xl" />
           <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#ED0006]" />
         </button>
         <button className="relative w-8 h-full">
           <PiLightningFill className="m-auto text-[#F9A000] text-xl" />
           <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#F9A000]" />
-        </button>
+        </button> */}
         <button className="flex items-center gap-2">
           <TbArrowsUpDown className="text-xl text-[#FC68B9]" />
           <p className="text-medium text-[#FC68B9] font-bold ">Más reciente</p>

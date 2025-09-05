@@ -28,13 +28,15 @@ export default function TituloFiltroFavoritos({
         <BreadcrumbItem>Favoritos</BreadcrumbItem>
       </Breadcrumbs>
 
-      <h1 className="mt-6 text-4xl font-black text-[#96EAEA]">Favoritos</h1>
+      <h1 className="mt-6 text-4xl font-black text-[#96EAEA] max-sm:text-2xl">
+        Favoritos
+      </h1>
 
-      <article className="w-full flex justify-between items-end">
-        <p className="text-[#8A8A8A]">
+      <article className="w-full flex justify-between items-end max-md:flex-col">
+        <p className="text-[#8A8A8A] max-sm:w-full">
           Aquí encontraras todas tus clases guardadas{" "}
         </p>
-        <div className="flex gap-2 ">
+        <div className="flex gap-2 max-md:mt-4">
           <Button
             className="bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold mt-4 hover:bg-[#fc68b939] m-0"
             radius="full"

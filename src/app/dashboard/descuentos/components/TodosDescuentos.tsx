@@ -36,7 +36,7 @@ const descuentos = [
 ];
 export default function TodosDescuentos() {
   return (
-    <section className="w-full flex flex-col gap-7 mt-16">
+    <section className="w-full flex flex-col gap-7 mt-16 ">
       <Button
         className="w-fit bg-white border-1 border-[#FC68B9] text-[#FC68B9] font-semibold mt-4 hover:bg-[#fc68b939] m-0"
         radius="full"

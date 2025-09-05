@@ -13,7 +13,7 @@ export default function DatosCompra() {
   const { suscripcion } = useSuscripcionStore();
 
   return (
-    <section className="w-full min-w-[300px]  h-full bg-white p-14 rounded-2xl  flex flex-col justify-center items-center  gap-10 ">
+    <section className="w-full min-w-[300px]  h-full bg-white p-14 rounded-2xl  flex flex-col justify-center items-center  gap-10  max-sm:p-10">
       <Image
         className="w-[150px]"
         src="/verificacion.gif"

@@ -19,10 +19,10 @@ interface Usuario {
 
 export interface Suscripcion {
   id: number;
-  status: string;
-  plan_id: number;
-  startDate: string;
-  endDate: string;
+  status: number;
+  planExternalId: string;
+  period_start: string;
+  period_end: string;
   precio: number;
   user_id: string;
   plan: Plan;
@@ -74,7 +74,7 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
   // Getters computados
   get isPremium() {
     const { suscripcion, isExpired } = get();
-    return !!suscripcion && suscripcion.status === "activa" && !isExpired;
+    return !!suscripcion && suscripcion.status === 1 && !isExpired;
   },
 
   get planName() {
@@ -85,18 +85,18 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
   get isExpired() {
     const { suscripcion } = get();
     if (!suscripcion) return true;
-    const endDate = new Date(suscripcion.endDate);
+    const period_end = new Date(suscripcion.period_end);
     const now = new Date();
-    return endDate < now;
+    return period_end < now;
   },
 
   get daysRemaining() {
     const { suscripcion } = get();
     if (!suscripcion) return 0;
-    const endDate = new Date(suscripcion.endDate);
+    const period_end = new Date(suscripcion.period_end);
     const now = new Date();
     const days = Math.ceil(
-      (endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+      (period_end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
     );
     return Math.max(0, days);
   },

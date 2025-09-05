@@ -24,7 +24,7 @@ export async function getSuscripciones() {
   try {
     const res = await instance.get(`/suscripcion`);
 
-    return res.data.suscripciones;
+    return res.data;
   } catch (error) {
     throw error;
   }

@@ -13,13 +13,22 @@ export async function postLogin(data: Login) {
   }
 }
 
-export async function postSignup(data: Signup) {
+export async function postSignup(data: Signup, plan: string | null) {
   try {
-    const res = await instance.post(`/user/signup`, data);
+    const res = await instance.post(`/user/signup`, { ...data, plan: plan });
     console.log(res);
 
     setToken(res.data.token);
 
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getPerfilRegistrarTarjeta() {
+  try {
+    const res = await instance.get(`/user/registrar-tarjeta`);
     return res.data;
   } catch (error) {
     throw error;

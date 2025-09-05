@@ -4,14 +4,14 @@ import CardDescuento from "../../components/CardDescuento";
 
 export default function DescuentoParati() {
   return (
-    <section className="w-full flex flex-col gap-8 mt-14 ">
+    <section className="w-full flex flex-col gap-8 mt-14  mb-14">
       <div className="w-full flex justify-between">
-        <h2 className="text-3xl font-extrabold uppercase text-[#96EAEA]">
+        <h2 className="text-3xl font-extrabold uppercase text-[#96EAEA] max-md:text-xl">
           Descuentos para ti
         </h2>
         <Link
           href={"/"}
-          className="text-lg font-semibold text-[#FC68B9] uppercase"
+          className="text-lg font-semibold text-[#FC68B9] uppercase max-md:text-sm"
         >
           Ver todo
         </Link>

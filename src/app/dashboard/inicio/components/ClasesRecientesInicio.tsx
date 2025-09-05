@@ -25,18 +25,18 @@ export default function ClasesRecientesInicio() {
 
   return (
     <section className="w-full flex flex-col gap-8 pt-10">
-      <div className="w-full flex justify-between">
-        <h2 className="text-3xl font-extrabold uppercase text-[#96EAEA]">
+      <div className="w-full flex justify-between items-center">
+        <h2 className="text-3xl font-extrabold uppercase text-[#96EAEA] max-md:text-xl">
           clases recientes
         </h2>
         <Link
           href={"/dashboard/clases"}
-          className="text-lg font-semibold text-[#FC68B9] uppercase"
+          className="text-lg font-semibold text-[#FC68B9] uppercase max-md:text-sm"
         >
           Ver todo
         </Link>
       </div>
-      <div className="flex flex-wrap gap-[30px] ">
+      <div className="w-full flex flex-wrap gap-[30px] ">
         {clases.map((clase) => (
           <CardClases key={clase.id} clase={clase} width="w-[calc(50%-15px)]" />
         ))}

@@ -10,16 +10,16 @@ import { handleAxiosError } from "@/utils/errorHandler";
 export default function Clases() {
   const [openFilter, setOpenFilter] = useState(false);
   const [clases, setClases] = useState<Clase[]>([]);
-  const [categoria, setCategoria] = useState("Todos");
-  const [tutorial, setTutorial] = useState("Todos");
+  const [categoria, setCategoria] = useState<string[]>([]);
+  const [tutorial, setTutorial] = useState<string[]>([]);
   const [order, setOrder] = useState<"asc" | "desc">("desc"); // 👈 nuevo estado
 
   const gfindClases = useCallback(async () => {
     try {
       const res = await getClases({
-        categoria_clase: categoria,
-        tutoriales_tips: tutorial,
-        order, // 👈 pasa orden al backend
+        categoria_clase: categoria.length > 0 ? categoria : undefined,
+        tutoriales_tips: tutorial.length > 0 ? tutorial : undefined,
+        order,
       });
       setClases(res);
     } catch (err) {
@@ -32,7 +32,7 @@ export default function Clases() {
   }, [order]);
 
   return (
-    <main className="w-full  max-w-7xl  mx-auto  px-10 py-8">
+    <main className="w-full    mx-auto  px-10 py-8 max-md:px-4">
       <TituloFiltroClases
         setOpenFilter={setOpenFilter}
         order={order}

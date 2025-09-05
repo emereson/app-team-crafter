@@ -81,9 +81,11 @@ export default function ListaRecursos({ recursos }: Props) {
 
   return (
     <section className="w-full flex flex-col items-center gap-8 pt-10">
-      <div className="w-full flex flex-wrap gap-[20px] ">
-        {recursos.map((recurso) => (
-          <CardRecursos key={recurso.id} recurso={recurso} />
+      <div className="w-full grid grid-cols-4 gap-[20px] max-2xl:grid-cols-3   max-md:grid-cols-2     max-sm:flex max-sm:flex-col max-sm:gap-[50px]">
+        {recursos.map((recurso, index) => (
+          <div className="w-full" key={index}>
+            <CardRecursos recurso={recurso} width="w-full" />
+          </div>
         ))}
       </div>
       <Pagination

@@ -4,15 +4,19 @@ import Loading from "@/app/components/Loading";
 import { verificarCorreo } from "@/services/auth/auth.service";
 import { User } from "@/interfaces/user.type";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 
 function VerificarCorreoContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const plan = searchParams.get("plan");
+
+  const router = useRouter();
 
   const [perfil, setPerfil] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [contador, setContador] = useState(5); // ⏳ segundos para redirigir
 
   useEffect(() => {
     if (token) {
@@ -30,6 +34,25 @@ function VerificarCorreoContent() {
       fetchPerfil();
     }
   }, [token]);
+
+  useEffect(() => {
+    const intervalo = setInterval(() => {
+      setContador((prev) => {
+        if (prev <= 1) {
+          clearInterval(intervalo);
+          if (plan) {
+            router.push(`/planes/${plan}`);
+          } else {
+            router.push(`/planes`);
+          }
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(intervalo);
+  }, [loading, perfil, router]);
 
   if (loading) return <Loading />;
 
@@ -51,11 +74,15 @@ function VerificarCorreoContent() {
         ¡Tu correo electrónico ha sido verificado con éxito!
       </h1>
       <p className="mt-2 text-base max-w-md">
-        Gracias por confirmar tu cuenta. Ahora podrás acceder a todas las
-        funcionalidades de nuestra plataforma con tu correo:
+        Gracias por confirmar tu correo electrónico.
         <span className="font-semibold block mt-2 text-[#fc68b9]">
           {perfil?.correo}
         </span>
+      </p>
+
+      <p className="mt-4 text-sm text-gray-600">
+        Serás redirigido en <span className="font-bold">{contador}</span>{" "}
+        segundos...
       </p>
     </div>
   );

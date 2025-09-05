@@ -15,7 +15,7 @@ export default function ClasesRelacionadas({ clase }: Props) {
   const [clases, setClases] = useState<Clase[]>([]);
 
   const gfindClases = useCallback(async () => {
-    const res = await getClases({ categoria_clase: clase.categoria_clase });
+    const res = await getClases({ categoria_clase: [clase.categoria_clase] });
     setClases(res);
   }, [clase.categoria_clase]);
 
@@ -40,16 +40,18 @@ export default function ClasesRelacionadas({ clase }: Props) {
         }}
         pagination={true}
       >
-        {clases.map((clase) => (
-          <SwiperSlide key={clase.id} className="!w-full !h-full pb-10">
-            <CardClases
-              key={clase.id}
-              clase={clase}
-              width="w-full"
-              hegiht_portada="h-[150px]"
-            />
-          </SwiperSlide>
-        ))}
+        {clases
+          .filter((c) => c.id !== clase.id)
+          .map((clase) => (
+            <SwiperSlide key={clase.id} className="!w-full !h-full pb-10">
+              <CardClases
+                key={clase.id}
+                clase={clase}
+                width="w-full"
+                hegiht_portada="h-[150px]"
+              />
+            </SwiperSlide>
+          ))}
       </Swiper>
     </section>
   );

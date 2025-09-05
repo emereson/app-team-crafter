@@ -160,3 +160,7 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.react-tel-input .form-control {
+  border: none !important;
+}

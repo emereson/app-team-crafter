@@ -15,6 +15,8 @@ import { handleAxiosError } from "@/utils/errorHandler";
 import Loading from "@/app/components/Loading";
 import { getComentarios } from "@/services/comentarios.service";
 import { Comentario } from "@/interfaces/comentario.interface";
+import DescripcionClaseAccordion from "./components/contenedor2/DescripcionClaseAccordion";
+import ClasesRelacionadasAccordion from "./components/contenedor2/ClasesRelacionadasAccordion";
 
 export default function ClasesId() {
   const params = useParams();
@@ -55,9 +57,14 @@ export default function ClasesId() {
   return (
     <>
       {clase && (
-        <main className="w-full max-w-7xl  mx-auto p-10 py-14 flex gap-8">
+        <main className="w-full   mx-auto p-10 py-14 flex gap-8 max-md:flex-col max-md:px-4">
           <div className="w-full">
             <VideoClase clase={clase} />
+            <div className="w-full hidden flex-col  max-md:flex mt-4">
+              {clase.recurso && <RecursoDescargable clase={clase} />}
+              <DescripcionClaseAccordion clase={clase} />
+              <ClasesRelacionadasAccordion clase={clase} />
+            </div>
             <ComentarClase
               claseId={clase.id}
               findComentarios={findComentarios}
@@ -66,7 +73,7 @@ export default function ClasesId() {
             <ComentariosClase claseId={clase.id} comentarios={comentarios} />
           </div>
 
-          <div className="min-w-[312px] max-w-[312px] flex flex-col gap-6">
+          <div className="min-w-[312px] max-w-[312px] flex flex-col gap-6 max-md:hidden">
             {clase.recurso && <RecursoDescargable clase={clase} />}
             <DescripcionClase clase={clase} />
             <ClasesRelacionadas clase={clase} />

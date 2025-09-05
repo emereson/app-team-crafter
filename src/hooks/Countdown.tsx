@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import {
+  differenceInDays,
   differenceInHours,
   differenceInMinutes,
   differenceInSeconds,
-  formatDistanceToNow,
 } from "date-fns";
-import { es } from "date-fns/locale";
 
 interface CountdownProps {
   fechaCaducidad: string; // formato "YYYY-MM-DD"
@@ -38,16 +37,13 @@ export function useCountdown(fechaCaducidad: string, onDelete?: () => void) {
       return;
     }
 
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffDays = differenceInDays(caducidad, nowPeru);
 
     if (diffDays >= 1) {
-      setCountdown(
-        `Caduca en ${formatDistanceToNow(caducidad, {
-          addSuffix: false,
-          locale: es,
-        })}`
-      );
+      // 👈 Mostrar SIEMPRE en días exactos
+      setCountdown(`Caduca en ${diffDays} día${diffDays > 1 ? "s" : ""}`);
     } else {
+      // 👈 Si falta menos de un día → reloj hh:mm:ss
       const hours = String(differenceInHours(caducidad, nowPeru)).padStart(
         2,
         "0"
@@ -80,7 +76,7 @@ export default function Countdown({
   const { countdown } = useCountdown(fechaCaducidad, onDelete);
 
   return (
-    <span className="w-full  p-1 flex items-center justify-center text-lg font-bold rounded-full">
+    <span className="w-full p-1 flex items-center justify-center text-base font-bold rounded-full">
       {countdown}
     </span>
   );

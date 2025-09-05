@@ -7,7 +7,7 @@ import { handleAxiosError } from "@/utils/errorHandler";
 import { Button, Input, Spinner, useDisclosure } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -16,11 +16,14 @@ import { usePerfilStore } from "@/stores/perfil.store";
 
 export default function FormIniciarSesion() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const searchParams = useSearchParams();
+  const plan = searchParams.get("plan");
+
   const setPerfil = usePerfilStore((state) => state.setPerfil);
 
   const router = useRouter();
 
-  const { register, handleSubmit } = useForm<Login>();
+  const { register, handleSubmit, watch } = useForm<Login>();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -44,8 +47,18 @@ export default function FormIniciarSesion() {
     },
     [router]
   );
+
+  const watchedFields = watch(["correo", "password"]);
+
+  const isFormValid = watchedFields.every((field) => {
+    if (typeof field === "string") {
+      return field && field.trim() !== "";
+    }
+    return field !== undefined && field !== null && field !== "";
+  });
+
   return (
-    <section className="w-full min-w-[300px]  h-full bg-white p-6  rounded-2xl  flex flex-col justify-center items-center  gap-10 ">
+    <section className="w-1/2   h-full bg-white p-6  rounded-2xl  flex flex-col justify-center items-center  gap-10 max-md:w-full ">
       <Image
         className="w-[190px]"
         src="/logo.png"
@@ -104,9 +117,14 @@ export default function FormIniciarSesion() {
         </button>
 
         <Button
-          className="bg-[#E2E6F5] text-white text-xl font-semibold px-8 py-6 border-3 border-[#E2E6F5] hover:bg-[#fc68b9] hover:border-[#FFEE97] hover:text-[#ffee97] shadow-rigth-yellow duration-500"
+          className={`text-xl font-semibold px-8 py-6 border-3 duration-500 transition-all ${
+            isFormValid
+              ? "bg-[#fc68b9] text-[#ffee97] border-[#FFEE97] hover:bg-[#fc68b9] hover:border-[#FFEE97] hover:text-[#ffee97] shadow-rigth-yellow cursor-pointer"
+              : "bg-[#E2E6F5] text-gray-400 border-[#E2E6F5] cursor-not-allowed opacity-50"
+          }`}
           radius="full"
           type="submit"
+          disabled={!isFormValid || loading}
         >
           {loading ? <Spinner /> : "Iniciar sesión"}
         </Button>
@@ -114,7 +132,7 @@ export default function FormIniciarSesion() {
       <div className="text-sm flex gap-2">
         <p className="text-gray ">¿No tienes una cuenta?</p>
         <Link
-          href="/crea-tu-cuenta?plan=1"
+          href={`/crea-tu-cuenta?${plan ? `plan=${plan}` : ""}`}
           className="color-pink  font-semibold"
         >
           Suscríbete

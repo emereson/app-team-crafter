@@ -1,7 +1,7 @@
 "use client";
 
 import { inputClassNames, inputClassNames2 } from "@/utils/classNames";
-import { Button, Input } from "@heroui/react";
+import { Button, Input, useDisclosure } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useState, Suspense } from "react";
@@ -16,8 +16,11 @@ import { handleAxiosError } from "@/utils/errorHandler";
 import Loading from "@/app/components/Loading";
 import { useRouter, useSearchParams } from "next/navigation";
 import { usePerfilStore } from "@/stores/perfil.store";
+import ModalOlvideContraseña from "@/app/(pages)/iniciar-sesion/components/ModalOlvideContraseña";
 
 function FormRegistroCorreoContent() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan");
@@ -58,11 +61,15 @@ function FormRegistroCorreoContent() {
     async (data: Signup) => {
       setLoading(true);
       try {
-        const res = await postSignup(data);
+        const res = await postSignup(data, plan);
         toast.success("Se registró correctamente");
         reset();
         setPerfil(res.user);
-        router.push(`/planes/${plan}`);
+        if (plan) {
+          router.push(`/planes/${plan}`);
+        } else {
+          router.push(`/planes`);
+        }
       } catch (err: unknown) {
         handleAxiosError(err);
       } finally {
@@ -85,7 +92,7 @@ function FormRegistroCorreoContent() {
   };
 
   return (
-    <section className="w-full min-w-[300px] h-fit bg-white p-6 rounded-2xl flex flex-col justify-start items-center gap-10 ">
+    <section className="w-1/2 min-w-[300px] h-auto bg-white p-6 rounded-2xl flex flex-col justify-start items-center gap-10 max-md:w-full ">
       {loading && <Loading />}
 
       <Image
@@ -97,10 +104,10 @@ function FormRegistroCorreoContent() {
         priority
       />
       <article className="text-center">
-        <h1 className="text-5xl text-[#68E1E0] font-black uppercase">
+        <h1 className="text-5xl text-[#68E1E0] font-black uppercase max-md:text-3xl">
           Crea tu cuenta
         </h1>
-        <h2 className="-mt-7 text-6xl text-[#FC68B9] font-[LearningCurve]">
+        <h2 className="-mt-7 text-6xl text-[#FC68B9] font-[LearningCurve] max-md:text-5xl">
           en un minuto
         </h2>
       </article>
@@ -179,7 +186,7 @@ function FormRegistroCorreoContent() {
           {/* Campo de teléfono */}
           <div className="relative flex flex-col gap-1">
             <Input
-              className="absolute right-0 w-[calc(100%-95px)] bottom-0 z-10"
+              className="absolute right-0 w-[calc(100%-105px)] bottom-0 z-10"
               classNames={inputClassNames2}
               isRequired
               label=""
@@ -201,6 +208,7 @@ function FormRegistroCorreoContent() {
                 <div className="relative">
                   <PhoneInput
                     value={value}
+                    country={"us"}
                     onChange={(phone) => onChange(phone)}
                     inputStyle={{
                       width: "150px",
@@ -241,12 +249,13 @@ function FormRegistroCorreoContent() {
           </div>
         </div>
 
-        <Link
-          href="/recuperar-contraseña"
-          className="color-pink text-base font-semibold"
+        <button
+          className="color-pink text-base font-semibold cursor-pointer"
+          onClick={onOpen}
+          type="button"
         >
-          ¿Olvidaste tu contraseña?
-        </Link>
+          Olvidaste tu contraseña?
+        </button>
 
         <Button
           className={`text-xl font-semibold px-8 py-6 border-3 duration-500 transition-all ${
@@ -264,10 +273,11 @@ function FormRegistroCorreoContent() {
 
       <div className="text-sm flex gap-2">
         <p className="text-gray">¿Ya tienes una cuenta?</p>
-        <Link href="/cambiar-password" className="color-pink font-semibold">
+        <Link href="/iniciar-sesion" className="color-pink font-semibold">
           Iniciar sesión
         </Link>
       </div>
+      <ModalOlvideContraseña onOpenChange={onOpenChange} isOpen={isOpen} />
     </section>
   );
 }

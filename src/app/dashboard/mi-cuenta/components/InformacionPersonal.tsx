@@ -87,8 +87,8 @@ export default function InformacionPersonal() {
   );
 
   return (
-    <section className="w-full flex flex-col gap-4">
-      <h2 className="text-2xl text-[#8A8A8A] font-bold ">
+    <section className="w-full max-w-5xl mx-auto flex flex-col gap-4">
+      <h2 className="text-2xl text-[#8A8A8A] font-bold  max-sm:text-xl">
         Información personal
       </h2>
       {perfil && (
@@ -96,11 +96,11 @@ export default function InformacionPersonal() {
           className="w-full flex flex-col gap-4 text-[#8A8A8A] font-medium"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <article className="flex justify-between">
+          <article className="flex justify-between gap-4 max-sm:flex-col">
             <h3>Fotografía de perfil</h3>
             <div className="w-full max-w-[572px] flex gap-4">
               <Avatar
-                className="w-16 h-16 flex-shrink-0"
+                className="w-16 h-16 flex-shrink-0 max-sm:w-14 max-sm:h-14"
                 src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${perfil?.foto_perfil}`}
                 alt={`Avatar de ${perfil?.nombre}`}
               />
@@ -145,9 +145,9 @@ export default function InformacionPersonal() {
               </div>
             </div>
           </article>
-          <div className="w-full flex gap-2 justify-between">
+          <div className="w-full flex gap-2 justify-between max-sm:flex-col">
             <h4>Nombre</h4>
-            <div className="w-full max-w-[572px] flex gap-4 ">
+            <div className="w-full max-w-[572px] flex gap-4 max-sm:flex-col">
               <Input
                 isRequired
                 classNames={inputClassNames3}
@@ -171,7 +171,7 @@ export default function InformacionPersonal() {
               />
             </div>
           </div>
-          <div className="w-full flex gap-2 justify-between">
+          <div className="w-full flex gap-2 justify-between max-sm:flex-col">
             <h4>Correo electrónico</h4>
             <div className="w-full max-w-[572px] flex gap-4 ">
               <Input
@@ -187,9 +187,9 @@ export default function InformacionPersonal() {
               />
             </div>
           </div>
-          <div className="w-full relative flex  gap-1 justify-between">
+          <div className="w-full relative flex  gap-2 justify-between max-sm:flex-col">
             <h4>Teléfono</h4>
-            <div className="relative w-full max-w-[572px] flex gap-4 ">
+            <div className="relative w-full max-w-[572px] flex gap-4  border-1 rounded-xl overflow-hidden">
               <Input
                 className="absolute right-0 w-[calc(100%-95px)] bottom-0 z-10"
                 classNames={inputClassNames4}
@@ -199,6 +199,7 @@ export default function InformacionPersonal() {
                 type="number"
                 {...register("telefono")}
                 defaultValue={perfil?.telefono}
+                radius="none"
               />
 
               <Controller
@@ -253,7 +254,7 @@ export default function InformacionPersonal() {
               />
             </div>
           </div>
-          <div className="w-full flex gap-2 justify-between">
+          <div className="w-full flex gap-2 justify-between max-sm:flex-col">
             <h4>DNI/ID/CE</h4>
             <div className="w-full max-w-[572px] flex gap-4 ">
               <Input
@@ -269,7 +270,7 @@ export default function InformacionPersonal() {
             </div>
           </div>
           <h3 className="text-2xl text-[#8A8A8A] font-bold ">Contraseña</h3>
-          <div className="w-full flex gap-2 justify-between">
+          <div className="w-full flex gap-2 justify-between max-sm:flex-col">
             <h4>
               Contraseña actual
               <p className="text-[#FC68B9]">Modificar contraseña</p>
@@ -288,7 +289,7 @@ export default function InformacionPersonal() {
           <div className="w-full flex justify-end gap-4 mt-4">
             <Button
               type="submit"
-              className="bg-[#FC68B9] text-white font-semibold"
+              className="bg-[#FC68B9] text-2xl p-6 text-white font-semibold max-sm:text-lg"
               radius="full"
             >
               {loading ? "cargando ... " : "Guardar"}

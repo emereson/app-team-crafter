@@ -29,7 +29,7 @@ export default function Foro() {
   }, [order]);
 
   return (
-    <main className="w-full  max-w-7xl  mx-auto  px-10 py-6">
+    <main className="w-full  max-w-7xl  mx-auto  px-10 py-6 pb-20">
       <TituloForo />
       <div className="w-full flex gap-8 mt-16">
         <div className="w-full flex flex-col gap-6">

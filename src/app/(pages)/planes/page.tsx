@@ -38,7 +38,7 @@ export default function Planes() {
         <CorreoNoVerificado perfil={perfil} />
       )}
       <HeaderPlanes />
-      <main className="w-full max-w-9xl p-10 pt-20">
+      <main className="w-full max-w-9xl p-10 pt-20 max-sm:px4">
         <TituloPlanes />
         <CardsPlanes />
       </main>

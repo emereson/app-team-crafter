@@ -2,6 +2,7 @@
 
 import { Clase } from "@/interfaces/clase.interface";
 import { getBuscar } from "@/services/clases.service";
+import { useMenuUIStore } from "@/stores/menu.store";
 import { usePerfilStore } from "@/stores/perfil.store";
 import { removeToken } from "@/utils/authUtils";
 import { handleAxiosError } from "@/utils/errorHandler";
@@ -14,10 +15,12 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RiArrowDownSLine } from "react-icons/ri";
 
 export default function Header() {
+  const { toggleMenu, isOpen } = useMenuUIStore();
+
   const perfil = usePerfilStore((state) => state.perfil);
   const router = useRouter();
   const [clases, setClases] = useState<Clase[]>([]);
@@ -108,7 +111,7 @@ export default function Header() {
 
   return (
     <header className="w-full h-[80px] px-4 md:px-20 bg-[#fc68b9] flex items-center justify-between relative z-50">
-      <Link href={"/dashboard/inicio"}>
+      <Link href={"/dashboard/inicio"} className="max-md:hidden">
         <Image
           className="h-[54px] w-auto flex-shrink-0"
           src="/logo.png"
@@ -118,6 +121,26 @@ export default function Header() {
           priority
         />
       </Link>
+      <button
+        className="relative w-12 h-10  hidden flex-col items-center justify-center gap-1.5 rounded-3xl cursor-pointer  max-md:flex "
+        onClick={toggleMenu}
+      >
+        <span
+          className={`block w-7 h-[3px] rounded-lg bg-white ${
+            isOpen ? "rotate-45 absolute" : ""
+          } duration-250`}
+        ></span>
+        <span
+          className={`block w-7 h-[3px] rounded-lg bg-white ${
+            isOpen ? "-rotate-45 absolute" : ""
+          } duration-250`}
+        ></span>
+        <span
+          className={`block w-7 h-[3px] rounded-lg bg-white ${
+            isOpen ? "rotate-45 absolute" : ""
+          } duration-250`}
+        ></span>
+      </button>
 
       <section
         ref={searchContainerRef}
@@ -127,7 +150,7 @@ export default function Header() {
           <input
             ref={inputRef}
             name="search"
-            className="w-full py-2.5 px-5 bg-transparent placeholder:text-[#FFB4DF] text-lg font-bold text-[#fc68b9] focus:outline-none transition-all duration-200"
+            className="w-full py-2.5 px-5 bg-transparent placeholder:text-[#FFB4DF] text-lg font-bold text-[#fc68b9] focus:outline-none transition-all duration-200 max-md:text-sm"
             type="text"
             placeholder="Buscar clases..."
             value={buscador}
@@ -171,7 +194,6 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Resultados de búsqueda con animaciones */}
         <div
           className={`absolute top-[110%] left-0 z-50 bg-[#FFE1F2] rounded-2xl w-full overflow-hidden shadow-xl border border-[#ffcce9] transition-all duration-300 ease-out transform ${
             isSearchOpen && clases.length > 0
@@ -261,22 +283,30 @@ export default function Header() {
               <p className="text-base font-bold hidden sm:block">
                 Natalia Tobar
               </p>
-              <RiArrowDownSLine className="text-2xl transition-transform duration-200 group-hover:rotate-180" />
+              <RiArrowDownSLine className="text-2xl transition-transform duration-200 group-hover:rotate-180 max-md:hidden" />
             </div>
           </DropdownTrigger>
 
-          <DropdownMenu aria-label="Menú de usuario" variant="flat">
+          <DropdownMenu
+            aria-label="Menú de usuario"
+            variant="flat"
+            itemClasses={{
+              base: ["rounded-t-xs"],
+            }}
+          >
             <DropdownItem
               key="mi-cuenta"
-              className="px-4 py-3 data-[hover=true]:bg-[#ffcce9] rounded-lg mx-2 my-1 transition-all duration-200"
+              className="group px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
               startContent={
-                <Image
-                  className="h-[24px] w-[24px]"
-                  src="/icons/miCuenta.svg"
-                  alt="Mi cuenta"
-                  width={24}
-                  height={24}
-                />
+                <div className="w-8 h-8 rounded-lg bg-[#ffcce9] group-hover:bg-[#FC68B9] p-1.5 flex items-center justify-center">
+                  <Image
+                    className="h-[24px] w-[24px]"
+                    src="/icons/miCuenta.svg"
+                    alt="Mi cuenta"
+                    width={24}
+                    height={24}
+                  />
+                </div>
               }
             >
               <Link
@@ -289,15 +319,17 @@ export default function Header() {
 
             <DropdownItem
               key="favoritos"
-              className="px-4 py-3 data-[hover=true]:bg-[#ffcce9] rounded-lg mx-2 my-1 transition-all duration-200"
+              className="px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
               startContent={
-                <Image
-                  className="h-[24px] w-[24px]"
-                  src="/icons/favoritos.svg"
-                  alt="Favoritos"
-                  width={24}
-                  height={24}
-                />
+                <div className="w-8 h-8 rounded-lg bg-[#ffcce9] group-hover:bg-[#FC68B9] p-1.5 flex items-center justify-center">
+                  <Image
+                    className="h-[22px] w-[22px]"
+                    src="/icons/favoritos-white.svg"
+                    alt="Mi cuenta"
+                    width={24}
+                    height={24}
+                  />
+                </div>
               }
             >
               <Link
@@ -311,15 +343,17 @@ export default function Header() {
             <DropdownItem
               key="cerrar-sesion"
               onClick={handleLogout}
-              className="px-4 py-3 data-[hover=true]:bg-[#ffcce9] rounded-lg mx-2 my-1 transition-all duration-200"
+              className="px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
               startContent={
-                <Image
-                  className="h-[24px] w-[24px]"
-                  src="/icons/cerrarSesion.svg"
-                  alt="Cerrar sesión"
-                  width={24}
-                  height={24}
-                />
+                <div className="w-8 h-8 rounded-lg bg-[#ffcce9] group-hover:bg-[#FC68B9] p-1.5 flex items-center justify-center">
+                  <Image
+                    className="h-[24px] w-[24px]"
+                    src="/icons/cerrarSesion.svg"
+                    alt="Cerrar sesión"
+                    width={24}
+                    height={24}
+                  />
+                </div>
               }
             >
               <span className="text-[#FC68B9] text-base font-semibold">

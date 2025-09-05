@@ -84,7 +84,7 @@ export default function ComentarioItem({ comentario }: Props) {
             {comentario.comentario}
           </p>
 
-          <div className="flex gap-4 mt-2 items-center">
+          <div className="flex gap-2 mt-2 items-center">
             <button
               onClick={handleToggleLike}
               disabled={isLoadingLike}
@@ -93,9 +93,9 @@ export default function ComentarioItem({ comentario }: Props) {
               }`}
             >
               {isLiked(comentario.id) ? (
-                <FaHeart className="text-2xl text-[#FC68B9] cursor-pointer" />
+                <FaHeart className="text-xl text-[#FC68B9] cursor-pointer" />
               ) : (
-                <PiHeart className="text-2xl text-[#FFB4DF] cursor-pointer" />
+                <PiHeart className="text-xl text-[#FFB4DF] cursor-pointer" />
               )}
             </button>
             <p className={classText}>{likesCount}</p>
@@ -103,7 +103,7 @@ export default function ComentarioItem({ comentario }: Props) {
             <Button
               variant="light"
               size="sm"
-              className="p-0 h-auto min-w-0 gap-2 text-[#FC68B9] hover:bg-[#FC68B9]/10"
+              className="p-0 ml-4 h-auto min-w-0 gap-2 text-[#FC68B9] hover:bg-[#FC68B9]/10"
               onPress={() => setOpenResponder(!openResponder)}
               startContent={
                 <Image

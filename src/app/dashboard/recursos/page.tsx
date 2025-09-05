@@ -32,7 +32,7 @@ export default function Recursos() {
   }, [order]);
 
   return (
-    <main className="w-full p-10 py-8">
+    <main className="w-full p-10 py-8 max-md:px-4">
       <TituloFiltroRecursos
         setOpenFilter={setOpenFilter}
         order={order}

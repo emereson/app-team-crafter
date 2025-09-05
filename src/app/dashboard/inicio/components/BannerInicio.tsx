@@ -32,7 +32,7 @@ export default function BannerInicio() {
 
   return (
     <section className="relative   w-full flex  flex-col  overflow-hidden  ">
-      <div className="w-full h-[450px] max-sm:h-[300px]">
+      <div className="w-full h-[450px] max-md:h-[300px]">
         <Swiper
           className="h-full w-full pb-4 "
           modules={[Navigation, A11y, Autoplay, Pagination]}
@@ -56,15 +56,15 @@ export default function BannerInicio() {
           ))}
         </Swiper>
       </div>
-      <article className="w-full bg-[#FFEE97] p-4 mt-4 border-4 border-[#FFE251] flex items-center gap-4 rounded-xl">
+      <article className="w-full bg-[#FFEE97] p-4 mt-4 border-4 border-[#FFE251] flex items-center gap-4 rounded-xl max-md:flex-col">
         <Image
-          className="w-[55px] h-[55px] object-cover"
+          className="w-[55px] h-[55px] object-cover max-md:w-[40px] max-md:h-[40px]"
           src="/icons/sAdmiracion.svg"
           alt="ps y ai"
           width={100}
           height={100}
         />
-        <p className="text-[#FC68B9] text-lg">
+        <p className="text-[#FC68B9] text-lg max-md:text-base max-md:text-center">
           <strong>¡Bienvenido!</strong> Desde el momento en que te suscribes,
           disfrutas de acceso{" "}
           <strong>a contenido exclusivo, clases y recursos diseñados</strong>

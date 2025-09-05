@@ -6,7 +6,7 @@ export default function CardsPlanes() {
   const router = useRouter();
 
   return (
-    <section className="w-full flex items-end justify-center gap-10 mt-20">
+    <section className="w-full flex items-end justify-center gap-10 mt-20 max-sm:flex-col">
       {planes.map((plan) => (
         <article
           key={plan.id}
@@ -63,7 +63,7 @@ export default function CardsPlanes() {
               />
             )}
             <span className="absolute -right-24 -bottom-20 flex w-[361px] h-[361px] bg-white rounded-full" />
-            <Image
+            <img
               className={`absolute z-10 ${
                 plan.id === 3 ? "min-w-[330px]" : "w-full"
               }  bottom-[-30px] -right-10 `}

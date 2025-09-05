@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { memo, useMemo } from "react";
+import { useMenuUIStore } from "@/stores/menu.store";
 
 // Configuración centralizada
 const MENU_CONFIG = {
@@ -107,12 +108,10 @@ const HelpSection = memo(() => (
 ));
 
 HelpSection.displayName = "HelpSection";
-
-// Componente principal
 export default function Menu() {
   const pathname = usePathname();
+  const { isOpen, closeMenu } = useMenuUIStore();
 
-  // Memoización de items del menú
   const menuItems = useMemo(
     () =>
       MENU_CONFIG.items.map((item) => (
@@ -128,14 +127,32 @@ export default function Menu() {
   );
 
   return (
-    <div className="min-w-[280px] w-min h-full bg-[#C3F3F3] py-6 flex flex-col gap-4">
-      <h2 className="ml-9 text-lg font-bold text-[#68E1E0]">MENÚ</h2>
+    <>
+      {/* Overlay: solo visible si isOpen */}
+      {isOpen && (
+        <div className="fixed inset-0 bg-black/20 z-10" onClick={closeMenu} />
+      )}
 
-      <nav className="flex flex-col gap-6">{menuItems}</nav>
+      {/* Menú */}
+      <div
+        className={`min-w-[280px] w-min h-full overflow-auto bg-[#C3F3F3] py-6 flex flex-col gap-4 z-20 
+          max-md:fixed max-md:top-[65px] max-md:h-[calc(100vh-65px)]
+          transition-opacity duration-300 ease-in-out
+          ${
+            isOpen
+              ? "opacity-100"
+              : "max-md:opacity-0 max-md:pointer-events-none"
+          }
+        `}
+      >
+        <h2 className="ml-9 text-lg font-bold text-[#68E1E0]">MENÚ</h2>
 
-      <div className="flex-1" />
+        <nav className="flex flex-col gap-6">{menuItems}</nav>
 
-      <HelpSection />
-    </div>
+        <div className="flex-1 max-md:flex-none pt-4" />
+
+        <HelpSection />
+      </div>
+    </>
   );
 }

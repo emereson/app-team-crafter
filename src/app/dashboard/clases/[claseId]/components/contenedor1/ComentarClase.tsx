@@ -6,7 +6,7 @@ import {
   postRespuestaComentario,
 } from "@/services/comentarios.service";
 import { handleAxiosError } from "@/utils/errorHandler";
-import { Avatar, Button, Textarea } from "@heroui/react";
+import { Button, Textarea } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -79,8 +79,8 @@ export default function ComentarClase({
     <section
       className={`w-full flex gap-4 ${respuestaComentario ? "mt-4" : "mt-12"} `}
     >
-      <Avatar
-        className="w-10 h-10"
+      <img
+        className="w-10 h-10 rounded-full"
         src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${perfil?.foto_perfil}`}
       />
       <form

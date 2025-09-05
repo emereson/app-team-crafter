@@ -60,9 +60,9 @@ export default function Footer() {
     },
   ];
   return (
-    <footer className=" bg-[#FC68B9]">
-      <section className="w-full p-10 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+    <footer className="w-full  bg-[#FC68B9] ">
+      <section className="w-full p-10 flex items-center justify-between max-sm:flex-col max-sm:gap-6 max-sm:p-4">
+        <div className="flex items-center justify-center gap-2 max-sm:w-full">
           {links.map((link) => (
             <Link
               key={link.id}
@@ -93,8 +93,8 @@ export default function Footer() {
         </article>
       </section>
       <Divider className="bg-white  " />
-      <section className="w-full p-10 flex flex-col items-center justify-center gap-3 ">
-        <h2 className="text-white  font-[Reboto]">
+      <section className="w-full p-10 flex flex-col items-center justify-center gap-3  max-sm:p-4">
+        <h2 className="text-white  font-[Reboto] text-center max-sm:text-sm">
           © 2024 - GLORIA LOBATÓN DISEÑO & SCRAP - MODO CRAFTER / TODOS LOS
           DERECHOS RESERVADOS.
         </h2>
@@ -103,7 +103,7 @@ export default function Footer() {
             <Link
               key={link.id}
               href={link.href}
-              className="text-white  text-sm font-medium underline"
+              className="text-white  text-sm font-medium underline text-center max-sm:text-xs"
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -14,7 +14,7 @@ function MetodosRegistroContent() {
   const plan = searchParams.get("plan");
 
   return (
-    <section className="w-full min-w-[300px] h-full bg-white p-6 rounded-2xl flex flex-col justify-center items-center gap-10">
+    <section className="w-1/2 min-w-[300px] h-full bg-white p-6 rounded-2xl flex flex-col justify-center items-center gap-10 max-md:w-full max-md:py-16">
       <Image
         className="w-[190px]"
         src="/logo.png"
@@ -23,10 +23,10 @@ function MetodosRegistroContent() {
         height={800}
       />
       <article className="text-center">
-        <h1 className="text-5xl text-[#68E1E0] font-black uppercase">
+        <h1 className="text-5xl text-[#68E1E0] font-black uppercase max-md:text-3xl">
           Crea tu cuenta
         </h1>
-        <h2 className="-mt-7 text-6xl text-[#FC68B9] font-[LearningCurve]">
+        <h2 className="-mt-7 text-6xl text-[#FC68B9] font-[LearningCurve] max-md:text-5xl">
           en un minuto
         </h2>
       </article>

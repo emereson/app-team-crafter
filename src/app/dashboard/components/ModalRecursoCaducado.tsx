@@ -18,7 +18,12 @@ export default function ModalRecursoCaducado({
 }: Props) {
   const [verFormulario, setVerFormulario] = useState(false);
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="sm">
+    <Modal
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      size="sm"
+      placement="center"
+    >
       <ModalContent
         className={`w-full p-6  ${
           recurso.tipo_recurso === "Exclusivos"
@@ -39,7 +44,7 @@ export default function ModalRecursoCaducado({
             </p>
             {recurso.tipo_recurso === "Exclusivos" ? (
               <button
-                className="w-full p-3 text-xl bg-[#FC68B9] rounded-full text-[#FFFFFF] cursor-pointer "
+                className="w-full p-3 text-xl bg-[#FC68B9] rounded-full text-[#FFFFFF] mt-2 cursor-pointer  max-md:p-2"
                 onClick={() => setVerFormulario(true)}
               >
                 Contactarse

@@ -80,13 +80,11 @@ export default function ListaClases({ clases }: Props) {
 
   return (
     <section className="w-full flex flex-col items-center gap-8 pt-10">
-      <div className="w-full flex flex-wrap gap-[20px] ">
-        {clases.map((clase) => (
-          <CardClases
-            key={clase.id}
-            clase={clase}
-            width="w-[calc(33%_-_15px)]"
-          />
+      <div className="w-full grid grid-cols-4 gap-[20px] max-2xl:grid-cols-3   max-md:grid-cols-2  max-sm:flex max-sm:flex-col max-sm:gap-[50px] ">
+        {clases.map((clase, index) => (
+          <div className="w-full" key={index}>
+            <CardClases clase={clase} width="w-full" />
+          </div>
         ))}
       </div>
       <Pagination

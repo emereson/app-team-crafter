@@ -19,7 +19,7 @@ export default function NavMiCuenta({ navSelect, setNavSelect }: Props) {
     },
   ];
   return (
-    <section className=" m-auto flex gap-1">
+    <section className="  m-auto flex gap-1  max-sm:w-full   max-sm:m-0 max-sm:overflow-x-scroll">
       {navs.map((nav) => (
         <button
           key={nav.id}
@@ -27,7 +27,9 @@ export default function NavMiCuenta({ navSelect, setNavSelect }: Props) {
             navSelect === nav.id
               ? "bg-[#FC68B9] text-[#FFFFFF]"
               : "bg-[#FFE1F2] text-[#FC68B9]"
-          } px-6 py-2 rounded-full text-lg font-bold cursor-pointer`}
+          } px-6 py-2 rounded-full text-lg font-bold cursor-pointer
+          max-sm:py-2  max-sm:text-md
+          `}
           onClick={() => {
             setNavSelect(nav.id);
           }}
@@ -35,7 +37,11 @@ export default function NavMiCuenta({ navSelect, setNavSelect }: Props) {
           {nav.title}
         </button>
       ))}
-      <button className="bg-white text-[#FC68B9] border-1 border-[#FC68B9] px-6 py-2 rounded-full text-lg font-bold cursor-pointer">
+      <button
+        className="bg-white text-[#FC68B9] border-1 border-[#FC68B9] px-6 py-2 rounded-full text-lg font-bold cursor-pointer
+       max-sm:py-2  max-sm:text-md text-nowrap
+      "
+      >
         Cerrar sesión
       </button>
     </section>

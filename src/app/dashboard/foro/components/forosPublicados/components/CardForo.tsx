@@ -65,44 +65,6 @@ export default function CardForo({
             </time>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleToggleLike}
-              disabled={isLoadingLike}
-              className={`transition-transform duration-200 ${
-                isLoadingLike ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-            >
-              {isLiked(foro.id) ? (
-                <FaHeart className="text-2xl text-[#FC68B9] cursor-pointer" />
-              ) : (
-                <PiHeart className="text-2xl text-[#FC68B9] cursor-pointer" />
-              )}
-            </button>
-            <span className="text-sm font-medium text-[#FC68B9]">
-              {likesCount}
-            </span>
-          </div>
-          <Button
-            variant="light"
-            size="sm"
-            className="p-0 h-auto min-w-0 gap-1.5 text-[#FC68B9] hover:bg-[#FC68B9]/10"
-            startContent={
-              <Image
-                src="/icons/message.svg"
-                alt=""
-                width={20}
-                height={20}
-                className="opacity-80"
-              />
-            }
-          >
-            <span className="text-sm font-medium">
-              {foro.comentarios_foro?.length}
-            </span>
-          </Button>
-        </div>
       </div>
 
       {foro.img_foro && (
@@ -119,6 +81,44 @@ export default function CardForo({
       <p className="text-medium text-[#8A8A8A] font-medium">
         {foro.contenido_foro}
       </p>
+      <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleToggleLike}
+            disabled={isLoadingLike}
+            className={`transition-transform duration-200 ${
+              isLoadingLike ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+          >
+            {isLiked(foro.id) ? (
+              <FaHeart className="text-2xl text-[#FC68B9] cursor-pointer" />
+            ) : (
+              <PiHeart className="text-2xl text-[#FC68B9] cursor-pointer" />
+            )}
+          </button>
+          <span className="text-sm font-medium text-[#FC68B9]">
+            {likesCount}
+          </span>
+        </div>
+        <Button
+          variant="light"
+          size="sm"
+          className="p-0 h-auto min-w-0 gap-1.5 text-[#FC68B9] hover:bg-[#FC68B9]/10"
+          startContent={
+            <Image
+              src="/icons/message.svg"
+              alt=""
+              width={20}
+              height={20}
+              className="opacity-80"
+            />
+          }
+        >
+          <span className="text-sm font-medium">
+            {foro.comentarios_foro?.length}
+          </span>
+        </Button>
+      </div>
       <Divider />
       <button
         className="w-min text-medium text-[#FC68B9] font-semibold underline cursor-pointer"

@@ -25,18 +25,18 @@ export default function RecursosMesInicio() {
 
   return (
     <section className="w-full flex flex-col gap-8 pt-16">
-      <div className="w-full flex justify-between">
-        <h2 className="text-3xl font-extrabold uppercase text-[#96EAEA]">
+      <div className="w-full flex justify-between items-center">
+        <h2 className="text-3xl font-extrabold uppercase text-[#96EAEA] max-md:text-xl">
           Recursos del mes
         </h2>
         <Link
           href={"/"}
-          className="text-lg font-semibold text-[#FC68B9] uppercase"
+          className="text-lg font-semibold text-[#FC68B9] uppercase max-md:text-sm"
         >
           Ver todo
         </Link>
       </div>
-      <div className="flex flex-wrap gap-[30px] ">
+      <div className="flex flex-wrap justify-between gap-[30px] ">
         {recursos.map((recurso) => (
           <CardRecursos key={recurso.id} recurso={recurso} />
         ))}

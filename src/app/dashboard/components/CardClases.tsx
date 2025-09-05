@@ -30,7 +30,9 @@ export default function CardClases({ clase, width }: Props) {
     }
   };
   return (
-    <article className={`${width}   aspect-[1.5/1] flex flex-col gap-3 "`}>
+    <article
+      className={`${width}   aspect-[1.5/1] flex flex-col gap-3  max-md:w-full`}
+    >
       <Link href={`/dashboard/clases/${clase?.id}`}>
         <div className="w-full relative rounded-2xl overflow-hidden">
           <VideoPlayer hlsUrl={clase.video_clase} mode="poster" />
@@ -76,7 +78,7 @@ export default function CardClases({ clase, width }: Props) {
         >
           {isFavorito(clase.id) ? (
             <Image
-              className="w-8"
+              className="w-6"
               src={"/icons/favoritos.svg"}
               alt="agregar a favorito"
               width={70}
