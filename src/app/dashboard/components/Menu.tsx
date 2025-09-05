@@ -134,7 +134,7 @@ export default function Menu() {
     <>
       {/* Overlay: solo visible si isOpen */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/20 z-10" onClick={closeMenu} />
+        <div className="fixed inset-0 bg-black/20 z-40 " onClick={closeMenu} />
       )}
 
       {/* Menú */}
