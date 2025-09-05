@@ -29,15 +29,15 @@ export default function Foro() {
   }, [order]);
 
   return (
-    <main className="w-full  max-w-7xl  mx-auto  px-10 py-6 pb-20">
+    <main className="w-full  max-w-7xl  mx-auto  px-10 py-6 pb-20 max-sm:px-4">
       <TituloForo />
-      <div className="w-full flex gap-8 mt-16">
+      <div className="w-full flex gap-8 mt-16 max-sm:flex-col">
         <div className="w-full flex flex-col gap-6">
           <FiltrarForo order={order} setOrder={setOrder} />
           <NuevaPublicacion gfindForos={gfindForos} />
           {foros && <ForosPublicados foros={foros} />}
         </div>
-        <div className="min-w-[312px] max-w-[312px] flex flex-col gap-6">
+        <div className="min-w-[312px] max-w-[312px] flex flex-col gap-6 max-sm:w-full max-sm:max-w-full">
           <ReglasForo />{" "}
         </div>
       </div>

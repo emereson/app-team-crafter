@@ -65,6 +65,7 @@ export default function ModalForoSelect({
       onOpenChange={onOpenChange}
       size="2xl"
       backdrop="blur"
+      placement="center"
     >
       <ModalContent className="w-full max-h-[80vh] overflow-auto p-0">
         {() => (

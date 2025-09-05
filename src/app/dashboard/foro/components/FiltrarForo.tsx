@@ -12,17 +12,17 @@ export default function FiltrarForo({ order, setOrder }: Props) {
     setOrder(order === "desc" ? "asc" : "desc");
   };
   return (
-    <section className="w-full flex justify-between items-center">
-      <div className="flex items-center gap-2">
+    <section className="w-full flex justify-between items-center max-sm:flex-col max-sm:items-start max-sm:gap-2">
+      <div className="flex items-center gap-2 max-sm:w-full">
         <Button
-          className="bg-[#FC68B9] border-1 border-[#FC68B9] text-white font-bold  px-3"
+          className="max-sm:w-full bg-[#FC68B9] border-1 border-[#FC68B9] text-white font-bold  px-3"
           radius="full"
           startContent={<ImClock className="text-lg" />}
         >
           Nuevos{" "}
         </Button>
         <Button
-          className="bg-[#FFE1F2] border-1 border-[#FFE1F2] text-[#FC68B9] font-bold  px-3"
+          className="max-sm:w-full bg-[#FFE1F2] border-1 border-[#FFE1F2] text-[#FC68B9] font-bold  px-3"
           radius="full"
           startContent={
             <Image
