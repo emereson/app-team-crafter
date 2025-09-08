@@ -182,6 +182,7 @@ function FormRegistroCorreoContent() {
           <Input
             isRequired
             classNames={inputClassNames}
+            label="DNI/ID/CE"
             labelPlacement="outside"
             type="text"
             {...register("dni_id_ce")}
