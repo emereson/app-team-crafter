@@ -179,6 +179,15 @@ function FormRegistroCorreoContent() {
             }
             radius="full"
           />
+          <Input
+            isRequired
+            classNames={inputClassNames}
+            labelPlacement="outside"
+            type="text"
+            {...register("dni_id_ce")}
+            errorMessage="El DNI/ID/CE es obligatorio"
+            radius="md"
+          />
 
           {/* Campo de teléfono */}
           <div className="relative flex flex-col gap-1">

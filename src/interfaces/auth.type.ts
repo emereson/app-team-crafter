@@ -5,6 +5,7 @@ export type Signup = {
   password: string;
   telefono: string;
   codigo_pais: string;
+  dni_id_ce: string;
 };
 
 export type Login = {
