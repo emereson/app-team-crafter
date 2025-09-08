@@ -187,7 +187,8 @@ function FormRegistroCorreoContent() {
             type="text"
             {...register("dni_id_ce")}
             errorMessage="El DNI/ID/CE es obligatorio"
-            radius="md"
+            radius="full"
+            placeholder="Escribe tu DNI/ID/CE"
           />
 
           {/* Campo de teléfono */}
