@@ -281,7 +281,7 @@ export default function Header() {
                 height={40}
               />
               <p className="text-base font-bold hidden sm:block">
-                Natalia Tobar
+                {perfil?.nombre}{" "}
               </p>
               <RiArrowDownSLine className="text-2xl transition-transform duration-200 group-hover:rotate-180 max-md:hidden" />
             </div>
@@ -297,7 +297,11 @@ export default function Header() {
             <DropdownItem
               key="mi-cuenta"
               className="group px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
-              startContent={
+            >
+              <Link
+                href="/dashboard/mi-cuenta"
+                className="text-[#FC68B9] text-base font-semibold  flex items-center gap-2 w-full "
+              >
                 <div className="w-8 h-8 rounded-lg bg-[#ffcce9] group-hover:bg-[#FC68B9] p-1.5 flex items-center justify-center">
                   <Image
                     className="h-[24px] w-[24px]"
@@ -307,12 +311,6 @@ export default function Header() {
                     height={24}
                   />
                 </div>
-              }
-            >
-              <Link
-                href="/dashboard/mi-cuenta"
-                className="text-[#FC68B9] text-base font-semibold w-full block"
-              >
                 Mi cuenta
               </Link>
             </DropdownItem>
@@ -320,7 +318,11 @@ export default function Header() {
             <DropdownItem
               key="favoritos"
               className="px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
-              startContent={
+            >
+              <Link
+                href="/dashboard/favoritos"
+                className="text-[#FC68B9] text-base font-semibold  flex items-center gap-2 w-full "
+              >
                 <div className="w-8 h-8 rounded-lg bg-[#ffcce9] group-hover:bg-[#FC68B9] p-1.5 flex items-center justify-center">
                   <Image
                     className="h-[22px] w-[22px]"
@@ -330,12 +332,6 @@ export default function Header() {
                     height={24}
                   />
                 </div>
-              }
-            >
-              <Link
-                href="/dashboard/favoritos"
-                className="text-[#FC68B9] text-base font-semibold w-full block"
-              >
                 Favoritos
               </Link>
             </DropdownItem>
@@ -344,7 +340,8 @@ export default function Header() {
               key="cerrar-sesion"
               onClick={handleLogout}
               className="px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
-              startContent={
+            >
+              <span className="text-[#FC68B9] text-base font-semibold  flex items-center gap-2 w-full ">
                 <div className="w-8 h-8 rounded-lg bg-[#ffcce9] group-hover:bg-[#FC68B9] p-1.5 flex items-center justify-center">
                   <Image
                     className="h-[24px] w-[24px]"
@@ -354,9 +351,6 @@ export default function Header() {
                     height={24}
                   />
                 </div>
-              }
-            >
-              <span className="text-[#FC68B9] text-base font-semibold">
                 Cerrar Sesión
               </span>
             </DropdownItem>

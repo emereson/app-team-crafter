@@ -42,10 +42,10 @@ export default function DatosCompra() {
             <p>Total a pagar</p>
             <p className="text-[#a9a9a9]">${suscripcion?.precio.toFixed(2)}</p>
           </li>
-          <li className="text-[#8A8A8A] text-base font-medium  flex justify-between gap-10">
+          {/* <li className="text-[#8A8A8A] text-base font-medium  flex justify-between gap-10">
             <p>Correo confirmación</p>
             <p className="text-[#a9a9a9]">{suscripcion?.usuario.correo}</p>
-          </li>
+          </li> */}
         </ul>
       </div>
       <Link

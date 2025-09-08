@@ -11,6 +11,7 @@ export type User = {
   password: string;
   status: "active" | "disabled";
   emailVerified: boolean;
+  videoPresentacion: boolean;
 };
 
 export interface DatosCliente {

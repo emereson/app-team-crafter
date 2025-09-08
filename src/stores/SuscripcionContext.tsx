@@ -4,6 +4,14 @@ import { create } from "zustand";
 import { getSuscripcion } from "@/services/auth/suscripcion.service";
 import { useEffect, useCallback } from "react";
 
+// 🟢 Enum de estados de suscripción
+export enum SubscriptionStatus {
+  ACTIVE = 1,
+  PENDING = 2, // ajusta si tu backend usa otro significado
+  TRIAL = 3, // ajusta si aplica
+  CANCELED = 4,
+}
+
 interface Plan {
   id: number;
   nombre_plan: string;
@@ -11,29 +19,22 @@ interface Plan {
   status: string;
 }
 
-interface Usuario {
-  foto_perfil: string;
-  nombre: string;
-  correo: string;
-}
-
 export interface Suscripcion {
-  id: number;
-  status: number;
+  subscriptionId: string;
+  status: number; // ahora validamos con SubscriptionStatus
   planExternalId: string;
   period_start: string;
   period_end: string;
   precio: number;
   user_id: string;
   plan: Plan;
-  usuario: Usuario;
 }
 
 interface SuscripcionState {
   // Estado
   suscripcion: Suscripcion | null;
   isLoading: boolean;
-  isInitialLoading: boolean; // Nuevo estado para primera carga
+  isInitialLoading: boolean;
   message: string;
   error: string | null;
   lastUpdated: number | null;
@@ -62,19 +63,22 @@ interface SuscripcionState {
 }
 
 const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
-  // Estado inicial - isInitialLoading en true para mostrar loading inicial
+  // Estado inicial
   suscripcion: null,
   isLoading: false,
-  isInitialLoading: true, // Nuevo estado inicial
+  isInitialLoading: true,
   message: "",
   error: null,
   lastUpdated: null,
   refetchInterval: null,
 
-  // Getters computados
+  // ✅ Getters computados corregidos
   get isPremium() {
     const { suscripcion, isExpired } = get();
-    return !!suscripcion && suscripcion.status === 1 && !isExpired;
+    if (!suscripcion) return false;
+
+    // Solo es premium si está ACTIVA y no expirada
+    return suscripcion.status === SubscriptionStatus.ACTIVE && !isExpired;
   },
 
   get planName() {
@@ -103,7 +107,6 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
 
   get needsUrgentRefetch() {
     const { daysRemaining } = get();
-    // Refetch más frecuente si quedan menos de 7 días
     return daysRemaining <= 7 && daysRemaining > 0;
   },
 
@@ -113,7 +116,7 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
       suscripcion,
       lastUpdated: Date.now(),
       error: null,
-      isInitialLoading: false, // Marcar que ya no es carga inicial
+      isInitialLoading: false,
     });
   },
 
@@ -125,23 +128,17 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
     const { setLoading, setSuscripcion, setMessage, setError, lastUpdated } =
       get();
 
-    // Evitar múltiples requests simultáneos
-    const state = get();
-    if (state.isLoading && !force) return;
+    if (get().isLoading && !force) return;
 
-    // Cache de 2 minutos para requests normales
     const now = Date.now();
-    const cacheTime = 2 * 60 * 1000; // 2 minutos
-    if (!force && lastUpdated && now - lastUpdated < cacheTime) {
-      return;
-    }
+    const cacheTime = 2 * 60 * 1000; // 2 min
+    if (!force && lastUpdated && now - lastUpdated < cacheTime) return;
 
     try {
       setLoading(true);
       setError(null);
 
       const response = await getSuscripcion();
-
       setSuscripcion(response.suscripcion);
       setMessage(response.msg);
     } catch (error: unknown) {
@@ -150,7 +147,6 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
         error instanceof Error ? error.message : "Error al obtener suscripción";
       setError(errorMessage);
 
-      // No limpiar datos existentes en caso de error de red
       if (
         error instanceof Error &&
         (error.message.includes("network") || error.message.includes("fetch"))
@@ -161,54 +157,47 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
         setMessage("");
       }
     } finally {
-      setLoading(false); // Siempre termina en false
-      set({ isInitialLoading: false }); // También terminar carga inicial
+      setLoading(false);
+      set({ isInitialLoading: false });
     }
   },
 
   clearSuscripcion: () => {
     const { stopRefetch } = get();
     stopRefetch();
-
     set({
       suscripcion: null,
       message: "",
       error: null,
       lastUpdated: null,
-      isLoading: false, // Asegurar que esté en false al limpiar
-      isInitialLoading: true, // Reset para próxima sesión
+      isLoading: false,
+      isInitialLoading: true,
     });
   },
 
   // Estrategia de refetch inteligente
   startSmartRefetch: () => {
     const { stopRefetch, refreshIfNeeded } = get();
-
-    // Limpiar interval existente
     stopRefetch();
 
     const runRefetch = async () => {
       const { needsUrgentRefetch, suscripcion } = get();
 
-      // Si no hay suscripción, refetch inmediato
       if (!suscripcion) {
         await refreshIfNeeded();
         return;
       }
 
-      // Frecuencia basada en urgencia - usar el valor calculado
       const intervalTime = needsUrgentRefetch
-        ? 5 * 60 * 1000 // 5 minutos si quedan pocos días
-        : 30 * 60 * 1000; // 30 minutos normalmente
+        ? 5 * 60 * 1000 // 5 min si quedan pocos días
+        : 30 * 60 * 1000; // 30 min normal
 
       await refreshIfNeeded();
 
-      // Programar el siguiente refetch con el tiempo calculado
       const nextTimeout = setTimeout(runRefetch, intervalTime);
       set({ refetchInterval: nextTimeout as unknown as NodeJS.Timeout });
     };
 
-    // Refetch inicial
     runRefetch();
   },
 
@@ -229,10 +218,7 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
     const { lastUpdated, fetchSuscripcion, needsUrgentRefetch } = get();
     const now = Date.now();
 
-    // Tiempo de cache dinámico basado en urgencia
-    const cacheTime = needsUrgentRefetch
-      ? 2 * 60 * 1000 // 2 minutos si es urgente
-      : 10 * 60 * 1000; // 10 minutos normalmente
+    const cacheTime = needsUrgentRefetch ? 2 * 60 * 1000 : 10 * 60 * 1000;
 
     if (!lastUpdated || now - lastUpdated > cacheTime) {
       await fetchSuscripcion();
@@ -248,7 +234,6 @@ export const useAutoRefetch = () => {
   const stopRefetch = useSuscripcionStore((state) => state.stopRefetch);
   const refreshIfNeeded = useSuscripcionStore((state) => state.refreshIfNeeded);
 
-  // Memoizar las funciones para evitar dependencias innecesarias
   const initAutoRefetch = useCallback(() => {
     startSmartRefetch();
   }, [startSmartRefetch]);
@@ -261,17 +246,11 @@ export const useAutoRefetch = () => {
 
   useEffect(() => {
     initAutoRefetch();
-
-    // Cleanup al desmontar
-    return () => {
-      stopRefetch();
-    };
+    return () => stopRefetch();
   }, [initAutoRefetch, stopRefetch]);
 
-  // Refetch al volver a la pestaña
   useEffect(() => {
     document.addEventListener("visibilitychange", handleVisibilityChange);
-
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };

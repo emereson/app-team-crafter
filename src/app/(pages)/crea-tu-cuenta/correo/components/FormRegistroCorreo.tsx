@@ -15,7 +15,6 @@ import { toast } from "sonner";
 import { handleAxiosError } from "@/utils/errorHandler";
 import Loading from "@/app/components/Loading";
 import { useRouter, useSearchParams } from "next/navigation";
-import { usePerfilStore } from "@/stores/perfil.store";
 import ModalOlvideContraseña from "@/app/(pages)/iniciar-sesion/components/ModalOlvideContraseña";
 
 function FormRegistroCorreoContent() {
@@ -35,7 +34,6 @@ function FormRegistroCorreoContent() {
   } = useForm<Signup>();
   const [loading, setLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState(false);
-  const setPerfil = usePerfilStore((state) => state.setPerfil);
 
   const watchedFields = watch([
     "nombre",
@@ -61,10 +59,9 @@ function FormRegistroCorreoContent() {
     async (data: Signup) => {
       setLoading(true);
       try {
-        const res = await postSignup(data, plan);
+        await postSignup(data, plan);
         toast.success("Se registró correctamente");
         reset();
-        setPerfil(res.user);
         if (plan) {
           router.push(`/planes/${plan}`);
         } else {
@@ -76,7 +73,7 @@ function FormRegistroCorreoContent() {
         setLoading(false);
       }
     },
-    [reset, plan, router, setPerfil]
+    [reset, plan, router]
   );
 
   const validatePassword = (password: string) => {

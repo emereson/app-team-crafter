@@ -9,7 +9,7 @@ export const planes = [
     color_principal: "#FFE251",
     color_text: "#8A8A8A",
     ruta_img: "/planes/planB.png",
-    flow_plan_id: "plan_basico_1",
+    flow_plan_id: "plan_basico",
   },
   {
     id: 2,

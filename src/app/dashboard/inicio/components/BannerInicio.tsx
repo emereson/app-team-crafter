@@ -5,30 +5,24 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, A11y, Autoplay, Pagination } from "swiper/modules";
 // import { ImagenCarrusel } from "../interfaces/inicio.interfaces";
 import Image from "next/image";
+import { getBanner } from "@/services/notificacion.service";
+import { useEffect, useState } from "react";
+import { Banner } from "@/interfaces/banner.interface";
 
 export default function BannerInicio() {
-  const imagenesCarrusel = [
-    {
-      id: 1,
-      guid: "/inicio/banner1.png",
-    },
-    {
-      id: 2,
-      guid: "/inicio/banner1.png",
-    },
-  ];
+  const [banners, setBanners] = useState<Banner[]>([]);
 
-  // const cargarAulas = async () => {
-  //   try {
-  //     const data = await getImagenesCarrusel();
-  //     setImagenesCarrusel(data.imagenesCarrusel);
-  //   } catch (error) {
-  //     console.error("Error al cargar aulas:", error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   cargarAulas();
-  // }, []);
+  const cargarBanners = async () => {
+    try {
+      const data = await getBanner();
+      setBanners(data);
+    } catch (error) {
+      console.error("Error al cargar aulas:", error);
+    }
+  };
+  useEffect(() => {
+    cargarBanners();
+  }, []);
 
   return (
     <section className="relative   w-full flex  flex-col  overflow-hidden  ">
@@ -45,11 +39,11 @@ export default function BannerInicio() {
           }}
           pagination={true}
         >
-          {imagenesCarrusel.map((imagen) => (
-            <SwiperSlide key={imagen.id} className="!w-full !h-full pb-10">
+          {banners?.map((banner) => (
+            <SwiperSlide key={banner.id} className="!w-full !h-full pb-10">
               <img
                 className="w-full h-full  object-cover rounded-2xl"
-                src={imagen.guid}
+                src={banner.url_banner}
                 alt="ps y ai"
               />
             </SwiperSlide>

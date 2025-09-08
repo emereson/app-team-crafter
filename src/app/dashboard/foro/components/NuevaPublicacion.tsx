@@ -87,7 +87,7 @@ export default function NuevaPublicacion({ gfindForos }: Props) {
         setLoading(false);
       }
     },
-    [selectedImage]
+    [selectedImage, gfindForos]
   );
 
   return (

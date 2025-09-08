@@ -4,7 +4,7 @@ import { useState } from "react";
 import NavMiCuenta from "./components/NavMiCuenta";
 import TituloMiCuenta from "./components/TituloMiCuenta";
 import InformacionPersonal from "./components/InformacionPersonal";
-import InformacionSuscripcion from "./components/InformacionSuscripcion";
+import InformacionSuscripcion from "./components/informacionSuscripcion/InformacionSuscripcion";
 
 export default function MiCuenta() {
   const [navSelect, setNavSelect] = useState(1);

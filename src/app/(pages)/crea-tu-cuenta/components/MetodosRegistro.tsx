@@ -13,6 +13,10 @@ function MetodosRegistroContent() {
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan");
 
+  const loginGoogle = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/user/google`;
+  };
+
   return (
     <section className="w-1/2 min-w-[300px] h-full bg-white p-6 rounded-2xl flex flex-col justify-center items-center gap-10 max-md:w-full max-md:py-16">
       <Image
@@ -35,6 +39,7 @@ function MetodosRegistroContent() {
           className="bg-white text-[#8A8A8A] p-6 border-1 border-neutral-300"
           startContent={<FcGoogle className="absolute left-6 text-2xl" />}
           radius="full"
+          onPress={loginGoogle}
         >
           Continuar con Google
         </Button>

@@ -42,9 +42,8 @@ export default function TuPedido() {
   const fetchPayment = async () => {
     if (productoFind) {
       try {
-        const response = await postSuscripcion(productoFind.id);
+        await postSuscripcion(productoFind.id);
 
-        console.log(response);
         const res = await getPerfilRegistrarTarjeta();
 
         setPerfil(res.perfil);
@@ -68,7 +67,7 @@ export default function TuPedido() {
 
   return (
     <section
-      className="w-full min-w-[300px] h-full bg-white p-14 rounded-2xl flex flex-col justify-center items-start gap-14 max-sm:p-10
+      className="w-1/2 min-w-[300px] h-full bg-white p-14 rounded-2xl flex flex-col justify-center items-start gap-14 max-sm:p-10 max-sm:w-full
     "
     >
       <h1 className="text-xl font-bold text-[#68E1E0]">Tu pedido</h1>

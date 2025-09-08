@@ -12,14 +12,12 @@ import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import ModalOlvideContraseña from "./ModalOlvideContraseña";
-import { usePerfilStore } from "@/stores/perfil.store";
+import { FcGoogle } from "react-icons/fc";
 
 export default function FormIniciarSesion() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan");
-
-  const setPerfil = usePerfilStore((state) => state.setPerfil);
 
   const router = useRouter();
 
@@ -35,9 +33,8 @@ export default function FormIniciarSesion() {
     async (data: Login) => {
       setLoading(true);
       try {
-        const res = await postLogin(data);
+        await postLogin(data);
         router.push("/");
-        setPerfil(res.user);
         window.location.reload();
       } catch (err: unknown) {
         handleAxiosError(err);
@@ -45,7 +42,7 @@ export default function FormIniciarSesion() {
         setLoading(false);
       }
     },
-    [router, setPerfil]
+    [router]
   );
 
   const watchedFields = watch(["correo", "password"]);
@@ -56,6 +53,10 @@ export default function FormIniciarSesion() {
     }
     return field !== undefined && field !== null && field !== "";
   });
+
+  const loginGoogle = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/user/google`;
+  };
 
   return (
     <section className="w-1/2   h-full bg-white p-6  rounded-2xl  flex flex-col justify-center items-center  gap-10 max-md:w-full ">
@@ -129,6 +130,14 @@ export default function FormIniciarSesion() {
           {loading ? <Spinner /> : "Iniciar sesión"}
         </Button>
       </form>
+      <Button
+        className=" bg-white text-[#8A8A8A] p-6 -mt-6 border-1 border-neutral-300"
+        startContent={<FcGoogle className=" text-2xl" />}
+        radius="full"
+        onPress={loginGoogle}
+      >
+        Iniciar sesión con Google
+      </Button>
       <div className="text-sm flex gap-2">
         <p className="text-gray ">¿No tienes una cuenta?</p>
         <Link

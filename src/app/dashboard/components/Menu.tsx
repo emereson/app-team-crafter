@@ -100,12 +100,12 @@ const HelpSection = memo(() => (
       <p className="text-lg text-white leading-relaxed">
         Consulta las Preguntas Frecuentes y resuelve tus dudas al instante.
       </p>
-      <Button
-        className="w-full bg-transparent border border-[#FC68B9] text-[#FC68B9] font-semibold text-lg py-6 mt-2 hover:bg-[#FC68B9] hover:text-white transition-colors duration-300"
-        radius="full"
+      <Link
+        className="w-full bg-transparent text-center border border-[#FC68B9] text-[#FC68B9] font-semibold text-lg p-3 mt-2 hover:bg-[#FC68B9] hover:text-white transition-colors rounded-full duration-300"
+        href="/preguntas-frecuentes"
       >
-        Consultar
-      </Button>
+        Ver FAQ
+      </Link>
     </section>
   </div>
 ));
@@ -127,7 +127,7 @@ export default function Menu() {
           closeMenu={closeMenu}
         />
       )),
-    [pathname]
+    [pathname, closeMenu]
   );
 
   return (

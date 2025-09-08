@@ -1,4 +1,9 @@
 "use client";
+
+import { useEffect } from "react";
+import { useDisclosure } from "@heroui/react";
+import { useVideoStore } from "@/stores/videoPresentacion.store";
+import VideoPresentacion from "./components/VideoPresentacion";
 import Header from "./components/Header";
 import Menu from "./components/Menu";
 import Footer from "./components/Footer";
@@ -7,19 +12,24 @@ import useSuscripcionStore, {
   useAutoRefetch,
 } from "@/stores/SuscripcionContext";
 import useLikedClasesStore from "@/stores/likeClases.store";
-import { useEffect } from "react";
 import useLikeComentarioClaseStore from "@/stores/likeComentarioClase.store";
 import useFavoritosStore from "@/stores/favoritos.store";
 import Loading from "../components/Loading";
 import useLikedForoStore from "@/stores/likeForos.store";
+import useLikeComentarioForoStore from "@/stores/likeComentarioForo.store";
+import { getPerfil } from "@/services/auth/auth.service";
+import { usePerfilStore } from "@/stores/perfil.store";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // Usar isInitialLoading en lugar de isLoading para la primera carga
   const { suscripcion, isLoading, isInitialLoading } = useSuscripcionStore();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  // ✅ Store del video
+  const hasWatchedVideo = useVideoStore((s) => s.hasWatchedVideo);
 
   useAutoRefetch();
   const fetchFavoritos = useFavoritosStore((s) => s.fetchFavoritos);
@@ -28,23 +38,51 @@ export default function DashboardLayout({
     (s) => s.fetchLikes
   );
   const fetchLikesForos = useLikedForoStore((s) => s.fetchLikes);
+  const fetchLikesComentarioForos = useLikeComentarioForoStore(
+    (s) => s.fetchLikes
+  );
+  const setPerfil = usePerfilStore((state) => state.setPerfil);
+
+  const fetchPerfil = async () => {
+    try {
+      const res = await getPerfil();
+      setPerfil(res);
+    } catch (error) {
+      console.error("Error cargando perfil:", error);
+    }
+  };
 
   useEffect(() => {
+    fetchPerfil();
     fetchFavoritos();
     fetchLikes();
     fetchLikesComentarioClases();
     fetchLikesForos();
-  }, [fetchLikes, fetchLikesComentarioClases, fetchFavoritos, fetchLikesForos]);
+    fetchLikesComentarioForos();
 
-  // Mostrar loading durante la carga inicial O durante refetches
+    // 👉 Solo abrir si nunca se vio
+    if (!hasWatchedVideo) {
+      onOpen();
+    }
+  }, [
+    fetchLikes,
+    fetchLikesComentarioClases,
+    fetchFavoritos,
+    fetchLikesForos,
+    hasWatchedVideo,
+    onOpen,
+  ]);
+
   if (isInitialLoading || isLoading) {
     return <Loading />;
   }
 
   return (
     <div className="w-screen h-screen flex flex-col">
-      {!suscripcion && <SuscripcionVencida />}
+      {suscripcion?.status !== 1 && <SuscripcionVencida />}
+
       <Header />
+      <VideoPresentacion onOpenChange={onOpenChange} isOpen={isOpen} />
       <div className="h-full w-full flex overflow-hidden">
         <Menu />
         <div className="flex flex-col w-full h-full overflow-y-auto">

@@ -29,3 +29,26 @@ export async function getSuscripciones() {
     throw error;
   }
 }
+
+export async function patchMigrarSuscripcion(
+  id: string,
+  data: { planExternalId: string }
+) {
+  try {
+    const res = await instance.patch(`/suscripcion/${id}`, data);
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function cancelarSuscripcion(id: string) {
+  try {
+    const res = await instance.delete(`/suscripcion/${id}`);
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}

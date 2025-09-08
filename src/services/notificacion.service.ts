@@ -12,3 +12,8 @@ export async function updateNotificacion(data: ConfigNotificacion) {
 
   return res.data.notificaciones;
 }
+
+export async function getBanner() {
+  const res = await instance.get(`/banner/usuario`);
+  return res.data.banners;
+}

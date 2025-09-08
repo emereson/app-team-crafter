@@ -72,10 +72,13 @@ export default function InformacionPersonal() {
           }
 
           const res = await updatePerfil(perfil.id, formData);
+
           setPerfil(res);
+
           reset();
-          toast.success("Los daots se actualizaron  correctamente");
           removeImage();
+
+          toast.success("Los datos se actualizaron correctamente");
         } catch (err: unknown) {
           handleAxiosError(err);
         } finally {
