@@ -134,7 +134,7 @@ export default function VideoClase({ clase }: Props) {
       </article>
 
       {/* Título */}
-      <article className="w-full flex justify-between gap-8 mt-6">
+      <article className="w-full flex justify-between gap-8 mt-1">
         <h1 className="text-xl text-[#8A8A8A] font-bold max-md:text-lg">
           {clase.titulo_clase}
         </h1>
@@ -163,7 +163,7 @@ export default function VideoClase({ clase }: Props) {
       </article>
 
       {/* Info del video */}
-      <article className="w-full flex gap-6 mt-2 max-md:flex-col max-md:gap-2">
+      <article className="w-full flex gap-6  -mt-2 max-md:flex-col max-md:gap-2">
         <div className="flex items-center gap-2">
           <Image
             className={classIcons}

@@ -31,7 +31,7 @@ export default function CardClases({ clase, width }: Props) {
   };
   return (
     <article
-      className={`${width}   aspect-[1.5/1] flex flex-col gap-3  max-md:w-full`}
+      className={`${width}   aspect-[1.5/1] flex flex-col gap-1  max-md:w-full`}
     >
       <Link href={`/dashboard/clases/${clase?.id}`}>
         <div className="w-full relative rounded-2xl overflow-hidden">
@@ -47,7 +47,7 @@ export default function CardClases({ clase, width }: Props) {
           />
         </div>
       </Link>
-      <div className="flex justify-between mt-2">
+      <div className="flex justify-between mt-1">
         <section className=" flex gap-4">
           <div className="flex items-center gap-1.5">
             <Image
@@ -98,7 +98,7 @@ export default function CardClases({ clase, width }: Props) {
         </button>
       </div>
 
-      <h3 className="mt-2 text-medium   font-semibold text-[#8A8A8A] uppercase">
+      <h3 className=" text-medium   font-semibold text-[#8A8A8A] uppercase">
         {clase.titulo_clase}
       </h3>
     </article>

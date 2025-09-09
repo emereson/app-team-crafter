@@ -1,8 +1,9 @@
 "use client";
 import VideoPlayer from "@/app/dashboard/components/VideoPlayer";
 import { faqs } from "@/utils/faqs";
-import { Accordion, AccordionItem } from "@heroui/react";
+import { Accordion, AccordionItem, Button } from "@heroui/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { LuMinus, LuPlus } from "react-icons/lu";
 
@@ -30,12 +31,43 @@ export default function PreguntasFrecuentes() {
 
   return (
     <main className="relative w-screen   bg-white flex flex-col pb-16 ">
-      <div className="relative w-full h-[700px]  max-sm:h-[400px]">
+      <div className="relative w-full h-[700px] flex justify-center   max-sm:h-[400px]">
         <img
-          className=" w-full h-full  object-cover object-top-left rotate-180 "
+          className="absolute  w-full h-full  object-cover object-top-left rotate-180 "
           src="/gradient.svg"
           alt="fondo gradiante"
         />
+        <Link href="/dashboard/inicio" className="mt-14">
+          <Button
+            className=" bg-[#FC68B9] text-white font-bold rounded-full"
+            startContent={
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14.364 7.99932H1.63605"
+                  stroke="white"
+                  stroke-width="2.57143"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M8.00001 14.3633L1.63605 7.99932L8.00001 1.63536"
+                  stroke="white"
+                  stroke-width="2.57143"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            }
+          >
+            Regresar
+          </Button>
+        </Link>
         <div className="absolute bottom-[50px] w-full flex flex-col items-center justify-center p-4 mt-[100px] max-sm:bottom-[20px]">
           <article
             className="w-full max-w-[800px]  relative rounded-2xl overflow-hidden flex items-center justify-center cursor-pointer shadow-xl shadow-pink-200"
