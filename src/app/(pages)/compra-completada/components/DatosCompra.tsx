@@ -91,7 +91,7 @@ export default function DatosCompra() {
           </div>
           <Link
             href={"/"}
-            className="w-fit  bg-[#fc68b9] text-white text-lg font-semibold px-10 py-4 border-5 border-[#fc68b9] rounded-full hover:bg-[#fc68b9] hover:border-[#fc68b9] hover:text-[#ffee97] shadow-rigth-yellow duration-500"
+            className="w-fit  bg-[#fc68b9] text-[#ffee97] text-xl font-semibold px-10 py-3 border-5 border-[#ffee97] rounded-full hover:bg-[#fc68b9]  hover:text-[#ffee97] shadow-rigth-yellow duration-500"
           >
             Explorar mi cuenta
           </Link>
