@@ -52,7 +52,6 @@ export default function FormCambiarPassword() {
     return true;
   };
 
-  // Validación de confirmación de contraseña
   const validatePasswordConfirmation = (value: string) => {
     const password = watch("nueva_password");
     return value === password || "Las contraseñas no coinciden";
