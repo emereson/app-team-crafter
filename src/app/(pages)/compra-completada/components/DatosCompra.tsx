@@ -38,8 +38,6 @@ export default function DatosCompra() {
     return planActivo;
   };
 
-  console.log(suscripcion);
-
   return (
     <>
       {suscripcion && (
@@ -52,7 +50,7 @@ export default function DatosCompra() {
             height={800}
             priority
           />
-          <article className="text-center">
+          <article className="text-center w-8/10">
             <h1 className="text-5xl text-[#68E1E0] font-black uppercase">
               Compra
             </h1>
@@ -61,10 +59,14 @@ export default function DatosCompra() {
             </h2>
             <p className="text-lg font-medium text-[#8A8A8A] mt-6">
               Gracias por tu suscripción.{" "}
-              <strong> La boleta ha sido enviada a tu correo.</strong>
+              <strong>
+                {" "}
+                La boleta ha <br />
+                sido enviada a tu correo.
+              </strong>
             </p>
           </article>
-          <div className="w-full bg-[#F1F6FB] rounded-2xl p-10">
+          <div className="w-8/10 bg-[#F1F6FB] rounded-2xl p-6">
             <ul className="w-full space-y-4">
               <li className="text-[#8A8A8A] text-base font-medium  flex justify-between">
                 <p>Plan seleccionado</p>
