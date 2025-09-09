@@ -41,7 +41,7 @@ export default function DatosCompra() {
   return (
     <>
       {suscripcion && (
-        <section className="w-1/2 min-w-[300px] h-auto bg-white p-6 rounded-2xl flex flex-col justify-start items-center gap-10 max-md:w-full ">
+        <section className="w-1/2 min-w-[300px] h-auto bg-white p-6 rounded-2xl flex flex-col justify-start items-center gap-10 max-md:w-full  pb-10">
           <Image
             className="w-[150px]"
             src="/verificacion.gif"
