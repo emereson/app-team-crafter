@@ -43,7 +43,7 @@ export default function BannerInicio() {
             <SwiperSlide key={banner.id} className="!w-full !h-full pb-10">
               <img
                 className="w-full h-full  object-cover rounded-2xl"
-                src={banner.url_banner}
+                src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${banner.url_banner}`}
                 alt="ps y ai"
               />
             </SwiperSlide>
