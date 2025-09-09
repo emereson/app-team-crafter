@@ -18,10 +18,12 @@ export default function DatosCompra() {
     return planActivo;
   };
 
+  console.log(suscripcion);
+
   return (
     <>
       {suscripcion && (
-        <section className="w-full min-w-[300px]  h-full bg-white p-14 rounded-2xl  flex flex-col justify-center items-center  gap-10  max-sm:p-10">
+        <section className="w-1/2 min-w-[300px] h-auto bg-white p-6 rounded-2xl flex flex-col justify-start items-center gap-10 max-md:w-full ">
           <Image
             className="w-[150px]"
             src="/verificacion.gif"
@@ -53,7 +55,10 @@ export default function DatosCompra() {
               <li className="text-[#8A8A8A] text-base font-medium  flex justify-between">
                 <p>Total a pagar</p>
                 <p className="text-[#a9a9a9]">
-                  ${suscripcion?.precio.toFixed(2)}
+                  ${" "}
+                  {planSuscripcion(
+                    suscripcion?.planExternalId
+                  )?.precio_plan?.toFixed(2)}
                 </p>
               </li>
               {/* <li className="text-[#8A8A8A] text-base font-medium  flex justify-between gap-10">
@@ -64,7 +69,7 @@ export default function DatosCompra() {
           </div>
           <Link
             href={"/"}
-            className="w-fit  bg-[#fc68b9] text-white text-xl font-semibold px-10 py-4 border-5 border-[#fc68b9] rounded-full hover:bg-[#fc68b9] hover:border-[#fc68b9] hover:text-[#ffee97] shadow-rigth-yellow duration-500"
+            className="w-fit  bg-[#fc68b9] text-white text-lg font-semibold px-10 py-4 border-5 border-[#fc68b9] rounded-full hover:bg-[#fc68b9] hover:border-[#fc68b9] hover:text-[#ffee97] shadow-rigth-yellow duration-500"
           >
             Explorar mi cuenta
           </Link>
