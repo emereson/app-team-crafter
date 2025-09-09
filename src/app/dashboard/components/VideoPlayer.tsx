@@ -61,7 +61,7 @@ export default function VideoPlayer({
     <video
       ref={videoRef}
       controls={mode === "video" ? showControls : false}
-      className="w-full h-full object-cover rounded-2xl hover:scale-105 duration-300"
+      className="w-full h-full object-cover rounded-2xl duration-300"
       playsInline
       preload="metadata"
     />

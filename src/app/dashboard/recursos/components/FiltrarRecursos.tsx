@@ -63,10 +63,14 @@ export default function FiltrarRecursos({
   ];
   return (
     <div
-      className={`fixed top-0 right-0 w-screen h-screen flex justify-end bg-[#1717178a] z-[60]   ${
-        openFilter ? "translate-x-0" : "translate-x-full"
-      } transition-transform duration-300 ease-in-out
-    `}
+      className={`fixed top-0 right-0 w-screen h-screen flex justify-end bg-[#1717178a] z-[60] 
+    transition-opacity duration-300 ease-in-out
+    ${
+      openFilter
+        ? "opacity-100 pointer-events-auto"
+        : "opacity-0 pointer-events-none"
+    }
+  `}
     >
       <section
         ref={sectionRef}

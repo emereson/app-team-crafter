@@ -26,7 +26,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const { suscripcion, isLoading, isInitialLoading } = useSuscripcionStore();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { onOpen, onOpenChange } = useDisclosure();
 
   // ✅ Store del video
   const hasWatchedVideo = useVideoStore((s) => s.hasWatchedVideo);
@@ -59,17 +59,11 @@ export default function DashboardLayout({
     fetchLikesComentarioClases();
     fetchLikesForos();
     fetchLikesComentarioForos();
-
-    // 👉 Solo abrir si nunca se vio
-    if (!hasWatchedVideo) {
-      onOpen();
-    }
   }, [
     fetchLikes,
     fetchLikesComentarioClases,
     fetchFavoritos,
     fetchLikesForos,
-    hasWatchedVideo,
     onOpen,
   ]);
 
@@ -82,7 +76,10 @@ export default function DashboardLayout({
       {suscripcion?.status !== 1 && <SuscripcionVencida />}
 
       <Header />
-      <VideoPresentacion onOpenChange={onOpenChange} isOpen={isOpen} />
+      <VideoPresentacion
+        onOpenChange={onOpenChange}
+        isOpen={!hasWatchedVideo}
+      />
       <div className="h-full w-full flex overflow-hidden">
         <Menu />
         <div className="flex flex-col w-full h-full overflow-y-auto">

@@ -88,7 +88,7 @@ export default function VideoClase({ clase }: Props) {
         onClick={handlePlayVideo}
       >
         <div
-          className={`w-full transition-all duration-500 ease-in-out ${
+          className={`w-full transition-all duration-500  hover:scale-105 ease-in-out ${
             isAnimating
               ? "opacity-0 scale-110 transform"
               : isPlaying
@@ -120,9 +120,7 @@ export default function VideoClase({ clase }: Props) {
 
         <div
           className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-            isPlaying
-              ? "opacity-100 scale-100"
-              : "opacity-0 scale-95 pointer-events-none"
+            isPlaying ? "opacity-100 " : "opacity-0  pointer-events-none"
           }`}
         >
           {isPlaying && <VideoPlayer hlsUrl={clase.video_clase} />}
@@ -146,7 +144,7 @@ export default function VideoClase({ clase }: Props) {
         >
           {isFavorito(clase.id) ? (
             <Image
-              className="w-8"
+              className="w-6"
               src={"/icons/favoritos.svg"}
               alt="agregar a favorito"
               width={70}

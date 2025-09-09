@@ -154,7 +154,7 @@ export default function FiltrarClases({
           </Button>
 
           {/* Botón para seleccionar/deseleccionar todas las categorías */}
-          {openCategorias && (
+          {/* {openCategorias && (
             <div className="mt-2 pl-2">
               <button
                 onClick={handleSelectAllCategorias}
@@ -165,7 +165,7 @@ export default function FiltrarClases({
                   : "Seleccionar todas"}
               </button>
             </div>
-          )}
+          )} */}
 
           {/* Lista de categorías */}
           <div className="mt-4 space-y-2 pl-2">
@@ -203,7 +203,7 @@ export default function FiltrarClases({
           </Button>
 
           {/* Botón para seleccionar/deseleccionar todos los tutoriales */}
-          {openTutoriales && (
+          {/* {openTutoriales && (
             <div className="mt-2 pl-2">
               <button
                 onClick={handleSelectAllTutoriales}
@@ -214,7 +214,7 @@ export default function FiltrarClases({
                   : "Seleccionar todos"}
               </button>
             </div>
-          )}
+          )} */}
 
           {/* Lista de tutoriales */}
           <div className="mt-4 space-y-2 pl-2">

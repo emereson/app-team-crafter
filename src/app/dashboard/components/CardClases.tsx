@@ -35,7 +35,9 @@ export default function CardClases({ clase, width }: Props) {
     >
       <Link href={`/dashboard/clases/${clase?.id}`}>
         <div className="w-full relative rounded-2xl overflow-hidden">
-          <VideoPlayer hlsUrl={clase.video_clase} mode="poster" />
+          <div className="w-full hover:scale-105 duration-300">
+            <VideoPlayer hlsUrl={clase.video_clase} mode="poster" />
+          </div>
           <Image
             className="absolute right-4 bottom-4  w-14"
             src={"/icons/playVideo.svg"}
@@ -78,7 +80,7 @@ export default function CardClases({ clase, width }: Props) {
         >
           {isFavorito(clase.id) ? (
             <Image
-              className="w-6"
+              className="w-5"
               src={"/icons/favoritos.svg"}
               alt="agregar a favorito"
               width={70}
@@ -86,7 +88,7 @@ export default function CardClases({ clase, width }: Props) {
             />
           ) : (
             <Image
-              className="w-6"
+              className="w-5"
               src={"/icons/favoritos-no.svg"}
               alt="agregar a favorito"
               width={50}
