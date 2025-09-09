@@ -28,6 +28,7 @@ export interface Suscripcion {
   precio: number;
   user_id: string;
   plan: Plan;
+  customerId: string;
 }
 
 interface SuscripcionState {

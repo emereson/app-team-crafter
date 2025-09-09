@@ -88,3 +88,13 @@ export async function nuevoPassword(password: string, token: string) {
     throw error;
   }
 }
+
+export async function datosClienteFlow(id: string) {
+  try {
+    const res = await instance.post(`/user/datos-cliente-flow/${id}`);
+
+    return res.data.datosClientes;
+  } catch (error) {
+    throw error;
+  }
+}

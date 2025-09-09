@@ -1,17 +1,37 @@
+import { DatosCliente } from "@/interfaces/user.type";
+import { datosClienteFlow } from "@/services/auth/auth.service";
+import { getSuscripciones } from "@/services/auth/suscripcion.service";
 import useSuscripcionStore from "@/stores/SuscripcionContext";
+import { handleAxiosError } from "@/utils/errorHandler";
 import { planes } from "@/utils/planes";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function DatosCompra() {
   const forceRefetch = useSuscripcionStore((state) => state.forceRefetch);
+  const { suscripcion } = useSuscripcionStore();
+  const [datosCliente, setDatosCliente] = useState<DatosCliente>();
+
+  const gfindsuscripciones = useCallback(async () => {
+    if (!suscripcion?.customerId) return;
+    try {
+      const res = await datosClienteFlow(suscripcion.customerId);
+
+      setDatosCliente(res);
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  }, [suscripcion?.customerId]);
+
+  useEffect(() => {
+    gfindsuscripciones();
+  }, [getSuscripciones, suscripcion?.customerId]);
 
   useEffect(() => {
     forceRefetch();
   }, [forceRefetch]);
 
-  const { suscripcion } = useSuscripcionStore();
   const planSuscripcion = (planExternalId: string) => {
     const planActivo = planes.find((p) => p.flow_plan_id === planExternalId);
 
@@ -61,10 +81,10 @@ export default function DatosCompra() {
                   )?.precio_plan?.toFixed(2)}
                 </p>
               </li>
-              {/* <li className="text-[#8A8A8A] text-base font-medium  flex justify-between gap-10">
-            <p>Correo confirmación</p>
-            <p className="text-[#a9a9a9]">{suscripcion?.usuario.correo}</p>
-          </li> */}
+              <li className="text-[#8A8A8A] text-base font-medium  flex justify-between gap-10">
+                <p>Correo confirmación</p>
+                <p className="text-[#a9a9a9]">{datosCliente?.email}</p>
+              </li>
             </ul>
           </div>
           <Link
