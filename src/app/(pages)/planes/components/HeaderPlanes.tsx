@@ -1,6 +1,7 @@
 "use client";
 
 import { usePerfilStore } from "@/stores/perfil.store";
+import useSuscripcionStore from "@/stores/SuscripcionContext";
 import { removeToken } from "@/utils/authUtils";
 import {
   Dropdown,
@@ -14,6 +15,8 @@ import { RiArrowDownSLine } from "react-icons/ri";
 
 export default function HeaderPlanes() {
   const perfil = usePerfilStore((state) => state.perfil);
+  const { suscripcion } = useSuscripcionStore();
+  console.log(suscripcion);
 
   const handleLogout = () => {
     removeToken();
@@ -66,51 +69,55 @@ export default function HeaderPlanes() {
               base: ["rounded-t-xs"],
             }}
           >
-            <DropdownItem
-              key="mi-cuenta"
-              className="group px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
-              startContent={
-                <div className="w-8 h-8 rounded-lg bg-[#ffcce9] group-hover:bg-[#FC68B9] p-1.5 flex items-center justify-center">
-                  <Image
-                    className="h-[24px] w-[24px]"
-                    src="/icons/miCuenta.svg"
-                    alt="Mi cuenta"
-                    width={24}
-                    height={24}
-                  />
-                </div>
-              }
-            >
-              <Link
-                href="/dashboard/mi-cuenta"
-                className="text-[#FC68B9] text-base font-semibold w-full block"
+            {suscripcion && (
+              <DropdownItem
+                key="mi-cuenta"
+                className="group px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
+                startContent={
+                  <div className="w-8 h-8 rounded-lg bg-[#ffcce9] group-hover:bg-[#FC68B9] p-1.5 flex items-center justify-center">
+                    <Image
+                      className="h-[24px] w-[24px]"
+                      src="/icons/miCuenta.svg"
+                      alt="Mi cuenta"
+                      width={24}
+                      height={24}
+                    />
+                  </div>
+                }
               >
-                Mi cuenta
-              </Link>
-            </DropdownItem>
+                <Link
+                  href="/dashboard/mi-cuenta"
+                  className="text-[#FC68B9] text-base font-semibold w-full block"
+                >
+                  Mi cuenta
+                </Link>
+              </DropdownItem>
+            )}
 
-            <DropdownItem
-              key="favoritos"
-              className="px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
-              startContent={
-                <div className="w-8 h-8 rounded-lg bg-[#ffcce9] group-hover:bg-[#FC68B9] p-1.5 flex items-center justify-center">
-                  <Image
-                    className="h-[22px] w-[22px]"
-                    src="/icons/favoritos-white.svg"
-                    alt="Mi cuenta"
-                    width={24}
-                    height={24}
-                  />
-                </div>
-              }
-            >
-              <Link
-                href="/dashboard/favoritos"
-                className="text-[#FC68B9] text-base font-semibold w-full block"
+            {suscripcion && (
+              <DropdownItem
+                key="favoritos"
+                className="px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
+                startContent={
+                  <div className="w-8 h-8 rounded-lg bg-[#ffcce9] group-hover:bg-[#FC68B9] p-1.5 flex items-center justify-center">
+                    <Image
+                      className="h-[22px] w-[22px]"
+                      src="/icons/favoritos-white.svg"
+                      alt="Mi cuenta"
+                      width={24}
+                      height={24}
+                    />
+                  </div>
+                }
               >
-                Favoritos
-              </Link>
-            </DropdownItem>
+                <Link
+                  href="/dashboard/favoritos"
+                  className="text-[#FC68B9] text-base font-semibold w-full block"
+                >
+                  Favoritos
+                </Link>
+              </DropdownItem>
+            )}
 
             <DropdownItem
               key="cerrar-sesion"
