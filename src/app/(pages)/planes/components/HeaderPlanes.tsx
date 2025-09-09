@@ -16,7 +16,6 @@ import { RiArrowDownSLine } from "react-icons/ri";
 export default function HeaderPlanes() {
   const perfil = usePerfilStore((state) => state.perfil);
   const { suscripcion } = useSuscripcionStore();
-  console.log(suscripcion);
 
   const handleLogout = () => {
     removeToken();
