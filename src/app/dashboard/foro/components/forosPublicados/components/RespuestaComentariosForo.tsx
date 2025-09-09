@@ -11,7 +11,11 @@ export default function RespuestaComentariosForo({ respuesta }: Props) {
     <article className="flex gap-3">
       <Avatar
         className="w-7 h-7 flex-shrink-0"
-        src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${respuesta.usuario?.foto_perfil}`}
+        src={
+          respuesta.usuario?.foto_perfil
+            ? `${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${respuesta.usuario?.foto_perfil}`
+            : "/icons/user.svg"
+        }
         alt={`Avatar de ${respuesta.usuario.nombre}`}
       />
       <div className="flex-1 min-w-0">

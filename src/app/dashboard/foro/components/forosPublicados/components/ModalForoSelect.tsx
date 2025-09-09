@@ -77,7 +77,11 @@ export default function ModalForoSelect({
               <div className="flex items-center gap-2">
                 <Avatar
                   className="w-8 h-8 flex-shrink-0"
-                  src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${selectForo.usuario?.foto_perfil}`}
+                  src={
+                    selectForo.usuario?.foto_perfil
+                      ? `${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${selectForo.usuario?.foto_perfil}`
+                      : "/icons/user.svg"
+                  }
                   alt={`Avatar de ${selectForo.usuario.nombre}`}
                 />
                 <div className="flex flex-col">
@@ -150,7 +154,11 @@ export default function ModalForoSelect({
             <div className="w-full flex items-center gap-2 mt-2 ">
               <Avatar
                 className="w-8 h-8 flex-shrink-0"
-                src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${selectForo.usuario?.foto_perfil}`}
+                src={
+                  selectForo.usuario?.foto_perfil
+                    ? `${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${selectForo.usuario?.foto_perfil}`
+                    : "/icons/user.svg"
+                }
                 alt={`Avatar de ${selectForo.usuario.nombre}`}
               />
               <FormComentarForo

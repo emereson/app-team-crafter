@@ -104,7 +104,11 @@ export default function InformacionPersonal() {
             <div className="w-full max-w-[572px] flex gap-4">
               <Avatar
                 className="w-16 h-16 flex-shrink-0 max-sm:w-14 max-sm:h-14"
-                src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${perfil?.foto_perfil}`}
+                src={
+                  perfil?.foto_perfil
+                    ? `${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${perfil.foto_perfil}`
+                    : "/icons/user.svg"
+                }
                 alt={`Avatar de ${perfil?.nombre}`}
               />
               <input

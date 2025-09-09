@@ -64,7 +64,11 @@ export default function ComentarioItem({ comentario }: Props) {
       <div className="flex gap-4">
         <Avatar
           className="w-10 h-10 flex-shrink-0"
-          src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${comentario.usuario?.foto_perfil}`}
+          src={
+            comentario.usuario?.foto_perfil
+              ? `${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${comentario.usuario?.foto_perfil}`
+              : "/icons/user.svg"
+          }
           alt={`Avatar de ${comentario.usuario.nombre}`}
         />
 

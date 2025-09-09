@@ -43,7 +43,11 @@ export default function HeaderPlanes() {
             <div className="flex items-center text-white gap-2 cursor-pointer hover:opacity-90 transition-all duration-200 hover:scale-105">
               <Image
                 className="h-[40px] w-[40px] border-2 border-[#68E1E0] rounded-full object-cover transition-all duration-200"
-                src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${perfil?.foto_perfil}`}
+                src={
+                  perfil?.foto_perfil
+                    ? `${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${perfil.foto_perfil}`
+                    : "/icons/user.svg"
+                }
                 alt="Avatar usuario"
                 width={40}
                 height={40}

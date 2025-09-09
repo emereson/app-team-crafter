@@ -53,7 +53,11 @@ export default function CardForo({
         <div className="flex items-center gap-2">
           <Avatar
             className="w-8 h-8 flex-shrink-0"
-            src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${foro.usuario?.foto_perfil}`}
+            src={
+              foro.usuario?.foto_perfil
+                ? `${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${foro.usuario?.foto_perfil}`
+                : "/icons/user.svg"
+            }
             alt={`Avatar de ${foro.usuario.nombre}`}
           />
           <div className="flex flex-col">
