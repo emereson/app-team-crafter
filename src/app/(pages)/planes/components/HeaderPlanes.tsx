@@ -8,9 +8,12 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Select,
+  SelectItem,
 } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
+import { PiTextItalicDuotone } from "react-icons/pi";
 import { RiArrowDownSLine } from "react-icons/ri";
 
 export default function HeaderPlanes() {
@@ -137,6 +140,20 @@ export default function HeaderPlanes() {
               <span className="text-[#FC68B9] text-base font-semibold">
                 Cerrar Sesión
               </span>
+            </DropdownItem>
+            <DropdownItem
+              key="favoritos"
+              className="px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
+            >
+              <Select
+                className="max-w-xs"
+                defaultSelectedKeys={["cat"]}
+                label="Favorite Animal"
+                placeholder="Select an animal"
+                startContent={<PiTextItalicDuotone />}
+              >
+                <SelectItem key="Español">Español</SelectItem>
+              </Select>
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

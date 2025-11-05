@@ -3,7 +3,16 @@ import instance from "./axiosInstance";
 export async function postSuscripcion(id: number) {
   try {
     const res = await instance.post(`/suscripcion/${id}`);
-    console.log(res);
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function postSuscripcionPaypal(id: number) {
+  try {
+    const res = await instance.post(`/suscripcion/paypal/${id}`);
 
     return res.data;
   } catch (error) {
@@ -31,8 +40,8 @@ export async function getSuscripciones() {
 }
 
 export async function patchMigrarSuscripcion(
-  id: string,
-  data: { planExternalId: string }
+  id: number,
+  data: { planExternalId: number }
 ) {
   try {
     const res = await instance.patch(`/suscripcion/${id}`, data);
@@ -43,7 +52,7 @@ export async function patchMigrarSuscripcion(
   }
 }
 
-export async function cancelarSuscripcion(id: string) {
+export async function cancelarSuscripcion(id: number) {
   try {
     const res = await instance.delete(`/suscripcion/${id}`);
 

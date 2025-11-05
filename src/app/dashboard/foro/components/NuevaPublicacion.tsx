@@ -1,3 +1,4 @@
+"use client";
 import { inputClassNames, selectClassNames } from "@/utils/classNames";
 import {
   Button,
@@ -17,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { postForo } from "@/services/foro.service";
 import { toast } from "sonner";
 import { handleAxiosError } from "@/utils/errorHandler";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 interface Props {
   gfindForos: () => void;
@@ -25,31 +27,68 @@ interface Props {
 export default function NuevaPublicacion({ gfindForos }: Props) {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { register, handleSubmit, reset } = useForm<FormForo>();
+  const { language } = useLanguageStore();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
-  };
+  // 🌐 Traducciones
+  const t = {
+    es: {
+      newPost: "Nueva publicación",
+      title: "Titular",
+      titlePlaceholder: "Escribe aquí el título...",
+      titleError: "El titular es obligatorio",
+      content: "Contenido",
+      contentPlaceholder: "Describe tu idea o pregunta aquí...",
+      contentError: "El contenido es obligatorio",
+      uploadImage: "Subir Imagen",
+      selectedImage: "Imagen seleccionada",
+      category: "Categoría",
+      cancel: "Cancelar",
+      publish: "Publicar",
+      publishing: "Cargando...",
+      success: "El foro se publicó correctamente",
+      invalidFile: "Por favor selecciona un archivo de imagen válido",
+      advice: "Consejos",
+    },
+    en: {
+      newPost: "New post",
+      title: "Title",
+      titlePlaceholder: "Write the title here...",
+      titleError: "Title is required",
+      content: "Content",
+      contentPlaceholder: "Describe your idea or question here...",
+      contentError: "Content is required",
+      uploadImage: "Upload Image",
+      selectedImage: "Selected image",
+      category: "Category",
+      cancel: "Cancel",
+      publish: "Publish",
+      publishing: "Loading...",
+      success: "Forum post published successfully",
+      invalidFile: "Please select a valid image file",
+      advice: "Tips",
+    },
+  }[language];
+
+  const handleImageClick = () => fileInputRef.current?.click();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Validar que sea una imagen
       if (file.type.startsWith("image/")) {
         setSelectedImage(file);
 
-        // Crear preview de la imagen
         const reader = new FileReader();
         reader.onload = (e) => {
           setImagePreview(e.target?.result as string);
         };
         reader.readAsDataURL(file);
       } else {
-        alert("Por favor selecciona un archivo de imagen válido");
+        alert(t.invalidFile);
       }
     }
   };
@@ -57,9 +96,7 @@ export default function NuevaPublicacion({ gfindForos }: Props) {
   const removeImage = () => {
     setSelectedImage(null);
     setImagePreview(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const onSubmit = useCallback(
@@ -70,15 +107,12 @@ export default function NuevaPublicacion({ gfindForos }: Props) {
         formData.append("titulo_foro", data.titulo_foro);
         formData.append("contenido_foro", data.contenido_foro);
         formData.append("categoria_foro", data.categoria_foro);
-
-        if (selectedImage) {
-          formData.append("img", selectedImage);
-        }
+        if (selectedImage) formData.append("img", selectedImage);
 
         await postForo(formData);
         gfindForos();
         reset();
-        toast.success("El foro se publico correctamente");
+        toast.success(t.success);
         removeImage();
         onClose();
       } catch (err: unknown) {
@@ -87,7 +121,7 @@ export default function NuevaPublicacion({ gfindForos }: Props) {
         setLoading(false);
       }
     },
-    [selectedImage, gfindForos]
+    [selectedImage, gfindForos, t.success]
   );
 
   return (
@@ -105,21 +139,19 @@ export default function NuevaPublicacion({ gfindForos }: Props) {
         <ModalContent className="w-full p-4">
           {(onClose) => (
             <form
-              className="w-full p-4 flex flex-col gap-4 "
+              className="w-full p-4 flex flex-col gap-4"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <h2 className="text-2xl text-[#68E1E0] font-bold">
-                Nueva publicación
-              </h2>
+              <h2 className="text-2xl text-[#68E1E0] font-bold">{t.newPost}</h2>
 
               <Input
                 isRequired
                 classNames={inputClassNames}
-                label="Titular"
-                placeholder="Escribe aquí el título..."
+                label={t.title}
+                placeholder={t.titlePlaceholder}
                 labelPlacement="outside"
                 type="text"
-                errorMessage="El titular es obligatorio"
+                errorMessage={t.titleError}
                 {...register("titulo_foro")}
                 radius="full"
               />
@@ -127,10 +159,10 @@ export default function NuevaPublicacion({ gfindForos }: Props) {
               <Textarea
                 isRequired
                 classNames={inputClassNames}
-                label="Contenido"
-                placeholder="Describe tu idea o pregunta aquí..."
+                label={t.content}
+                placeholder={t.contentPlaceholder}
                 labelPlacement="outside"
-                errorMessage="El contenido es obligatorio"
+                errorMessage={t.contentError}
                 {...register("contenido_foro")}
                 radius="full"
                 minRows={4}
@@ -145,7 +177,7 @@ export default function NuevaPublicacion({ gfindForos }: Props) {
                 onChange={handleFileChange}
               />
 
-              {/* Botón para subir imagen */}
+              {/* Botón subir imagen */}
               <div className="flex flex-col gap-3">
                 <button
                   type="button"
@@ -154,18 +186,18 @@ export default function NuevaPublicacion({ gfindForos }: Props) {
                 >
                   <Image
                     src="/icons/clip.svg"
-                    alt="Subir Imagen"
+                    alt={t.uploadImage}
                     width={24}
                     height={24}
                   />
                   <p className="text-[#FC68B9] font-semibold underline">
                     {selectedImage
-                      ? `Imagen seleccionada: ${selectedImage.name}`
-                      : "Subir Imagen"}
+                      ? `${t.selectedImage}: ${selectedImage.name}`
+                      : t.uploadImage}
                   </p>
                 </button>
 
-                {/* Preview de la imagen */}
+                {/* Preview de imagen */}
                 {imagePreview && (
                   <div className="relative">
                     <Image
@@ -178,17 +210,21 @@ export default function NuevaPublicacion({ gfindForos }: Props) {
                     <button
                       type="button"
                       onClick={removeImage}
-                      className="absolute top-2 right-2 bg-[#FC68B9] text-white rounded-full w-8 h-8 flex items-center justify-center text-3xl hover:bg-[#e35aa5] cursor-pointer transition-colors"
+                      className="absolute top-2 right-2 bg-[#FC68B9] text-white rounded-full w-8 h-8 flex items-center justify-center text-3xl hover:bg-[#e35aa5] transition-colors"
                     >
                       ×
                     </button>
                   </div>
                 )}
               </div>
+
               <Select
                 isRequired
-                label="Categoría"
+                label={t.category}
                 classNames={selectClassNames}
+                labelPlacement="outside"
+                {...register("categoria_foro")}
+                defaultSelectedKeys={["Consejos"]}
                 listboxProps={{
                   itemClasses: {
                     base: [
@@ -204,28 +240,27 @@ export default function NuevaPublicacion({ gfindForos }: Props) {
                     ],
                   },
                 }}
-                labelPlacement="outside"
-                {...register("categoria_foro")}
-                defaultSelectedKeys={["Consejos"]}
               >
-                <SelectItem key="Consejos">Consejos</SelectItem>
+                <SelectItem key="Consejos">{t.advice}</SelectItem>
               </Select>
 
               <div className="w-full flex justify-end gap-4 mt-4">
                 <Button
                   type="button"
-                  className="bg-white text-[#FC68B9]  font-semibold border-1 border-[#FC68B9]  "
+                  className="bg-white text-[#FC68B9] font-semibold border-1 border-[#FC68B9]"
                   radius="full"
                   onPress={onClose}
                 >
-                  Cancelar
+                  {t.cancel}
                 </Button>
+
                 <Button
                   type="submit"
                   className="bg-[#FC68B9] text-white font-semibold"
                   radius="full"
+                  isDisabled={loading}
                 >
-                  {loading ? "cargando ... " : "Publicar"}
+                  {loading ? t.publishing : t.publish}
                 </Button>
               </div>
             </form>

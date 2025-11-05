@@ -9,6 +9,7 @@ import { handleAxiosError } from "@/utils/errorHandler";
 import { Button, Textarea } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 interface Props {
   claseId: number;
@@ -28,8 +29,32 @@ export default function ComentarClase({
   onCancel,
 }: Props) {
   const [value, setValue] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // 🆕 Estado de carga
-  const [perfil, setPerfil] = useState<User | null>(null); // 👈 inicializar como null
+  const [isLoading, setIsLoading] = useState(false);
+  const [perfil, setPerfil] = useState<User | null>(null);
+
+  const { language } = useLanguageStore();
+
+  // 🌐 Traducciones
+  const t = {
+    es: {
+      writeComment: "... Escribe un comentario",
+      writeReply: "... Escribe una respuesta",
+      cancel: "Cancelar",
+      publish: "Publicar",
+      reply: "Responder",
+      commentSent: "Comentario enviado",
+      replySent: "Respuesta enviada",
+    },
+    en: {
+      writeComment: "... Write a comment",
+      writeReply: "... Write a reply",
+      cancel: "Cancel",
+      publish: "Post",
+      reply: "Reply",
+      commentSent: "Comment posted",
+      replySent: "Reply posted",
+    },
+  }[language];
 
   useEffect(() => {
     const fetchPerfil = async () => {
@@ -37,7 +62,7 @@ export default function ComentarClase({
         const res = await getPerfil();
         setPerfil(res);
       } catch (error) {
-        console.error("Error cargando perfil:", error);
+        console.error("Error loading profile:", error);
       }
     };
 
@@ -48,7 +73,6 @@ export default function ComentarClase({
     e.preventDefault();
 
     if (!value.trim() || isLoading) return;
-
     setIsLoading(true);
 
     try {
@@ -60,14 +84,9 @@ export default function ComentarClase({
 
       findComentarios();
       setValue("");
-      toast.success(
-        respuestaComentario ? "Respuesta enviada" : "Comentario enviado"
-      );
+      toast.success(respuestaComentario ? t.replySent : t.commentSent);
 
-      // Si es una respuesta y hay callback de cancelar, ejecutarlo
-      if (respuestaComentario && onCancel) {
-        onCancel();
-      }
+      if (respuestaComentario && onCancel) onCancel();
     } catch (err) {
       handleAxiosError(err);
     } finally {
@@ -77,7 +96,7 @@ export default function ComentarClase({
 
   return (
     <section
-      className={`w-full flex gap-4 ${respuestaComentario ? "mt-4" : "mt-12"} `}
+      className={`w-full flex gap-4 ${respuestaComentario ? "mt-4" : "mt-12"}`}
     >
       <img
         className="w-10 h-10 rounded-full"
@@ -92,11 +111,7 @@ export default function ComentarClase({
         className="w-full flex flex-col items-end gap-2"
       >
         <Textarea
-          placeholder={
-            respuestaComentario
-              ? "... Escribe una respuesta"
-              : "... Escribe un comentario"
-          }
+          placeholder={respuestaComentario ? t.writeReply : t.writeComment}
           classNames={{
             inputWrapper: `
               border-1 border-[#FC68B9]
@@ -107,12 +122,11 @@ export default function ComentarClase({
           value={value}
           variant="bordered"
           onValueChange={setValue}
-          minRows={respuestaComentario ? 3 : 5} // 🔧 Menos filas para respuestas
+          minRows={respuestaComentario ? 3 : 5}
           isDisabled={isLoading}
         />
 
         <div className="flex gap-2">
-          {/* 🆕 Botón cancelar para respuestas */}
           {respuestaComentario && onCancel && (
             <Button
               variant="bordered"
@@ -121,7 +135,7 @@ export default function ComentarClase({
               onPress={onCancel}
               isDisabled={isLoading}
             >
-              Cancelar
+              {t.cancel}
             </Button>
           )}
 
@@ -132,7 +146,7 @@ export default function ComentarClase({
             isDisabled={!value.trim() || isLoading}
             isLoading={isLoading}
           >
-            {respuestaComentario ? "Responder" : "Publicar"}
+            {respuestaComentario ? t.reply : t.publish}
           </Button>
         </div>
       </form>

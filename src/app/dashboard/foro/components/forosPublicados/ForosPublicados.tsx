@@ -12,6 +12,7 @@ interface Props {
 export default function ForosPublicados({ foros }: Props) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectForo, setSelectForo] = useState<Foro | null>(null);
+  const [colorForo, setColorForo] = useState<string>("");
 
   return (
     <section className="flex flex-col gap-4">
@@ -22,6 +23,7 @@ export default function ForosPublicados({ foros }: Props) {
           index={index}
           setSelectForo={setSelectForo}
           onOpen={onOpen}
+          setColorForo={setColorForo}
         />
       ))}
       {selectForo && (
@@ -29,6 +31,7 @@ export default function ForosPublicados({ foros }: Props) {
           onOpenChange={onOpenChange}
           isOpen={isOpen}
           selectForo={selectForo}
+          colorForo={colorForo}
         />
       )}
     </section>

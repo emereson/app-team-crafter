@@ -31,7 +31,6 @@ const useLikedForoStore = create<LikeForoState>()(
         set({ isLoading: true, error: null });
         try {
           const likesFromBackend: number[] = await getLikeForos();
-          console.log(likesFromBackend);
 
           set({ likedForos: likesFromBackend, isLoading: false });
         } catch (error: unknown) {

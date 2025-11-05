@@ -1,6 +1,8 @@
+"use client";
+
 import { DatosCliente } from "@/interfaces/user.type";
 import { getSuscripciones } from "@/services/auth/suscripcion.service";
-import { Suscripcion } from "@/stores/SuscripcionContext";
+import useSuscripcionStore, { Suscripcion } from "@/stores/SuscripcionContext";
 import { handleAxiosError } from "@/utils/errorHandler";
 import { formatDate } from "@/utils/formatDate";
 import { planes } from "@/utils/planes";
@@ -16,21 +18,23 @@ import {
 } from "@heroui/react";
 import { useCallback, useEffect, useState } from "react";
 import ModalMigrarPlan from "./components/ModalMigrarPlan";
-import { Plan } from "@/interfaces/plan.interface";
 import ModalCancelarSuscripcion from "./components/ModalCancelarSuscripcion";
+import { Plan } from "@/interfaces/plan.interface";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 export default function InformacionSuscripcion() {
+  const { language } = useLanguageStore();
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectModal, setSelectModal] = useState("");
   const [selectPlan, setSelectPlan] = useState<Plan>();
+  const { suscripcion } = useSuscripcionStore();
   const [suscripciones, setSuscripciones] = useState<Suscripcion[]>([]);
-  const [datosCliente, setDatosCliente] = useState<DatosCliente>();
 
   const gfindsuscripciones = useCallback(async () => {
     try {
       const res = await getSuscripciones();
-      setSuscripciones(res.suscripciones.data);
-      setDatosCliente(res.datosClientes);
+      setSuscripciones(res.suscripciones);
     } catch (err) {
       handleAxiosError(err);
     }
@@ -40,15 +44,10 @@ export default function InformacionSuscripcion() {
     gfindsuscripciones();
   }, [getSuscripciones]);
 
-  const suscripcionActiva = suscripciones.find((s) => s.status === 1);
+  const planActivo = planes.find((p) => p.id === suscripcion?.plan_id);
 
-  const planActivo = planes.find(
-    (p) => p.flow_plan_id === suscripcionActiva?.planExternalId
-  );
-
-  const planSuscripcion = (planExternalId: string) => {
-    const planActivo = planes.find((p) => p.flow_plan_id === planExternalId);
-
+  const planSuscripcion = (planExternalId: number) => {
+    const planActivo = planes.find((p) => p.id === planExternalId);
     return planActivo;
   };
 
@@ -63,23 +62,52 @@ export default function InformacionSuscripcion() {
     onOpen();
   };
 
+  // 🌐 Traducciones
+  const t = {
+    es: {
+      planInfo: "Información de plan",
+      cancelMembership: "Cancelar membresía",
+      migratePlan: "Migrar Plan",
+      paymentMethod: "Método de pago",
+      history: "Historial Suscripciones",
+      plan: "Plan",
+      price: "Precio",
+      startDate: "Fecha inicio",
+      endDate: "Fecha final",
+      status: "Estado",
+      noEndDate: "Sin fecha de finalización",
+    },
+    en: {
+      planInfo: "Plan Information",
+      cancelMembership: "Cancel membership",
+      migratePlan: "Migrate Plan",
+      paymentMethod: "Payment Method",
+      history: "Subscription History",
+      plan: "Plan",
+      price: "Price",
+      startDate: "Start Date",
+      endDate: "End Date",
+      status: "Status",
+      noEndDate: "No end date",
+    },
+  }[language];
+
   return (
-    <section
-      className="w-full max-w-7xl mx-auto p-8  pb-24 flex flex-col gap-6 
-    max-sm:px-0
-    "
-    >
+    <section className="w-full max-w-7xl mx-auto p-8 pb-24 flex flex-col gap-6 max-sm:px-0">
+      {/* 🧾 Título e acción de cancelar */}
       <article className="w-full flex items-center justify-between gap-3">
         <h2 className="text-[#8A8A8A] font-bold text-2xl max-sm:text-xl">
-          Información de plan
+          {t.planInfo}
         </h2>
         <button
           className="text-sm text-red-400 font-semibold underline cursor-pointer"
-          onClick={() => handleCancelarSuscripcion()}
+          onClick={handleCancelarSuscripcion}
         >
-          Cancelar membresía
+          {t.cancelMembership}
         </button>
       </article>
+
+      {/* 💳 Planes disponibles */}
       <div className="w-full flex flex-col gap-3">
         {planes.map((plan) => (
           <div key={plan.id} className="w-full flex flex-col items-end gap-0.5">
@@ -88,21 +116,21 @@ export default function InformacionSuscripcion() {
                 className="text-sm text-[#FC68B9] font-semibold underline cursor-pointer"
                 onClick={() => handleMigrarPlan(plan)}
               >
-                Migrar Plan
+                {t.migratePlan}
               </button>
             )}
             <article
               className={`w-full p-4 px-5 ${
                 planActivo?.id === plan.id
-                  ? "border-3  border-[#FC68B9] text-[#8A8A8A]"
-                  : "border-2  border-[#C5C5C5] text-[#C5C5C5] "
-              }   rounded-2xl flex justify-between `}
+                  ? "border-3 border-[#FC68B9] text-[#8A8A8A]"
+                  : "border-2 border-[#C5C5C5] text-[#C5C5C5]"
+              } rounded-2xl flex justify-between`}
             >
-              <div className=" flex flex-col justify-between">
+              <div className="flex flex-col justify-between">
                 <span
                   className={`w-6 h-6 rounded-full ${
                     planActivo?.id === plan.id ? "border-7" : "border-2"
-                  }  border-[#FC68B9]`}
+                  } border-[#FC68B9]`}
                 />
                 <Button
                   className={`${
@@ -123,7 +151,7 @@ export default function InformacionSuscripcion() {
                     planActivo?.id === plan.id
                       ? "text-[#FC68B9]"
                       : "text-[#C5C5C5]"
-                  } text-sm font-semibold max-sm:text-xs `}
+                  } text-sm font-semibold max-sm:text-xs`}
                 >
                   {plan.descripcion}
                 </p>
@@ -133,88 +161,63 @@ export default function InformacionSuscripcion() {
         ))}
       </div>
 
+      {/* 💰 Método de pago */}
       <h2 className="text-[#8A8A8A] font-bold text-2xl mt-4 max-sm:text-xl">
-        Método de pago
-      </h2>
-      <article
-        className="w-fit border-1 border-[#CBD5E1] rounded-lg p-4 flex gap-4 text-[#8A8A8A] justify-start items-start
-      max-sm:w-full
-      "
-      >
-        <img
-          src={`/icons/${
-            datosCliente?.creditCardType === "MASTERCARD"
-              ? "mastercard.svg"
-              : "visa.svg"
-          }`}
-          alt=""
-        />
-        <div>
-          <h3 className="font-medium">
-            {datosCliente?.creditCardType} que termina en{" "}
-            {datosCliente?.last4CardDigits}
-          </h3>
-          <p className="mt-2">{datosCliente?.email}</p>
-        </div>
-      </article>
-
-      <h2 className="text-[#8A8A8A] font-bold text-2xl mt-4 max-sm:text-xl">
-        Historial Suscripciones
+        {t.paymentMethod}
       </h2>
 
-      <Table
-        aria-label="Example static collection table"
-        classNames={{ wrapper: "p-1" }}
-      >
+      {/* 📜 Historial de suscripciones */}
+      <h2 className="text-[#8A8A8A] font-bold text-2xl mt-4 max-sm:text-xl">
+        {t.history}
+      </h2>
+
+      <Table aria-label="Subscription table" classNames={{ wrapper: "p-1" }}>
         <TableHeader>
-          <TableColumn>PLAN</TableColumn>
-          <TableColumn>PRECIO</TableColumn>
-          <TableColumn>FECHA INICIO</TableColumn>
-          <TableColumn>FECHA FINAL</TableColumn>
-          <TableColumn>ESTADO</TableColumn>
+          <TableColumn>{t.plan}</TableColumn>
+          <TableColumn>{t.price}</TableColumn>
+          <TableColumn>{t.startDate}</TableColumn>
+          <TableColumn>{t.endDate}</TableColumn>
+          <TableColumn>{t.status}</TableColumn>
         </TableHeader>
+
         <TableBody>
           {suscripciones.map((suscripcion, index) => (
             <TableRow key={index}>
               <TableCell>
-                {planSuscripcion(suscripcion.planExternalId)?.nombre_plan}
+                {planSuscripcion(suscripcion.plan_id)?.nombre_plan}
               </TableCell>
               <TableCell>
-                $
-                {planSuscripcion(
-                  suscripcion.planExternalId
-                )?.precio_plan.toFixed(2)}
+                ${planSuscripcion(suscripcion.plan_id)?.precio_plan.toFixed(2)}
               </TableCell>
-              <TableCell>{formatDate(suscripcion.period_start)}</TableCell>
-              <TableCell>{formatDate(suscripcion.period_end)}</TableCell>
-
+              <TableCell>{formatDate(suscripcion.startDate)}</TableCell>
               <TableCell>
-                {suscripcion.status === 1
-                  ? "activo"
-                  : suscripcion.status === 4
-                  ? "cancelado"
-                  : "vencido"}
+                {suscripcion.endDate
+                  ? formatDate(suscripcion.endDate)
+                  : t.noEndDate}
               </TableCell>
+              <TableCell>{suscripcion.status}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      {suscripcionActiva && selectPlan && selectModal === "migrarPlan" && (
+
+      {/* 🧩 Modales */}
+      {suscripcion && selectPlan && selectModal === "migrarPlan" && (
         <ModalMigrarPlan
-          key={suscripcionActiva.subscriptionId}
+          key={suscripcion.subscriptionId}
           onOpenChange={onOpenChange}
           isOpen={isOpen}
-          selectSuscripcion={suscripcionActiva}
+          selectSuscripcion={suscripcion}
           plan={selectPlan}
         />
       )}
 
-      {suscripcionActiva && selectModal === "cancelarSuscripcion" && (
+      {suscripcion && selectModal === "cancelarSuscripcion" && (
         <ModalCancelarSuscripcion
-          key={suscripcionActiva.subscriptionId}
+          key={suscripcion.subscriptionId}
           onOpenChange={onOpenChange}
           isOpen={isOpen}
-          selectSuscripcion={suscripcionActiva}
+          selectSuscripcion={suscripcion}
         />
       )}
     </section>

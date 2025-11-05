@@ -1,3 +1,4 @@
+"use client";
 import {
   Comentario,
   RespuestaComentario,
@@ -12,6 +13,7 @@ import { getRespuestaComentario } from "@/services/comentarios.service";
 import { handleAxiosError } from "@/utils/errorHandler";
 import RespuestaComentarios from "./components/RespuestaComentarios";
 import useLikeComentarioClaseStore from "@/stores/likeComentarioClase.store";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 interface Props {
   comentario: Comentario;
@@ -19,6 +21,8 @@ interface Props {
 
 export default function ComentarioItem({ comentario }: Props) {
   const { isLiked, toggleLike } = useLikeComentarioClaseStore();
+  const { language } = useLanguageStore();
+
   const [isLoadingLike, setIsLoadingLike] = useState(false);
   const [likesCount, setLikesCount] = useState<number>(comentario.nro_likes);
 
@@ -28,6 +32,18 @@ export default function ComentarioItem({ comentario }: Props) {
   >([]);
 
   const classText = "text-lg text-[#FFB4DF] font-medium";
+
+  // 🌐 Traducciones
+  const t = {
+    es: {
+      reply: "Responder",
+      errorLike: "Error al dar like:",
+    },
+    en: {
+      reply: "Reply",
+      errorLike: "Error liking comment:",
+    },
+  }[language];
 
   const findRespuestaComentarios = useCallback(async () => {
     try {
@@ -50,10 +66,9 @@ export default function ComentarioItem({ comentario }: Props) {
 
     try {
       await toggleLike(comentario.id);
-
       setLikesCount((prev) => (alreadyLiked ? prev - 1 : prev + 1));
     } catch (error) {
-      console.error("Error al dar like:", error);
+      console.error(t.errorLike, error);
     } finally {
       setIsLoadingLike(false);
     }
@@ -102,6 +117,7 @@ export default function ComentarioItem({ comentario }: Props) {
                 <PiHeart className="text-xl text-[#FFB4DF] cursor-pointer" />
               )}
             </button>
+
             <p className={classText}>{likesCount}</p>
 
             <Button
@@ -119,7 +135,7 @@ export default function ComentarioItem({ comentario }: Props) {
                 />
               }
             >
-              <span className="text-sm font-medium">Responder</span>
+              <span className="text-sm font-medium">{t.reply}</span>
             </Button>
           </div>
 

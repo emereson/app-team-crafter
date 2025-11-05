@@ -8,7 +8,7 @@ export type User = {
   codigo_pais: string;
   zona_horaria?: string | null;
   dni_id_ce: string | null;
-  password: string;
+  reset_password: string;
   status: "active" | "disabled";
   emailVerified: boolean;
   videoPresentacion: boolean;

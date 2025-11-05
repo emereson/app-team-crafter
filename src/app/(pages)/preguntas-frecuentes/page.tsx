@@ -1,4 +1,5 @@
 "use client";
+
 import VideoPlayer from "@/app/dashboard/components/VideoPlayer";
 import { faqs } from "@/utils/faqs";
 import { Accordion, AccordionItem, Button } from "@heroui/react";
@@ -6,14 +7,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { LuMinus, LuPlus } from "react-icons/lu";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 export default function PreguntasFrecuentes() {
+  const { language } = useLanguageStore(); // 🧠 idioma global desde la store
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handlePlayVideo = async () => {
     if (isAnimating || isPlaying) return;
-
     try {
       setIsAnimating(true);
       setTimeout(() => {
@@ -26,20 +28,44 @@ export default function PreguntasFrecuentes() {
     }
   };
 
+  // 🎨 Colores para alternar estilos visuales
   const colores = ["bg-[#FFE1F2]", "bg-[#C3F3F3]", "bg-[#FFEE97]"];
   const coloresIcon = ["bg-[#FC68B9]", "bg-[#68E1E0]", "bg-[#EDD558]"];
 
+  // 🌐 Traducciones de textos
+  const t = {
+    es: {
+      back: "Regresar",
+      questions: "Preguntas",
+      frequent: "frecuentes",
+      stillHave: "¿Aún tienes preguntas?",
+      help: "Estamos aquí para ayudarte con cualquier consulta.",
+      contact: "Contáctanos",
+    },
+    en: {
+      back: "Back",
+      questions: "Frequently",
+      frequent: "Asked Questions",
+      stillHave: "Still have questions?",
+      help: "We’re here to help with any inquiry.",
+      contact: "Contact us",
+    },
+  }[language];
+
+  const currentFaqs = faqs[language]; // 🔄 Selecciona FAQ según idioma
+
   return (
-    <main className="relative w-screen   bg-white flex flex-col pb-16 ">
-      <div className="relative w-full h-[700px] flex justify-center   max-sm:h-[400px]">
+    <main className="relative w-screen bg-white flex flex-col pb-16">
+      {/* 🎥 Sección de video */}
+      <div className="relative w-full h-[700px] flex justify-center max-sm:h-[400px]">
         <img
-          className="absolute  w-full h-full  object-cover object-top-left rotate-180 "
+          className="absolute w-full h-full object-cover object-top-left rotate-180"
           src="/gradient.svg"
           alt="fondo gradiante"
         />
         <Link href="/dashboard/inicio" className="mt-14">
           <Button
-            className=" bg-[#FC68B9] text-white font-bold rounded-full"
+            className="bg-[#FC68B9] text-white font-bold rounded-full"
             startContent={
               <svg
                 width="16"
@@ -51,26 +77,27 @@ export default function PreguntasFrecuentes() {
                 <path
                   d="M14.364 7.99932H1.63605"
                   stroke="white"
-                  stroke-width="2.57143"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2.57143"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
                 <path
                   d="M8.00001 14.3633L1.63605 7.99932L8.00001 1.63536"
                   stroke="white"
-                  stroke-width="2.57143"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2.57143"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
             }
           >
-            Regresar
+            {t.back}
           </Button>
         </Link>
+
         <div className="absolute bottom-[50px] w-full flex flex-col items-center justify-center p-4 mt-[100px] max-sm:bottom-[20px]">
           <article
-            className="w-full max-w-[800px]  relative rounded-2xl overflow-hidden flex items-center justify-center cursor-pointer shadow-xl shadow-pink-200"
+            className="w-full max-w-[800px] relative rounded-2xl overflow-hidden flex items-center justify-center cursor-pointer shadow-xl shadow-pink-200"
             onClick={handlePlayVideo}
           >
             <div
@@ -88,6 +115,7 @@ export default function PreguntasFrecuentes() {
               />
             </div>
 
+            {/* ▶️ Botón de play */}
             <button
               className={`w-14 absolute z-10 transition-all duration-300 ease-in-out transform hover:scale-110 ${
                 isAnimating
@@ -127,27 +155,21 @@ export default function PreguntasFrecuentes() {
           </article>
         </div>
       </div>
-      <h1
-        className="relative  mx-auto mt-10 w-fit text-6xl font-black text-[#96EAEA] flex items-center  justify-center uppercase
-      max-sm:text-4xl 
-      "
-      >
-        Preguntas <br />
-        <strong
-          className="absolute -bottom-13 text-[86px] text-[#FC68B9] font-[LearningCurve] normal-case
-        max-sm:text-[60px] max-sm:-bottom-8
-        "
-        >
-          frecuentes
+
+      {/* 🟢 Título */}
+      <h1 className="relative mx-auto mt-10 w-fit text-6xl font-black text-[#96EAEA] flex items-center justify-center uppercase max-sm:text-4xl">
+        {t.questions} <br />
+        <strong className="absolute -bottom-13 text-[86px] text-[#FC68B9] font-[LearningCurve] normal-case max-sm:text-[60px] max-sm:-bottom-8">
+          {t.frequent}
         </strong>
       </h1>
 
-      <div className="w-full max-w-5xl p-4 mx-auto mt-24 max-sm:mt-12  ">
+      {/* 📋 Lista de preguntas */}
+      <div className="w-full max-w-5xl p-4 mx-auto mt-24 max-sm:mt-12">
         <Accordion variant="splitted">
-          {faqs.map((faq, index) => {
+          {currentFaqs.map((faq, index) => {
             const bgColor = colores[index % colores.length];
             const bgColorIcon = coloresIcon[index % coloresIcon.length];
-
             return (
               <AccordionItem
                 key={faq.id}
@@ -161,7 +183,7 @@ export default function PreguntasFrecuentes() {
                     {isOpen ? (
                       <LuMinus className="text-xl text-white rotate-90" />
                     ) : (
-                      <LuPlus className="text-xl text-white " />
+                      <LuPlus className="text-xl text-white" />
                     )}
                   </div>
                 )}
@@ -178,21 +200,21 @@ export default function PreguntasFrecuentes() {
           })}
         </Accordion>
       </div>
+
+      {/* 🟣 Contacto */}
       <section className="w-full max-w-4xl mx-auto mt-16 flex flex-col items-center justify-center gap-4 text-center px-4">
         <h2 className="text-3xl text-[#FFB4DF] font-extrabold max-sm:text-2xl">
-          ¿Aún tienes preguntas?
+          {t.stillHave}
         </h2>
         <p className="text-xl text-[#8A8A8A] font-bold max-sm:text-base">
-          Estamos aquí para ayudarte con cualquier consulta.
+          {t.help}
         </p>
         <a
           href="https://api.whatsapp.com/send/?phone=51994757941&text&type=phone_number&app_absent=0"
           target="_blank"
-          className={`w-fit rounded-full text-2xl font-semibold px-12 py-3 border-4
-               bg-[#fc68b9] text-[#ffee97] border-[#FFEE97] shadow-rigth-yellow cursor-pointer
-          max-sm:text-xl `}
+          className="w-fit rounded-full text-2xl font-semibold px-12 py-3 border-4 bg-[#fc68b9] text-[#ffee97] border-[#FFEE97] shadow-rigth-yellow cursor-pointer max-sm:text-xl"
         >
-          Contáctanos
+          {t.contact}
         </a>
       </section>
     </main>

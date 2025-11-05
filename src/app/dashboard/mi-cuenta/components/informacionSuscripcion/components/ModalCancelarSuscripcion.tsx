@@ -1,5 +1,7 @@
+"use client";
+
 import { cancelarSuscripcion } from "@/services/auth/suscripcion.service";
-import { Suscripcion } from "@/stores/SuscripcionContext";
+import useSuscripcionStore, { Suscripcion } from "@/stores/SuscripcionContext";
 import { handleAxiosError } from "@/utils/errorHandler";
 import {
   Button,
@@ -10,6 +12,7 @@ import {
   ModalHeader,
 } from "@heroui/react";
 import { toast } from "sonner";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 interface Props {
   onOpenChange: (i: boolean) => void;
@@ -22,10 +25,32 @@ export default function ModalCancelarSuscripcion({
   isOpen,
   selectSuscripcion,
 }: Props) {
-  const handleMigrarPlan = async () => {
+  const { forceRefetch } = useSuscripcionStore();
+  const { language } = useLanguageStore();
+
+  // 🌐 Traducciones
+  const t = {
+    es: {
+      title: "Cancelar membresía",
+      message: "¿Estás seguro de que deseas cancelar tu membresía?",
+      cancel: "Cancelar",
+      confirm: "Confirmar",
+      success: "La membresía ha sido cancelada con éxito",
+    },
+    en: {
+      title: "Cancel membership",
+      message: "Are you sure you want to cancel your membership?",
+      cancel: "Cancel",
+      confirm: "Confirm",
+      success: "Membership has been successfully canceled",
+    },
+  }[language];
+
+  const handleCancelarPlan = async () => {
     try {
-      await cancelarSuscripcion(selectSuscripcion.subscriptionId),
-        toast.success("La membresía ha sido cancelada con éxito");
+      await cancelarSuscripcion(selectSuscripcion.id);
+      toast.success(t.success);
+      await forceRefetch();
     } catch (err) {
       handleAxiosError(err);
     } finally {
@@ -39,21 +64,21 @@ export default function ModalCancelarSuscripcion({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1 text-[#8A8A8A] font-bold text-xl max-sm:text-xl">
-              Cancelar membresía
+              {t.title}
             </ModalHeader>
             <ModalBody>
-              <p>¿Estás seguro de que deseas cancelar tu membresía</p>
+              <p>{t.message}</p>
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={onClose}>
-                Cancelar
+                {t.cancel}
               </Button>
               <Button
                 className="bg-[#FC68B9]"
                 color="primary"
-                onPress={handleMigrarPlan}
+                onPress={handleCancelarPlan}
               >
-                Confirmar
+                {t.confirm}
               </Button>
             </ModalFooter>
           </>

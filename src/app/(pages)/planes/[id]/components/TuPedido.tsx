@@ -1,10 +1,12 @@
 import CorreoNoVerificado from "@/app/components/CorreoNoVerificado";
-import Loading from "@/app/components/Loading";
 import {
   getPerfil,
   getPerfilRegistrarTarjeta,
 } from "@/services/auth/auth.service";
-import { postSuscripcion } from "@/services/auth/suscripcion.service";
+import {
+  postSuscripcion,
+  postSuscripcionPaypal,
+} from "@/services/auth/suscripcion.service";
 import { User } from "@/interfaces/user.type";
 import { planes } from "@/utils/planes";
 import { Button } from "@heroui/react";
@@ -12,14 +14,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import LoadingPay from "@/app/components/LoadingPay";
+import Loading from "@/app/components/Loading";
 
 export default function TuPedido() {
   const params = useParams();
   const id = params?.id as string;
-
-  // 🔥 TODOS LOS HOOKS DEBEN IR AL PRINCIPIO, ANTES DE CUALQUIER RETURN
   const [perfil, setPerfil] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadingPay, setLoadingPay] = useState(false);
 
   // ✅ TODOS LOS useEffect TAMBIÉN DEBEN IR AQUÍ
   const productoFind = planes.find((p) => p.id === Number(id));
@@ -35,12 +38,14 @@ export default function TuPedido() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchPerfil();
   }, [id]);
 
   const fetchPayment = async () => {
     if (productoFind) {
+      setLoadingPay(true);
       try {
         await postSuscripcion(productoFind.id);
 
@@ -51,12 +56,27 @@ export default function TuPedido() {
       } catch (error) {
         console.error("Error cargando perfil:", error);
       } finally {
-        setLoading(false);
+        setLoadingPay(false);
       }
     }
   };
 
-  // ✅ AHORA SÍ, DESPUÉS DE TODOS LOS HOOKS, LOS RETURNS CONDICIONALES
+  const fetchPaymentPaypal = async () => {
+    if (productoFind) {
+      setLoadingPay(true);
+
+      try {
+        const res = await postSuscripcionPaypal(productoFind.id);
+
+        window.location.href = res.link_pago;
+      } catch (error) {
+        console.error("Error cargando perfil:", error);
+      } finally {
+        setLoadingPay(false);
+      }
+    }
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -70,7 +90,8 @@ export default function TuPedido() {
       className="w-1/2 min-w-[300px] h-full bg-white p-14 rounded-2xl flex flex-col justify-center items-start gap-14 max-sm:p-10 max-sm:w-full
     "
     >
-      <h1 className="text-xl font-bold text-[#68E1E0]">Tu pedido</h1>
+      {loadingPay && <LoadingPay />}
+      <h1 className="text-2xl font-bold text-[#68E1E0]">Tu pedido</h1>
 
       {/* Detalles del pedido */}
       <ul className="w-full space-y-4">
@@ -88,33 +109,52 @@ export default function TuPedido() {
         </li>
       </ul>
 
-      {/* Logo Flow */}
-      <Image
-        className="w-24"
-        src="/icons/flow.svg"
-        alt="Flow"
-        width={200}
-        height={200}
-      />
-
-      {/* Política de privacidad */}
       <p className="text-sm text-gray-600">
         Tus datos personales se utilizarán para procesar tu pedido, mejorar tu
         experiencia en esta web y otros propósito descritos en nuestra{" "}
-        <Link href="/" className="text-[#fc68b9] hover:underline">
+        <span className="text-[#fc68b9] hover:underline">
           política de privacidad
-        </Link>
+        </span>
       </p>
       {/* {openForm && <FlowSubscribe token={tokenTarjeta} />} */}
 
-      <Button
-        className="w-full bg-[#fa89c7] text-white text-xl font-semibold px-8 py-6 border-3 border-[#fa89c7] hover:bg-[#fc68b9] hover:border-[#fc68b9] hover:text-[#ffee97] shadow-rigth-yellow duration-500"
-        radius="full"
-        onPress={fetchPayment}
-        // isDisabled={processingPayment}
-      >
-        Suscribirse
-      </Button>
+      <div className="w-full flex flex-col justify-center items-center gap-4">
+        <Button
+          className="w-[270px] bg-white  text-[#596203ff] text-md  font-bold px-10 py-5 border-3 border-[#fa89c7] hover:bg-[#fc68b9] hover:border-[#fc68b9] hover:text-white shadow-rigth-yellow duration-500 flex flex-col items-center gap-2"
+          radius="full"
+          onPress={fetchPayment}
+          // isDisabled={processingPayment}
+        >
+          <div className="flex items-center justify-center gap-2">
+            <span>Suscribirse</span>
+
+            <Image
+              src="/icons/flow.svg"
+              alt="PayPal Logo"
+              width={50}
+              height={60}
+              className="rounded-md"
+            />
+          </div>{" "}
+        </Button>
+        <Button
+          className="w-[270px] bg-white  text-[#222D65] text-md  font-bold px-10 py-5 border-3 border-[#fa89c7] hover:bg-[#fc68b9] hover:border-[#fc68b9] hover:text-white shadow-rigth-yellow duration-500 flex flex-col items-center gap-2"
+          radius="full"
+          onPress={fetchPaymentPaypal}
+        >
+          <div className="flex items-center justify-center gap-2">
+            <span>Suscribirse</span>
+
+            <Image
+              src="/icons/paypal.svg"
+              alt="PayPal Logo"
+              width={80}
+              height={70}
+              className="rounded-md"
+            />
+          </div>
+        </Button>
+      </div>
     </section>
   );
 }

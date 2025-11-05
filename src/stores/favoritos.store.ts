@@ -57,8 +57,6 @@ const useFavoritosStore = create<FavoritosState>()(
         try {
           let updatedFavoritos: number[];
 
-          console.log(favoritos);
-
           if (wasFavorito) {
             updatedFavoritos = await deleteFavorito(id);
           } else {

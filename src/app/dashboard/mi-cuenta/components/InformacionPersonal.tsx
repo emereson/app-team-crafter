@@ -1,3 +1,5 @@
+"use client";
+
 import { User } from "@/interfaces/user.type";
 import { updatePerfil } from "@/services/auth/auth.service";
 import { usePerfilStore } from "@/stores/perfil.store";
@@ -5,15 +7,57 @@ import { inputClassNames3, inputClassNames4 } from "@/utils/classNames";
 import { handleAxiosError } from "@/utils/errorHandler";
 import { Avatar, Button, Input } from "@heroui/react";
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { CiMail } from "react-icons/ci";
 import { LiaCloudUploadAltSolid } from "react-icons/lia";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { toast } from "sonner";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 export default function InformacionPersonal() {
+  const { language } = useLanguageStore();
+
+  const t = {
+    es: {
+      title: "Información personal",
+      profilePic: "Fotografía de perfil",
+      clickUpload: "Click para subir",
+      orDrag: "o arrastra y suelta",
+      formats: "SVG, PNG, JPG o GIF (max. 800x400px)",
+      name: "Nombre",
+      surname: "Apellidos",
+      email: "Correo electrónico",
+      phone: "Teléfono",
+      dni: "DNI/ID/CE",
+      passwordSection: "Contraseña",
+      currentPassword: "Contraseña actual",
+      modifyPassword: "Modificar contraseña",
+      save: "Guardar",
+      uploadingError: "Por favor selecciona un archivo de imagen válido",
+      updatedSuccess: "Los datos se actualizaron correctamente",
+    },
+    en: {
+      title: "Personal Information",
+      profilePic: "Profile picture",
+      clickUpload: "Click to upload",
+      orDrag: "or drag and drop",
+      formats: "SVG, PNG, JPG or GIF (max. 800x400px)",
+      name: "First Name",
+      surname: "Last Name",
+      email: "Email",
+      phone: "Phone",
+      dni: "DNI/ID/CE",
+      passwordSection: "Password",
+      currentPassword: "Current password",
+      modifyPassword: "Change password",
+      save: "Save",
+      uploadingError: "Please select a valid image file",
+      updatedSuccess: "Your information has been updated successfully",
+    },
+  }[language];
+
   const perfil = usePerfilStore((state) => state.perfil);
   const setPerfil = usePerfilStore((state) => state.setPerfil);
 
@@ -23,25 +67,27 @@ export default function InformacionPersonal() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+
   const handleImageClick = () => {
     fileInputRef.current?.click();
   };
 
+  useEffect(() => {
+    if (perfil) reset(perfil);
+  }, [perfil, reset]);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Validar que sea una imagen
       if (file.type.startsWith("image/")) {
         setSelectedImage(file);
-
-        // Crear preview de la imagen
         const reader = new FileReader();
         reader.onload = (e) => {
           setImagePreview(e.target?.result as string);
         };
         reader.readAsDataURL(file);
       } else {
-        alert("Por favor selecciona un archivo de imagen válido");
+        alert(t.uploadingError);
       }
     }
   };
@@ -49,9 +95,7 @@ export default function InformacionPersonal() {
   const removeImage = () => {
     setSelectedImage(null);
     setImagePreview(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const onSubmit = useCallback(
@@ -65,20 +109,16 @@ export default function InformacionPersonal() {
           formData.append("telefono", data.telefono);
           formData.append("codigo_pais", data.codigo_pais);
           formData.append("dni_id_ce", data.dni_id_ce || "");
-          formData.append("newPassword", data.password);
+          formData.append("newPassword", data.reset_password || "");
 
-          if (selectedImage) {
-            formData.append("img", selectedImage);
-          }
+          if (selectedImage) formData.append("img", selectedImage);
 
           const res = await updatePerfil(perfil.id, formData);
-
-          setPerfil(res);
-
+          setPerfil({ ...res });
           reset();
           removeImage();
 
-          toast.success("Los datos se actualizaron correctamente");
+          toast.success(t.updatedSuccess);
         } catch (err: unknown) {
           handleAxiosError(err);
         } finally {
@@ -86,13 +126,13 @@ export default function InformacionPersonal() {
         }
       }
     },
-    [selectedImage, perfil, reset, setPerfil]
+    [selectedImage, perfil, reset, setPerfil, t.updatedSuccess]
   );
 
   return (
     <section className="w-full max-w-5xl mx-auto flex flex-col gap-4">
-      <h2 className="text-2xl text-[#8A8A8A] font-bold  max-sm:text-xl">
-        Información personal
+      <h2 className="text-2xl text-[#8A8A8A] font-bold max-sm:text-xl">
+        {t.title}
       </h2>
       {perfil && (
         <form
@@ -100,7 +140,7 @@ export default function InformacionPersonal() {
           onSubmit={handleSubmit(onSubmit)}
         >
           <article className="flex justify-between gap-4 max-sm:flex-col">
-            <h3>Fotografía de perfil</h3>
+            <h3>{t.profilePic}</h3>
             <div className="w-full max-w-[572px] flex gap-4">
               <Avatar
                 className="w-16 h-16 flex-shrink-0 max-sm:w-14 max-sm:h-14"
@@ -126,10 +166,10 @@ export default function InformacionPersonal() {
                   <LiaCloudUploadAltSolid className="text-[#FC68B9] text-3xl" />
                 </span>
                 <p>
-                  <strong className="text-[#FC68B9]">Click to upload</strong> or
-                  drag and drop
+                  <strong className="text-[#FC68B9]">{t.clickUpload}</strong>{" "}
+                  {t.orDrag}
                 </p>
-                <p>SVG, PNG, JPG or GIF (max. 800x400px)</p>
+                <p>{t.formats}</p>
 
                 {imagePreview && (
                   <div className="relative">
@@ -152,8 +192,10 @@ export default function InformacionPersonal() {
               </div>
             </div>
           </article>
+
+          {/* Nombre y Apellidos */}
           <div className="w-full flex gap-2 justify-between max-sm:flex-col">
-            <h4>Nombre</h4>
+            <h4>{t.name}</h4>
             <div className="w-full max-w-[572px] flex gap-4 max-sm:flex-col">
               <Input
                 isRequired
@@ -161,25 +203,27 @@ export default function InformacionPersonal() {
                 labelPlacement="outside"
                 type="text"
                 {...register("nombre")}
-                errorMessage="El nombre es obligatorio"
+                errorMessage={`${t.name} es obligatorio`}
                 radius="md"
                 defaultValue={perfil?.nombre}
               />
               <Input
                 isRequired
                 classNames={inputClassNames3}
-                placeholder="Escribe tus apellidos"
+                placeholder={t.surname}
                 labelPlacement="outside"
                 type="text"
                 {...register("apellidos")}
-                errorMessage="Los Apellidos son obligatorios"
+                errorMessage={`${t.surname} es obligatorio`}
                 radius="md"
                 defaultValue={perfil?.apellidos}
               />
             </div>
           </div>
+
+          {/* Correo */}
           <div className="w-full flex gap-2 justify-between max-sm:flex-col">
-            <h4>Correo electrónico</h4>
+            <h4>{t.email}</h4>
             <div className="w-full max-w-[572px] flex gap-4 ">
               <Input
                 disabled
@@ -187,33 +231,23 @@ export default function InformacionPersonal() {
                 classNames={inputClassNames3}
                 labelPlacement="outside"
                 type="text"
-                errorMessage="El correo es obligatorio"
+                errorMessage={`${t.email} es obligatorio`}
                 radius="md"
                 defaultValue={perfil?.correo}
                 startContent={<CiMail className="min-w-8 text-2xl" />}
               />
             </div>
           </div>
-          <div className="w-full relative flex  gap-2 justify-between max-sm:flex-col">
-            <h4>Teléfono</h4>
-            <div className="relative w-full max-w-[572px] flex gap-4  border-1 rounded-xl overflow-hidden">
-              <Input
-                className="absolute right-0 w-[calc(100%-95px)] bottom-0 z-10"
-                classNames={inputClassNames4}
-                isRequired
-                label=""
-                labelPlacement="outside"
-                type="number"
-                {...register("telefono")}
-                defaultValue={perfil?.telefono}
-                radius="none"
-              />
 
+          {/* Teléfono */}
+          <div className="w-full relative flex gap-2 justify-between max-sm:flex-col">
+            <h4>{t.phone}</h4>
+            <div className="relative w-full max-w-[572px] flex gap-0 border-1 rounded-xl ">
               <Controller
                 name="codigo_pais"
                 control={control}
-                defaultValue={perfil?.codigo_pais || ""} // 👈 aquí va el valor inicial
-                rules={{ required: "El teléfono es obligatorio" }}
+                defaultValue={perfil?.codigo_pais || ""}
+                rules={{ required: `${t.phone} es obligatorio` }}
                 render={({
                   field: { onChange, value },
                   fieldState: { error },
@@ -223,11 +257,11 @@ export default function InformacionPersonal() {
                       value={value}
                       onChange={(phone) => onChange(phone)}
                       inputStyle={{
-                        width: "150px",
+                        width: "100px",
                         height: "48px",
                         borderRadius: "12px",
                         border: "1px solid #8A8A8A",
-                        paddingLeft: "60px",
+                        paddingLeft: "50px",
                         fontSize: "14px",
                         fontWeight: "400",
                         backgroundColor: "#ffff",
@@ -239,11 +273,11 @@ export default function InformacionPersonal() {
                         border: "none",
                         backgroundColor: "transparent",
                         borderRadius: "5px",
-                        paddingLeft: "16px",
+                        paddingLeft: "10px",
                         paddingRight: "8px",
                       }}
                       containerStyle={{
-                        width: "150px",
+                        width: "100px",
                       }}
                       dropdownStyle={{
                         borderRadius: "5px",
@@ -259,10 +293,23 @@ export default function InformacionPersonal() {
                   </div>
                 )}
               />
+              <Input
+                className="w-full"
+                classNames={inputClassNames4}
+                isRequired
+                label=""
+                labelPlacement="outside"
+                type="number"
+                {...register("telefono")}
+                defaultValue={perfil?.telefono}
+                radius="none"
+              />
             </div>
           </div>
+
+          {/* DNI */}
           <div className="w-full flex gap-2 justify-between max-sm:flex-col">
-            <h4>DNI/ID/CE</h4>
+            <h4>{t.dni}</h4>
             <div className="w-full max-w-[572px] flex gap-4 ">
               <Input
                 isRequired
@@ -270,17 +317,21 @@ export default function InformacionPersonal() {
                 labelPlacement="outside"
                 type="text"
                 {...register("dni_id_ce")}
-                errorMessage="El DNI/ID/CE es obligatorio"
+                errorMessage={`${t.dni} es obligatorio`}
                 radius="md"
                 defaultValue={perfil?.dni_id_ce || ""}
               />
             </div>
           </div>
-          <h3 className="text-2xl text-[#8A8A8A] font-bold ">Contraseña</h3>
+
+          {/* Contraseña */}
+          <h3 className="text-2xl text-[#8A8A8A] font-bold ">
+            {t.passwordSection}
+          </h3>
           <div className="w-full flex gap-2 justify-between max-sm:flex-col">
             <h4>
-              Contraseña actual
-              <p className="text-[#FC68B9]">Modificar contraseña</p>
+              {t.currentPassword}
+              <p className="text-[#FC68B9]">{t.modifyPassword}</p>
             </h4>
             <div className="w-full max-w-[572px] flex gap-4 ">
               <Input
@@ -288,20 +339,25 @@ export default function InformacionPersonal() {
                 labelPlacement="outside"
                 placeholder="****************"
                 type="password"
-                {...register("password")}
+                {...register("reset_password")}
                 radius="md"
+                defaultValue=""
               />
             </div>
           </div>
+
+          {/* Botón Guardar */}
           <div className="w-full flex justify-end gap-4 mt-4">
             <Button
               type="submit"
               className="bg-[#FC68B9] text-2xl p-6 text-white font-semibold max-sm:text-lg"
               radius="full"
             >
-              {loading ? "cargando ... " : "Guardar"}
+              {loading
+                ? `${language === "es" ? "cargando..." : "loading..."}`
+                : t.save}
             </Button>
-          </div>{" "}
+          </div>
         </form>
       )}
     </section>

@@ -1,3 +1,4 @@
+"use client";
 import { RespuestaComentario } from "@/interfaces/comentario.interface";
 import { Avatar, Button } from "@heroui/react";
 import Image from "next/image";
@@ -10,6 +11,7 @@ import { getRespuestaComentarioForo } from "@/services/foro.service";
 import RespuestaComentariosForo from "./RespuestaComentariosForo";
 import FormComentarForo from "./FormComentarForo";
 import useLikeComentarioForoStore from "@/stores/likeComentarioForo.store";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 interface Props {
   comentario: ComentarioForo;
@@ -17,6 +19,8 @@ interface Props {
 
 export default function CardComentarioForo({ comentario }: Props) {
   const { isLiked, toggleLike } = useLikeComentarioForoStore();
+  const { language } = useLanguageStore();
+
   const [isLoadingLike, setIsLoadingLike] = useState(false);
   const [likesCount, setLikesCount] = useState<number>(
     comentario.likes_comentario_foro
@@ -28,6 +32,18 @@ export default function CardComentarioForo({ comentario }: Props) {
   >([]);
 
   const classText = "text-lg text-[#FFB4DF] font-medium";
+
+  // 🌐 Traducciones
+  const t = {
+    es: {
+      reply: "Responder",
+      errorLike: "Error al dar like:",
+    },
+    en: {
+      reply: "Reply",
+      errorLike: "Error liking comment:",
+    },
+  }[language];
 
   const findRespuestaComentarios = useCallback(async () => {
     try {
@@ -50,16 +66,13 @@ export default function CardComentarioForo({ comentario }: Props) {
 
     try {
       await toggleLike(comentario.id);
-
       setLikesCount((prev) => (alreadyLiked ? prev - 1 : prev + 1));
     } catch (error) {
-      console.error("Error al dar like:", error);
+      console.error(t.errorLike, error);
     } finally {
       setIsLoadingLike(false);
     }
   };
-
-  console.log(comentario);
 
   return (
     <article className="w-full">
@@ -91,7 +104,7 @@ export default function CardComentarioForo({ comentario }: Props) {
           </p>
 
           <div className="w-full flex justify-between">
-            <div className="flex gap-4  items-center">
+            <div className="flex gap-4 items-center">
               <button
                 onClick={handleToggleLike}
                 disabled={isLoadingLike}
@@ -106,6 +119,7 @@ export default function CardComentarioForo({ comentario }: Props) {
                 )}
               </button>
               <p className={classText}>{likesCount}</p>
+
               <Button
                 variant="light"
                 size="sm"
@@ -125,13 +139,14 @@ export default function CardComentarioForo({ comentario }: Props) {
                 </span>
               </Button>
             </div>
+
             <Button
               variant="light"
               size="sm"
               className="p-0 h-auto min-w-0 gap-2 text-[#FC68B9] hover:bg-[#FC68B9]/10"
               onPress={() => setOpenResponder(!openResponder)}
             >
-              <span className="text-sm font-medium">Responder</span>
+              <span className="text-sm font-medium">{t.reply}</span>
             </Button>
           </div>
 

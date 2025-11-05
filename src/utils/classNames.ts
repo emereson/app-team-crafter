@@ -54,7 +54,7 @@ export const inputClassNames3 = {
 
 export const inputClassNames4 = {
   inputWrapper:
-    "bg-[#ffffff] data-[hover=true]:bg-[#ffffff] h-12 border-0 border-[#8A8A8A]   border-l-0  rounded-l-none",
+    "bg-[#ffffff] data-[hover=true]:bg-[#ffffff] h-12 border-0 border-[#8A8A8A]   border-l-0  rounded-none rounded-r-2xl",
   input: [
     "text-gray",
     "text-base",

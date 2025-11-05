@@ -11,6 +11,7 @@ interface Props {
   index: number;
   setSelectForo: (i: Foro) => void;
   onOpen: () => void;
+  setColorForo: (e: string) => void;
 }
 
 export default function CardForo({
@@ -18,6 +19,7 @@ export default function CardForo({
   index,
   setSelectForo,
   onOpen,
+  setColorForo,
 }: Props) {
   const { isLiked, toggleLike } = useLikedForoStore();
 
@@ -44,6 +46,7 @@ export default function CardForo({
   const colores = ["bg-[#FFEE97]", "bg-[#C3F3F3]", "bg-[#FFE1F2]"];
 
   const bgColor = colores[index % colores.length];
+
   return (
     <article
       key={foro.id}
@@ -129,6 +132,7 @@ export default function CardForo({
         onClick={() => {
           setSelectForo(foro);
           onOpen();
+          setColorForo(bgColor);
         }}
       >
         Comentar

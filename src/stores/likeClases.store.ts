@@ -57,8 +57,6 @@ const useLikedClasesStore = create<LikeClasesState>()(
         try {
           let updatedLikes: number[];
 
-          console.log(likedClases);
-
           if (wasLiked) {
             updatedLikes = await deleteLikeClases(claseId);
           } else {

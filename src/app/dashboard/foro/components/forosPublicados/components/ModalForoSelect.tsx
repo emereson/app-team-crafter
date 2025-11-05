@@ -1,3 +1,4 @@
+"use client";
 import { ComentarioForo, Foro } from "@/interfaces/foro.interface";
 import { getComentarioForo } from "@/services/foro.service";
 import { handleAxiosError } from "@/utils/errorHandler";
@@ -9,24 +10,43 @@ import useLikedForoStore from "@/stores/likeForos.store";
 import { FaHeart } from "react-icons/fa";
 import { PiHeart } from "react-icons/pi";
 import FormComentarForo from "./FormComentarForo";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 interface Props {
   isOpen: boolean;
   onOpenChange: () => void;
   selectForo: Foro;
+  colorForo: string;
 }
 
 export default function ModalForoSelect({
   isOpen,
   onOpenChange,
   selectForo,
+  colorForo,
 }: Props) {
   const { isLiked, toggleLike } = useLikedForoStore();
+  const { language } = useLanguageStore();
+
   const [isLoadingLike, setIsLoadingLike] = useState(false);
   const [likesCount, setLikesCount] = useState<number>(selectForo.likes_foro);
+  const [comentariosForo, setComentariosForo] = useState<ComentarioForo[]>([]);
 
   const tieneComentarios: boolean = selectForo.comentarios_foro?.length > 0;
-  const [comentariosForo, setComentariosForo] = useState<ComentarioForo[]>([]);
+
+  // 🌐 Traducciones
+  const t = {
+    es: {
+      comments: "Comentarios",
+      mostRecent: "Más reciente",
+      errorLike: "Error al dar like:",
+    },
+    en: {
+      comments: "Comments",
+      mostRecent: "Most recent",
+      errorLike: "Error liking post:",
+    },
+  }[language];
 
   const findComentariosForos = useCallback(async () => {
     try {
@@ -35,11 +55,11 @@ export default function ModalForoSelect({
     } catch (err) {
       handleAxiosError(err);
     }
-  }, []);
+  }, [selectForo.id]);
 
   useEffect(() => {
     findComentariosForos();
-  }, []);
+  }, [findComentariosForos]);
 
   const handleToggleLike = async () => {
     if (isLoadingLike) return;
@@ -49,11 +69,9 @@ export default function ModalForoSelect({
 
     try {
       await toggleLike(selectForo.id);
-
-      // Actualiza conteo
       setLikesCount((prev) => (alreadyLiked ? prev - 1 : prev + 1));
     } catch (error) {
-      console.error("Error al dar like:", error);
+      console.error(t.errorLike, error);
     } finally {
       setIsLoadingLike(false);
     }
@@ -71,7 +89,7 @@ export default function ModalForoSelect({
         {() => (
           <article
             key={selectForo.id}
-            className="w-full p-5 bg-[#FFEE97] flex flex-col gap-2 rounded-2xl"
+            className={`w-full p-5 ${colorForo} flex flex-col gap-2 rounded-2xl`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -131,6 +149,7 @@ export default function ModalForoSelect({
                   {likesCount}
                 </span>
               </div>
+
               <Button
                 variant="light"
                 size="sm"
@@ -169,23 +188,20 @@ export default function ModalForoSelect({
 
             <div className="w-full flex justify-between items-center mt-2">
               <span className="text-[#FC68B9] font-semibold">
-                {selectForo.comentarios_foro?.length} Comentarios
+                {selectForo.comentarios_foro?.length} {t.comments}
               </span>
               <button
                 className="text-[#FC68B9] font-semibold flex items-center gap-2"
                 type="button"
-                onClick={() => {
-                  /* Lógica para ordenar */
-                }}
               >
                 <Image
                   className="text-xs"
                   src="/icons/arrows.svg"
-                  alt="Más reciente"
+                  alt={t.mostRecent}
                   width={20}
                   height={20}
                 />
-                Más reciente
+                {t.mostRecent}
               </button>
             </div>
 

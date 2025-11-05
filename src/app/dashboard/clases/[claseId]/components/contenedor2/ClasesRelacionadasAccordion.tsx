@@ -7,6 +7,7 @@ import { Clase } from "@/interfaces/clase.interface";
 import { getClases } from "@/services/clases.service";
 import CardClases from "@/app/dashboard/components/CardClases";
 import { Accordion, AccordionItem } from "@heroui/react";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 interface Props {
   clase: Clase;
@@ -14,6 +15,17 @@ interface Props {
 
 export default function ClasesRelacionadasAccordion({ clase }: Props) {
   const [clases, setClases] = useState<Clase[]>([]);
+  const { language } = useLanguageStore();
+
+  // 🌐 Traducciones
+  const t = {
+    es: {
+      relatedClasses: "Clases relacionadas",
+    },
+    en: {
+      relatedClasses: "Related classes",
+    },
+  }[language];
 
   const gfindClases = useCallback(async () => {
     const res = await getClases({ categoria_clase: [clase.categoria_clase] });
@@ -25,19 +37,19 @@ export default function ClasesRelacionadasAccordion({ clase }: Props) {
   }, [gfindClases]);
 
   return (
-    <section className="w-full flex flex-col gap-4 ">
+    <section className="w-full flex flex-col gap-4">
       <Accordion>
         <AccordionItem
           key="1"
           aria-label="Accordion 1"
           startContent={
             <h2 className="text-lg text-[#68E1E0] font-semibold">
-              Clases relacionada
+              {t.relatedClasses}
             </h2>
           }
         >
           <Swiper
-            className="h-full w-full pb-4 "
+            className="h-full w-full pb-4"
             modules={[Navigation, A11y, Autoplay, Pagination]}
             spaceBetween={1}
             slidesPerView={1}

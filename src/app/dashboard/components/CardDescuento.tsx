@@ -1,5 +1,6 @@
 "use client";
 import { Snippet } from "@heroui/react";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 export const CopyIcon = () => {
   return (
@@ -63,7 +64,7 @@ export interface Descuento {
   tipo_descuento: string;
   titulo: string;
   descripcion: string;
-  fecha_expiracion: string; // o Date si quieres manejarlo como objeto de fecha
+  fecha_expiracion: string;
   codigo: string;
 }
 
@@ -72,12 +73,32 @@ interface Props {
 }
 
 export default function CardDescuento({ descuento }: Props) {
+  const { language } = useLanguageStore();
+
+  // 🌐 Traducciones
+  const t = {
+    es: {
+      discountLabel: "DSCTO",
+      expiration: "Fecha de expiración",
+      valid: "Cupón válido en nuestra web: glorialobatonarchivos.com",
+      code: "Código:",
+    },
+    en: {
+      discountLabel: "OFF",
+      expiration: "Expiration date",
+      valid: "Coupon valid on our website: glorialobatonarchivos.com",
+      code: "Code:",
+    },
+  }[language];
+
   return (
     <article className="w-full relative flex overflow-hidden max-sm:flex-col">
-      <span className="absolute -top-[18px] -right-[18px] w-[36px] h-[36px] rounded-full bg-white z-10 max-sm: " />
-      <span className="absolute -bottom-[18px] -right-[18px] w-[36px] h-[36px] rounded-full bg-white  z-10" />
+      <span className="absolute -top-[18px] -right-[18px] w-[36px] h-[36px] rounded-full bg-white z-10" />
+      <span className="absolute -bottom-[18px] -right-[18px] w-[36px] h-[36px] rounded-full bg-white z-10" />
       <span className="absolute -bottom-[18px] -left-[18px] w-[36px] h-[36px] rounded-full bg-white z-10" />
-      <div className="relative w-[220px] h-[185px] bg-[#68E1E0]  flex flex-col items-center justify-center text-white z-10 max-sm:w-full">
+
+      {/* LADO IZQUIERDO */}
+      <div className="relative w-[220px] h-[185px] bg-[#68E1E0] flex flex-col items-center justify-center text-white z-10 max-sm:w-full">
         <span className="absolute -top-[18px] -left-[18px] w-[36px] h-[36px] rounded-full bg-white" />
         <span className="absolute -top-[18px] -right-[18px] w-[36px] h-[36px] rounded-full bg-white" />
         <span className="absolute -bottom-[18px] -left-[18px] w-[36px] h-[36px] rounded-full bg-white" />
@@ -87,28 +108,29 @@ export default function CardDescuento({ descuento }: Props) {
             ? `$ ${descuento.monto}`
             : `${descuento.monto}%`}
         </h3>
-        <h5 className="text-2xl font-bold">DSCTO</h5>
+        <h5 className="text-2xl font-bold">{t.discountLabel}</h5>
       </div>
-      <div className="relative w-full h-[185px] bg-white border-2 border-[#68E1E0] flex  items-center justify-between  gap-6 text-[#8A8A8A] overflow-hidden  p-6 max-sm:flex-col max-sm:h-auto">
-        <span className="absolute -top-[18px] -left-[18px] w-[36px] h-[36px] rounded-full bg-white  border-2 border-[#68E1E0]" />
-        <span className="absolute -top-[18px] -right-[18px] w-[36px] h-[36px] rounded-full bg-white  border-2 border-[#68E1E0]" />
-        <span className="absolute -bottom-[18px] -left-[18px] w-[36px] h-[36px] rounded-full bg-white  border-2 border-[#68E1E0]" />
-        <span className="absolute -bottom-[18px] -right-[18px] w-[36px] h-[36px] rounded-full bg-white  border-2 border-[#68E1E0]" />
 
-        <article className="flex flex-col max-sm:text-center   ">
+      {/* LADO DERECHO */}
+      <div className="relative w-full h-[185px] bg-white border-2 border-[#68E1E0] flex items-center justify-between gap-6 text-[#8A8A8A] overflow-hidden p-6 max-sm:flex-col max-sm:h-auto">
+        <span className="absolute -top-[18px] -left-[18px] w-[36px] h-[36px] rounded-full bg-white border-2 border-[#68E1E0]" />
+        <span className="absolute -top-[18px] -right-[18px] w-[36px] h-[36px] rounded-full bg-white border-2 border-[#68E1E0]" />
+        <span className="absolute -bottom-[18px] -left-[18px] w-[36px] h-[36px] rounded-full bg-white border-2 border-[#68E1E0]" />
+        <span className="absolute -bottom-[18px] -right-[18px] w-[36px] h-[36px] rounded-full bg-white border-2 border-[#68E1E0]" />
+
+        <article className="flex flex-col max-sm:text-center">
           <h3 className="text-2xl font-bold">{descuento.titulo}</h3>
           <p className="text-lg">{descuento.descripcion}</p>
           <span className="text-[14px] font-bold mt-2">
-            Fecha de expiración: {descuento.fecha_expiracion}
+            {t.expiration}: {descuento.fecha_expiracion}
           </span>
-          <span className="text-[14px] font-medium ">
-            Cupón válido en nuestra web: glorialobatonarchivos.com
-          </span>
+          <span className="text-[14px] font-medium">{t.valid}</span>
         </article>
+
         <article className="flex flex-col items-center justify-center gap-1.5">
-          <h3 className="text-[#FC68B9]">Código:</h3>
+          <h3 className="text-[#FC68B9]">{t.code}</h3>
           <Snippet
-            className="bg-[#FC68B9] "
+            className="bg-[#FC68B9]"
             size="lg"
             symbol=""
             copyIcon={<CopyIcon />}

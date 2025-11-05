@@ -6,10 +6,10 @@ import { useEffect, useCallback } from "react";
 
 // 🟢 Enum de estados de suscripción
 export enum SubscriptionStatus {
-  ACTIVE = 1,
-  PENDING = 2, // ajusta si tu backend usa otro significado
-  TRIAL = 3, // ajusta si aplica
-  CANCELED = 4,
+  ACTIVE = "activa",
+  PENDING = "pendiente", // ajusta si tu backend usa otro significado
+  TRIAL = "expirada", // ajusta si aplica
+  CANCELED = "cancelada",
 }
 
 interface Plan {
@@ -20,8 +20,9 @@ interface Plan {
 }
 
 export interface Suscripcion {
+  id: number;
   subscriptionId: string;
-  status: number; // ahora validamos con SubscriptionStatus
+  status: string; // ahora validamos con SubscriptionStatus
   planExternalId: string;
   period_start: string;
   period_end: string;
@@ -29,6 +30,9 @@ export interface Suscripcion {
   user_id: string;
   plan: Plan;
   customerId: string;
+  plan_id: number;
+  startDate: string;
+  endDate: string;
 }
 
 interface SuscripcionState {
@@ -140,10 +144,10 @@ const useSuscripcionStore = create<SuscripcionState>((set, get) => ({
       setError(null);
 
       const response = await getSuscripcion();
-      setSuscripcion(response.suscripcion);
+
+      setSuscripcion(response.suscripcionActiva);
       setMessage(response.msg);
     } catch (error: unknown) {
-      console.error("Error fetching subscription:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Error al obtener suscripción";
       setError(errorMessage);

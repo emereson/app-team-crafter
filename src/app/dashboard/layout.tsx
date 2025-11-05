@@ -73,7 +73,7 @@ export default function DashboardLayout({
 
   return (
     <div className="w-screen h-screen flex flex-col">
-      {suscripcion?.status !== 1 && <SuscripcionVencida />}
+      {!suscripcion && <SuscripcionVencida />}
 
       <Header />
       <VideoPresentacion

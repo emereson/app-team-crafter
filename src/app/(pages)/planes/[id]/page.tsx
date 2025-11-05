@@ -12,7 +12,7 @@ export default function PlanId() {
     <main className="w-full min-h-screen h-full p-10 py-14  flex gap-8 background-login max-sm:px-4">
       <div className="w-full  h-full max-w-[1440px] mx-auto flex   overflow-hidden max-sm:p-0 max-sm:flex-col-reverse">
         <PsAi />
-        {suscripcion?.status === 1 ? (
+        {suscripcion ? (
           <section
             className="m-auto w-1/2 min-w-[300px]  h-full bg-white rounded-2xl p-10  flex flex-col justify-center items-start  gap-14
           max-sm:w-full

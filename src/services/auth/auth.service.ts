@@ -16,7 +16,6 @@ export async function postLogin(data: Login) {
 export async function postSignup(data: Signup, plan: string | null) {
   try {
     const res = await instance.post(`/user/signup`, { ...data, plan: plan });
-    console.log(res);
 
     setToken(res.data.token);
 

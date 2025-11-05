@@ -4,9 +4,11 @@ import { Clase } from "@/interfaces/clase.interface";
 import { getBuscar } from "@/services/clases.service";
 import { useMenuUIStore } from "@/stores/menu.store";
 import { usePerfilStore } from "@/stores/perfil.store";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 import { removeToken } from "@/utils/authUtils";
 import { handleAxiosError } from "@/utils/errorHandler";
 import {
+  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -20,6 +22,7 @@ import { RiArrowDownSLine } from "react-icons/ri";
 
 export default function Header() {
   const { toggleMenu, isOpen } = useMenuUIStore();
+  const { language, toggleLanguage } = useLanguageStore();
 
   const perfil = usePerfilStore((state) => state.perfil);
   const router = useRouter();
@@ -29,6 +32,31 @@ export default function Header() {
   const [isLoading, setIsLoading] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const t = {
+    es: {
+      searchPlaceholder: "Buscar clases...",
+      myAccount: "Mi cuenta",
+      favorites: "Favoritos",
+      logout: "Cerrar sesión",
+      english: "Inglés",
+      spanish: "Español",
+      showingResults: "Mostrando",
+      results: "resultados",
+      notifications: "Notificaciones",
+    },
+    en: {
+      searchPlaceholder: "Search classes...",
+      myAccount: "My account",
+      favorites: "Favorites",
+      logout: "Log out",
+      english: "English",
+      spanish: "Spanish",
+      showingResults: "Showing",
+      results: "results",
+      notifications: "Notifications",
+    },
+  }[language];
 
   const handleLogout = () => {
     removeToken();
@@ -152,7 +180,7 @@ export default function Header() {
             name="search"
             className="w-full py-2.5 px-5 bg-transparent placeholder:text-[#FFB4DF] text-lg font-bold text-[#fc68b9] focus:outline-none transition-all duration-200 max-md:text-sm"
             type="text"
-            placeholder="Buscar clases..."
+            placeholder={t.searchPlaceholder}
             value={buscador}
             onChange={handleSearchChange}
             onFocus={handleSearchFocus}
@@ -238,7 +266,7 @@ export default function Header() {
           {clases.length >= 5 && (
             <div className="p-2 text-center bg-[#edd5e3]">
               <p className="text-xs text-[#8A8A8A] font-medium">
-                Mostrando {clases.length} resultados
+                {t.showingResults} {clases.length} {t.results}
               </p>
             </div>
           )}
@@ -290,7 +318,6 @@ export default function Header() {
               <RiArrowDownSLine className="text-2xl transition-transform duration-200 group-hover:rotate-180 max-md:hidden" />
             </div>
           </DropdownTrigger>
-
           <DropdownMenu
             aria-label="Menú de usuario"
             variant="flat"
@@ -315,7 +342,7 @@ export default function Header() {
                     height={24}
                   />
                 </div>
-                Mi cuenta
+                {t.myAccount}
               </Link>
             </DropdownItem>
 
@@ -336,7 +363,7 @@ export default function Header() {
                     height={24}
                   />
                 </div>
-                Favoritos
+                {t.favorites}
               </Link>
             </DropdownItem>
 
@@ -355,10 +382,33 @@ export default function Header() {
                     height={24}
                   />
                 </div>
-                Cerrar Sesión
+                {t.logout}
               </span>
             </DropdownItem>
+            <DropdownItem
+              key="Idiomas"
+              className="px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
+            >
+              <Button
+                className="w-full bg-[#FC68B9] text-white font-semibold gap-2"
+                radius="full"
+                onPress={toggleLanguage}
+              >
+                <Image
+                  src={
+                    language === "es"
+                      ? "/icons/ingles.svg"
+                      : "/icons/spanish.svg"
+                  }
+                  alt="Idioma"
+                  width={30}
+                  height={30}
+                />
+                <p>{language === "es" ? t.english : t.spanish}</p>
+              </Button>
+            </DropdownItem>
           </DropdownMenu>
+             
         </Dropdown>
       </div>
     </header>

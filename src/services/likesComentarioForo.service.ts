@@ -14,7 +14,6 @@ export async function postLikeComentarioForo(id: number) {
 
 export async function deleteLikeComentarioForo(id: number) {
   const res = await instance.delete(`/like-comentario-foro/${id}`);
-  console.log(res);
 
   return res.data.likeComentarioForos;
 }

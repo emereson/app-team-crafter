@@ -16,7 +16,6 @@ export default function Foro() {
   const gfindForos = useCallback(async () => {
     try {
       const res = await getForos(order);
-      console.log(res);
 
       setForos(res);
     } catch (err) {

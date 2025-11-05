@@ -6,15 +6,16 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { memo, useMemo } from "react";
 import { useMenuUIStore } from "@/stores/menu.store";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
-// Configuración centralizada
+// 📘 Configuración base del menú
 const MENU_CONFIG = {
   items: [
-    { href: "/dashboard/inicio", label: "Inicio", icon: "home" },
-    { href: "/dashboard/clases", label: "Clases", icon: "clases" },
-    { href: "/dashboard/recursos", label: "Recursos", icon: "recursos" },
-    { href: "/dashboard/descuentos", label: "Descuentos", icon: "descuento" },
-    { href: "/dashboard/foro", label: "Foro", icon: "foro" },
+    { href: "/dashboard/inicio", key: "home", icon: "home" },
+    { href: "/dashboard/clases", key: "classes", icon: "clases" },
+    { href: "/dashboard/recursos", key: "resources", icon: "recursos" },
+    { href: "/dashboard/descuentos", key: "discounts", icon: "descuento" },
+    { href: "/dashboard/foro", key: "forum", icon: "foro" },
   ],
   colors: {
     bg: "#C3F3F3",
@@ -24,7 +25,39 @@ const MENU_CONFIG = {
   },
 } as const;
 
-// Componente MenuItem con Image en lugar de bg-image
+// 🌐 Traducciones centralizadas
+const TRANSLATIONS = {
+  es: {
+    menuTitle: "MENÚ",
+    items: {
+      home: "Inicio",
+      classes: "Clases",
+      resources: "Recursos",
+      discounts: "Descuentos",
+      forum: "Foro",
+    },
+    helpTitle: "¿Tienes dudas?",
+    helpText:
+      "Consulta las Preguntas Frecuentes y resuelve tus dudas al instante.",
+    faqButton: "Ver FAQ",
+  },
+  en: {
+    menuTitle: "MENU",
+    items: {
+      home: "Home",
+      classes: "Classes",
+      resources: "Resources",
+      discounts: "Discounts",
+      forum: "Forum",
+    },
+    helpTitle: "Have questions?",
+    helpText:
+      "Check the Frequently Asked Questions and clear your doubts instantly.",
+    faqButton: "View FAQ",
+  },
+} as const;
+
+// 🧩 Item del menú individual
 const MenuItem = memo(
   ({
     href,
@@ -45,7 +78,7 @@ const MenuItem = memo(
       prefetch={true}
       onClick={closeMenu}
     >
-      {/* Usando Image component en lugar de background-image */}
+      {/* Icono con hover */}
       <div className="h-10 w-10 relative transition-all duration-200">
         <Image
           src={`/home/${icon}-${isActive ? "yes" : "no"}.svg`}
@@ -56,7 +89,6 @@ const MenuItem = memo(
             isActive ? "opacity-100" : "opacity-100 group-hover:opacity-0"
           }`}
         />
-        {/* Imagen hover */}
         {!isActive && (
           <Image
             src={`/home/${icon}-yes.svg`}
@@ -81,63 +113,69 @@ const MenuItem = memo(
 
 MenuItem.displayName = "MenuItem";
 
-// Componente HelpSection optimizado
-const HelpSection = memo(() => (
-  <div className="px-8">
-    <section className="w-full bg-[#68E1E0] rounded-2xl p-4 py-5 flex flex-col items-start gap-3 shadow-sm">
-      <Image
-        className="h-[54px] w-[54px]"
-        src="/home/interogation.svg"
-        alt="¿Tienes dudas?"
-        width={54}
-        height={54}
-        loading="lazy"
-        onError={(e) => {
-          console.error("Error cargando imagen:", e);
-        }}
-      />
-      <h3 className="text-lg font-bold text-white mt-2">¿Tienes dudas?</h3>
-      <p className="text-lg text-white leading-relaxed">
-        Consulta las Preguntas Frecuentes y resuelve tus dudas al instante.
-      </p>
-      <Link
-        className="w-full bg-transparent text-center border border-[#FC68B9] text-[#FC68B9] font-semibold text-lg p-3 mt-2 hover:bg-[#FC68B9] hover:text-white transition-colors rounded-full duration-300"
-        href="/preguntas-frecuentes"
-      >
-        Ver FAQ
-      </Link>
-    </section>
-  </div>
-));
+// 💬 Sección de ayuda con traducción
+const HelpSection = memo(
+  ({ t }: { t: (key: keyof (typeof TRANSLATIONS)["es"]) => string }) => (
+    <div className="px-8">
+      <section className="w-full bg-[#68E1E0] rounded-2xl p-4 py-5 flex flex-col items-start gap-3 shadow-sm">
+        <Image
+          className="h-[54px] w-[54px]"
+          src="/home/interogation.svg"
+          alt={t("helpTitle")}
+          width={54}
+          height={54}
+          loading="lazy"
+        />
+        <h3 className="text-lg font-bold text-white mt-2">{t("helpTitle")}</h3>
+        <p className="text-lg text-white leading-relaxed">{t("helpText")}</p>
+        <Link
+          className="w-full bg-transparent text-center border border-[#FC68B9] text-[#FC68B9] font-semibold text-lg p-3 mt-2 hover:bg-[#FC68B9] hover:text-white transition-colors rounded-full duration-300"
+          href="/preguntas-frecuentes"
+        >
+          {t("faqButton")}
+        </Link>
+      </section>
+    </div>
+  )
+);
 
 HelpSection.displayName = "HelpSection";
+
+// 🧭 Componente principal del menú
 export default function Menu() {
   const pathname = usePathname();
   const { isOpen, closeMenu } = useMenuUIStore();
+  const { language } = useLanguageStore();
 
+  // Traducciones actuales
+  const tr = TRANSLATIONS[language];
+  const translate = (key: keyof (typeof TRANSLATIONS)["es"]) =>
+    tr[key] as string;
+
+  // Ítems del menú traducidos dinámicamente
   const menuItems = useMemo(
     () =>
       MENU_CONFIG.items.map((item) => (
         <MenuItem
           key={item.href}
           href={item.href}
-          label={item.label}
+          label={tr.items[item.key]}
           icon={item.icon}
           isActive={pathname === item.href}
           closeMenu={closeMenu}
         />
       )),
-    [pathname, closeMenu]
+    [pathname, closeMenu, tr]
   );
 
   return (
     <>
-      {/* Overlay: solo visible si isOpen */}
+      {/* Fondo oscuro (overlay) */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/20 z-40 " onClick={closeMenu} />
+        <div className="fixed inset-0 bg-black/20 z-40" onClick={closeMenu} />
       )}
 
-      {/* Menú */}
+      {/* Contenedor del menú */}
       <div
         className={`min-w-[280px] w-min h-full overflow-auto bg-[#C3F3F3] py-6 flex flex-col gap-4 z-40 
           max-md:fixed max-md:top-[65px] max-md:h-[calc(100vh-65px)]
@@ -149,13 +187,15 @@ export default function Menu() {
           }
         `}
       >
-        <h2 className="ml-9 text-lg font-bold text-[#68E1E0]">MENÚ</h2>
+        <h2 className="ml-9 text-lg font-bold text-[#68E1E0]">
+          {translate("menuTitle")}
+        </h2>
 
         <nav className="flex flex-col gap-6">{menuItems}</nav>
 
         <div className="flex-1 max-md:flex-none pt-4" />
 
-        <HelpSection />
+        <HelpSection t={translate} />
       </div>
     </>
   );

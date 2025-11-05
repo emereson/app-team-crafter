@@ -1,8 +1,11 @@
+"use client";
+
 import { Button } from "@heroui/react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 import { IoCloseOutline } from "react-icons/io5";
+import { useLanguageStore } from "@/stores/useLanguage.store"; // 🌍
 
 interface Props {
   setOpenFilter: (open: boolean) => void;
@@ -26,8 +29,45 @@ export default function FiltrarClases({
   const [openCategorias, setOpenCategorias] = useState(true);
   const [openTutoriales, setOpenTutoriales] = useState(true);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const { language } = useLanguageStore(); // 🔤 idioma actual
 
-  // 👇 Detecta clics fuera del section
+  // 🌍 Traducciones
+  const t = {
+    es: {
+      filters: "FILTROS",
+      categories: "Categorías",
+      tutorials: "Tutoriales y Tips",
+      apply: "Aplicar",
+      cakeToppers: "Cake Toppers",
+      cajas: "Cajitas Temáticas",
+      cartonaje: "Cartonaje",
+      tarjetas: "Tarjetas Invitación",
+      varios: "Proyectos Varios",
+      tutSilhouette: "Tutoriales Silhouette Studio",
+      tutCricut: "Tutoriales Cricut Design",
+      tipsDesign: "Tips de Diseño",
+      tipsCut: "Tips de Corte",
+      others: "Varios/otros",
+    },
+    en: {
+      filters: "FILTERS",
+      categories: "Categories",
+      tutorials: "Tutorials & Tips",
+      apply: "Apply",
+      cakeToppers: "Cake Toppers",
+      cajas: "Themed Boxes",
+      cartonaje: "Cartonage",
+      tarjetas: "Invitation Cards",
+      varios: "Various Projects",
+      tutSilhouette: "Silhouette Studio Tutorials",
+      tutCricut: "Cricut Design Tutorials",
+      tipsDesign: "Design Tips",
+      tipsCut: "Cutting Tips",
+      others: "Various/Others",
+    },
+  }[language];
+
+  // 🔎 Detecta clics fuera del panel
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -41,90 +81,58 @@ export default function FiltrarClases({
     if (openFilter) {
       document.addEventListener("mousedown", handleClickOutside);
     }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [openFilter, setOpenFilter]);
 
   const categorias = [
-    { id: "Cake Toppers", label: "Cake Toppers" },
-    { id: "Cajitas Temáticas", label: "Cajitas Temáticas" },
-    { id: "Cartonaje", label: "Cartonaje" },
-    { id: "Tarjetas Invitación", label: "Tarjetas Invitación" },
-    { id: "Proyectos Varios", label: "Proyectos Varios" },
+    { id: "Cake Toppers", label: t.cakeToppers },
+    { id: "Cajitas Temáticas", label: t.cajas },
+    { id: "Cartonaje", label: t.cartonaje },
+    { id: "Tarjetas Invitación", label: t.tarjetas },
+    { id: "Proyectos Varios", label: t.varios },
   ];
 
   const tutoriales = [
-    {
-      id: "Tutoriales Silhouette Studio",
-      label: "Tutoriales Silhouette Studio",
-    },
-    { id: "Tutoriales Cricut Design", label: "Tutoriales Cricut Design" },
-    { id: "Tips de Diseño", label: "Tips de Diseño" },
-    { id: "Tips de Corte", label: "Tips de Corte" },
-    { id: "Varios/otros", label: "Varios/otros" },
+    { id: "Tutoriales Silhouette Studio", label: t.tutSilhouette },
+    { id: "Tutoriales Cricut Design", label: t.tutCricut },
+    { id: "Tips de Diseño", label: t.tipsDesign },
+    { id: "Tips de Corte", label: t.tipsCut },
+    { id: "Varios/otros", label: t.others },
   ];
 
-  // Función para manejar la selección de categorías
+  // ✅ Selección de categorías
   const handleCategoriaChange = (categoriaId: string) => {
-    if (categoria.includes(categoriaId)) {
-      // Si ya está seleccionada, la removemos
-      setCategoria(categoria.filter((id) => id !== categoriaId));
-    } else {
-      // Si no está seleccionada, la agregamos
-      setCategoria([...categoria, categoriaId]);
-    }
+    setCategoria(
+      categoria.includes(categoriaId)
+        ? categoria.filter((id) => id !== categoriaId)
+        : [...categoria, categoriaId]
+    );
   };
 
-  // Función para manejar la selección de tutoriales
+  // ✅ Selección de tutoriales
   const handleTutorialChange = (tutorialId: string) => {
-    if (tutorial.includes(tutorialId)) {
-      // Si ya está seleccionado, lo removemos
-      setTutorial(tutorial.filter((id) => id !== tutorialId));
-    } else {
-      // Si no está seleccionado, lo agregamos
-      setTutorial([...tutorial, tutorialId]);
-    }
-  };
-
-  // Función para seleccionar/deseleccionar todas las categorías
-  const handleSelectAllCategorias = () => {
-    if (categoria.length === categorias.length) {
-      // Si todas están seleccionadas, deseleccionar todas
-      setCategoria([]);
-    } else {
-      // Si no todas están seleccionadas, seleccionar todas
-      setCategoria(categorias.map((cat) => cat.id));
-    }
-  };
-
-  // Función para seleccionar/deseleccionar todos los tutoriales
-  const handleSelectAllTutoriales = () => {
-    if (tutorial.length === tutoriales.length) {
-      // Si todos están seleccionados, deseleccionar todos
-      setTutorial([]);
-    } else {
-      // Si no todos están seleccionados, seleccionar todos
-      setTutorial(tutoriales.map((tut) => tut.id));
-    }
+    setTutorial(
+      tutorial.includes(tutorialId)
+        ? tutorial.filter((id) => id !== tutorialId)
+        : [...tutorial, tutorialId]
+    );
   };
 
   return (
     <div
       className={`fixed top-0 right-0 w-screen h-screen flex justify-end bg-[#1717178a] z-[60] 
-    transition-opacity duration-300 ease-in-out
-    ${
-      openFilter
-        ? "opacity-100 pointer-events-auto"
-        : "opacity-0 pointer-events-none"
-    }
-  `}
+      transition-opacity duration-300 ease-in-out
+      ${
+        openFilter
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+      }`}
     >
       <section
         ref={sectionRef}
         className="w-full max-w-[383px] h-screen py-10 px-5 bg-white flex flex-col items-center gap-6"
       >
+        {/* Botón cerrar */}
         <button
           className="absolute top-5 right-5 cursor-pointer"
           onClick={() => setOpenFilter(false)}
@@ -136,13 +144,14 @@ export default function FiltrarClases({
         <div className="flex items-center gap-3 text-[#FC68B9]">
           <Image
             src="/icons/grid-pink.svg"
-            alt="FILTROS"
+            alt={t.filters}
             width={40}
             height={40}
           />
-          <h2 className="text-lg font-semibold">FILTROS</h2>
+          <h2 className="text-lg font-semibold">{t.filters}</h2>
         </div>
 
+        {/* Categorías */}
         <article className="w-full">
           <Button
             className="w-full bg-white text-[#FC68B9] text-lg font-semibold flex justify-between border border-[#FC68B9]"
@@ -150,27 +159,12 @@ export default function FiltrarClases({
             radius="full"
             onPress={() => setOpenCategorias(!openCategorias)}
           >
-            Categorías ({categoria.length})
+            {t.categories} ({categoria.length})
           </Button>
 
-          {/* Botón para seleccionar/deseleccionar todas las categorías */}
-          {/* {openCategorias && (
-            <div className="mt-2 pl-2">
-              <button
-                onClick={handleSelectAllCategorias}
-                className="text-sm text-[#FC68B9] font-medium hover:underline"
-              >
-                {categoria.length === categorias.length
-                  ? "Deseleccionar todas"
-                  : "Seleccionar todas"}
-              </button>
-            </div>
-          )} */}
-
-          {/* Lista de categorías */}
-          <div className="mt-4 space-y-2 pl-2">
-            {openCategorias &&
-              categorias.map((cat) => (
+          {openCategorias && (
+            <div className="mt-4 space-y-2 pl-2">
+              {categorias.map((cat) => (
                 <label
                   key={cat.id}
                   htmlFor={`cat-${cat.id}`}
@@ -189,9 +183,11 @@ export default function FiltrarClases({
                   </span>
                 </label>
               ))}
-          </div>
+            </div>
+          )}
         </article>
 
+        {/* Tutoriales */}
         <article className="w-full">
           <Button
             className="w-full bg-white text-[#FC68B9] text-lg font-semibold flex justify-between border border-[#FC68B9]"
@@ -199,27 +195,12 @@ export default function FiltrarClases({
             radius="full"
             onPress={() => setOpenTutoriales(!openTutoriales)}
           >
-            Tutoriales y Tips ({tutorial.length})
+            {t.tutorials} ({tutorial.length})
           </Button>
 
-          {/* Botón para seleccionar/deseleccionar todos los tutoriales */}
-          {/* {openTutoriales && (
-            <div className="mt-2 pl-2">
-              <button
-                onClick={handleSelectAllTutoriales}
-                className="text-sm text-[#FC68B9] font-medium hover:underline"
-              >
-                {tutorial.length === tutoriales.length
-                  ? "Deseleccionar todos"
-                  : "Seleccionar todos"}
-              </button>
-            </div>
-          )} */}
-
-          {/* Lista de tutoriales */}
-          <div className="mt-4 space-y-2 pl-2">
-            {openTutoriales &&
-              tutoriales.map((item) => (
+          {openTutoriales && (
+            <div className="mt-4 space-y-2 pl-2">
+              {tutoriales.map((item) => (
                 <label
                   key={item.id}
                   htmlFor={`tut-${item.id}`}
@@ -238,24 +219,22 @@ export default function FiltrarClases({
                   </span>
                 </label>
               ))}
-          </div>
+            </div>
+          )}
         </article>
 
         <div className="flex-1"></div>
 
+        {/* Botón Aplicar */}
         <Button
           className="w-full py-6 bg-[#FC68B9] text-white text-lg font-bold"
           radius="full"
           type="button"
           onPress={gfindClases}
         >
-          Aplicar
+          {t.apply}
         </Button>
       </section>
     </div>
   );
 }
-
-// Ejemplo de cómo usar el componente en el componente padre:
-// const [categoria, setCategoria] = useState<string[]>([]);
-// const [tutorial, setTutorial] = useState<string[]>([]);

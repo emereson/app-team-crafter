@@ -69,7 +69,7 @@ export default function ClasesId() {
               claseId={clase.id}
               findComentarios={findComentarios}
             />
-            <FiltrarComentarios />
+            <FiltrarComentarios totalComentarios={comentarios.length} />
             <ComentariosClase claseId={clase.id} comentarios={comentarios} />
           </div>
 

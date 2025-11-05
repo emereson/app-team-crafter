@@ -1,6 +1,8 @@
+"use client";
+
 import { Plan } from "@/interfaces/plan.interface";
 import { patchMigrarSuscripcion } from "@/services/auth/suscripcion.service";
-import { Suscripcion } from "@/stores/SuscripcionContext";
+import useSuscripcionStore, { Suscripcion } from "@/stores/SuscripcionContext";
 import { handleAxiosError } from "@/utils/errorHandler";
 import {
   Button,
@@ -11,6 +13,7 @@ import {
   ModalHeader,
 } from "@heroui/react";
 import { toast } from "sonner";
+import { useLanguageStore } from "@/stores/useLanguage.store";
 
 interface Props {
   onOpenChange: (i: boolean) => void;
@@ -25,12 +28,40 @@ export default function ModalMigrarPlan({
   selectSuscripcion,
   plan,
 }: Props) {
+  const { forceRefetch } = useSuscripcionStore();
+  const { language } = useLanguageStore();
+
+  // 🌐 Traducciones
+  const t = {
+    es: {
+      title: "Confirmar membresía de plan",
+      message:
+        "¿Estás seguro de que deseas migrar tu membresía al plan seleccionado?",
+      cancel: "Cancelar",
+      confirm: "Confirmar",
+      success: "El plan se migró correctamente.",
+    },
+    en: {
+      title: "Confirm plan membership",
+      message:
+        "Are you sure you want to migrate your membership to the selected plan?",
+      cancel: "Cancel",
+      confirm: "Confirm",
+      success: "Plan successfully migrated.",
+    },
+  }[language];
+
   const handleMigrarPlan = async () => {
     try {
-      await patchMigrarSuscripcion(selectSuscripcion.subscriptionId, {
-        planExternalId: plan.flow_plan_id,
-      }),
-        toast.success("✅ Plan migrado con éxito");
+      const resData = await patchMigrarSuscripcion(selectSuscripcion.id, {
+        planExternalId: plan.id,
+      });
+      if (resData.link_pago) {
+        window.location.href = resData.link_pago;
+      } else {
+        toast.success(t.success);
+        await forceRefetch();
+      }
     } catch (err) {
       handleAxiosError(err);
     } finally {
@@ -44,24 +75,24 @@ export default function ModalMigrarPlan({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1 text-[#8A8A8A] font-bold text-xl max-sm:text-xl">
-              Confirmar membresía de plan
+              {t.title}
             </ModalHeader>
             <ModalBody>
               <p>
-                ¿Estás seguro de que deseas migrar tu membresía al{" "}
-                <strong className="text-[#FC68B9] ">{plan.nombre_plan}</strong>?
+                {t.message}{" "}
+                <strong className="text-[#FC68B9]">{plan.nombre_plan}</strong>?
               </p>
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={onClose}>
-                Cancelar
+                {t.cancel}
               </Button>
               <Button
                 className="bg-[#FC68B9]"
                 color="primary"
                 onPress={handleMigrarPlan}
               >
-                Confirmar
+                {t.confirm}
               </Button>
             </ModalFooter>
           </>

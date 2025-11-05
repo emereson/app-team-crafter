@@ -65,7 +65,7 @@ export default function Notificaciones() {
               <p className="max-sm:text-sm">{notificacion.contenido}</p>
               <Link
                 className="text-[#FC68B9]"
-                href={notificacion.url_notificacion}
+                href={notificacion.url_notificacion || ""}
               >
                 Ver ahora
               </Link>
