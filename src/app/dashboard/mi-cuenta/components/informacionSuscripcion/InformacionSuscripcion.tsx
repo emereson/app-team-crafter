@@ -161,10 +161,10 @@ export default function InformacionSuscripcion() {
         ))}
       </div>
 
-      {/* 💰 Método de pago */}
+      {/* 💰 Método de pago
       <h2 className="text-[#8A8A8A] font-bold text-2xl mt-4 max-sm:text-xl">
         {t.paymentMethod}
-      </h2>
+      </h2> */}
 
       {/* 📜 Historial de suscripciones */}
       <h2 className="text-[#8A8A8A] font-bold text-2xl mt-4 max-sm:text-xl">

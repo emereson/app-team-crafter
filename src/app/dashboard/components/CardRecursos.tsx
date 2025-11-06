@@ -7,6 +7,9 @@ import { formatDate } from "@/utils/formatDate";
 import { useDisclosure } from "@heroui/react";
 import ModalRecursoCaducado from "./ModalRecursoCaducado";
 import { useLanguageStore } from "@/stores/useLanguage.store";
+import { useCallback } from "react";
+import { postDescarga } from "@/services/decargas.service";
+import { handleAxiosError } from "@/utils/errorHandler";
 
 interface Props {
   recurso: Recurso;
@@ -29,6 +32,13 @@ export default function CardRecursos({ recurso, width }: Props) {
     },
   }[language];
 
+  const getfindDescargas = useCallback(async () => {
+    try {
+      await postDescarga(recurso.id);
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  }, []);
   return (
     <article
       key={recurso.id}
@@ -63,6 +73,7 @@ export default function CardRecursos({ recurso, width }: Props) {
             className="group absolute cursor-pointer right-4 bottom-4 bg-white text-[#FC68B9] font-semibold flex items-center gap-3 p-1.5 px-4 rounded-full group-hover:bg-[#FC68B9] group-hover:text-white duration-300"
             href={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/doc/${recurso?.link_recurso}`}
             download
+            onClick={getfindDescargas}
           >
             <div className="w-5 h-5 bg-[url(/icons/documento-pink.svg)] bg-no-repeat bg-center group-hover:bg-[url(/icons/documento.svg)]" />
             <p>{t.download}</p>

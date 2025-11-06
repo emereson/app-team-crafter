@@ -96,7 +96,11 @@ export default function VideoClase({ clase }: Props) {
               : "opacity-100 scale-100"
           }`}
         >
-          <VideoPlayer hlsUrl={clase.video_clase} mode="poster" />
+          <VideoPlayer
+            hlsUrl={clase.video_clase}
+            ThumbnailUrl={clase.poster_url}
+            mode="poster"
+          />
         </div>
 
         <button

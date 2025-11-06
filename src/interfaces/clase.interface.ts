@@ -23,4 +23,5 @@ export interface Clase {
   status: "active" | "disabled";
   createdAt: string;
   recurso: Recurso;
+  poster_url: string;
 }

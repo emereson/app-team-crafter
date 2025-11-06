@@ -23,3 +23,9 @@ export interface Recurso {
   createdAt: string;
   clase: Clase;
 }
+
+export interface Descarga {
+  id: number;
+  fecha_descarga: string;
+  recurso: Recurso;
+}

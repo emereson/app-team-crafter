@@ -36,7 +36,11 @@ export default function CardClases({ clase, width }: Props) {
       <Link href={`/dashboard/clases/${clase?.id}`}>
         <div className="w-full relative rounded-2xl overflow-hidden">
           <div className="w-full hover:scale-105 duration-300">
-            <VideoPlayer hlsUrl={clase.video_clase} mode="poster" />
+            <VideoPlayer
+              hlsUrl={clase.video_clase}
+              ThumbnailUrl={clase.poster_url}
+              mode="poster"
+            />
           </div>
           <Image
             className="absolute right-4 bottom-4  w-14"

@@ -375,11 +375,11 @@ export default function Header() {
               <span className="text-[#FC68B9] text-base font-semibold  flex items-center gap-2 w-full ">
                 <div className="w-8 h-8 rounded-lg bg-[#ffcce9] group-hover:bg-[#FC68B9] p-1.5 flex items-center justify-center">
                   <Image
-                    className="h-[24px] w-[24px]"
                     src="/icons/cerrarSesion.svg"
                     alt="Cerrar sesión"
                     width={24}
                     height={24}
+                    className="w-6 h-auto" // 👈 mantiene proporción automática
                   />
                 </div>
                 {t.logout}

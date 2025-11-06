@@ -6,6 +6,7 @@ import TituloMiCuenta from "./components/TituloMiCuenta";
 import InformacionPersonal from "./components/InformacionPersonal";
 import InformacionSuscripcion from "./components/informacionSuscripcion/InformacionSuscripcion";
 import { useSearchParams } from "next/navigation";
+import DescargaRecursos from "./components/DescargaRecursos";
 
 export default function MiCuenta() {
   const searchParams = useSearchParams();
@@ -23,6 +24,7 @@ export default function MiCuenta() {
       <TituloMiCuenta />
       <NavMiCuenta navSelect={navSelect} setNavSelect={setNavSelect} />
       {navSelect === 1 && <InformacionPersonal />}
+      {navSelect === 2 && <DescargaRecursos />}
 
       {navSelect === 4 && <InformacionSuscripcion />}
     </main>
