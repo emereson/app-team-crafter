@@ -52,42 +52,51 @@ export default function CardForo({
       key={foro.id}
       className={`w-full p-5 ${bgColor} flex flex-col gap-2 rounded-2xl`}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Avatar
-            className="w-8 h-8 flex-shrink-0"
-            src={
-              foro.usuario?.foto_perfil
-                ? `${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${foro.usuario?.foto_perfil}`
-                : "/icons/user.svg"
-            }
-            alt={`Avatar de ${foro.usuario.nombre}`}
-          />
-          <div className="flex flex-col">
-            <h3 className="text-[#8A8A8A] font-bold text-sm truncate">
-              {foro.usuario.nombre}
-            </h3>
-            <time className="text-[#8A8A8A] text-xs font-light flex-shrink-0">
-              {foro.createdAt}
-            </time>
+      <div
+        className="w-full flex flex-col gap-2 cursor-pointer "
+        onClick={() => {
+          setSelectForo(foro);
+          onOpen();
+          setColorForo(bgColor);
+        }}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Avatar
+              className="w-8 h-8 flex-shrink-0"
+              src={
+                foro.usuario?.foto_perfil
+                  ? `${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${foro.usuario?.foto_perfil}`
+                  : "/icons/user.svg"
+              }
+              alt={`Avatar de ${foro.usuario.nombre}`}
+            />
+            <div className="flex flex-col">
+              <h3 className="text-[#8A8A8A] font-bold text-sm truncate">
+                {foro.usuario.nombre}
+              </h3>
+              <time className="text-[#8A8A8A] text-xs font-light flex-shrink-0">
+                {foro.createdAt}
+              </time>
+            </div>
           </div>
         </div>
+
+        {foro.img_foro && (
+          <Image
+            src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${foro.img_foro}`}
+            alt={`Imagen del foro ${foro.titulo_foro}`}
+            width={600}
+            height={300}
+            className="w-full h-[280px] rounded-lg object-cover"
+          />
+        )}
+
+        <h3 className="text-xl text-[#8A8A8A] font-bold">{foro.titulo_foro}</h3>
+        <p className="text-medium text-[#8A8A8A] font-medium">
+          {foro.contenido_foro}
+        </p>
       </div>
-
-      {foro.img_foro && (
-        <Image
-          src={`${process.env.NEXT_PUBLIC_API_URL_UPLOADS}/img/${foro.img_foro}`}
-          alt={`Imagen del foro ${foro.titulo_foro}`}
-          width={600}
-          height={300}
-          className="w-full h-[280px] rounded-lg object-cover"
-        />
-      )}
-
-      <h3 className="text-xl text-[#8A8A8A] font-bold">{foro.titulo_foro}</h3>
-      <p className="text-medium text-[#8A8A8A] font-medium">
-        {foro.contenido_foro}
-      </p>
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <button

@@ -126,7 +126,11 @@ export default function NuevaPublicacion({ gfindForos }: Props) {
 
   return (
     <section className="w-full flex flex-col gap-4 -mt-2">
-      <div className="w-full h-[70px] flex justify-end items-center border-1 border-[#FFB4DF] rounded-2xl px-4">
+      <div
+        className="w-full h-[70px] flex justify-end items-center border-1 border-[#FFB4DF] rounded-2xl px-4
+         cursor-pointer"
+        onClick={onOpen}
+      >
         <Button
           className="relative min-w-1 w-[40px] h-[40px] p-0 bg-[#FC68B9]"
           onPress={onOpen}
