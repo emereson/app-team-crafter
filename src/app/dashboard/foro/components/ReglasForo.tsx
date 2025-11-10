@@ -17,7 +17,7 @@ export default function ReglasForo() {
         "Antes de abrir un tema, revisa si ya existe una publicación similar.",
       rule4:
         "No compartas datos personales sensibles como direcciones, teléfonos, etc.",
-      note: "***Este foro está diseñado para ser un espacio seguro y creativo para inspirarnos, apoyarnos y aprender juntos. ¡Disfruta del Team Crafter!***",
+      note: "Este foro está diseñado para ser un espacio seguro y creativo para inspirarnos, apoyarnos y aprender juntos. ¡Disfruta del Team Crafter!",
       featuredPosts: "Publicaciones destacadas",
       examplePost: "Lorem ipsum dolor sit amet, consectetur adipiscing.",
     },
@@ -30,7 +30,7 @@ export default function ReglasForo() {
       rule3: "Before creating a topic, check if a similar post already exists.",
       rule4:
         "Do not share sensitive personal data such as addresses or phone numbers.",
-      note: "***This forum is designed to be a safe and creative space to inspire, support, and learn together. Enjoy the Team Crafter!***",
+      note: "This forum is designed to be a safe and creative space to inspire, support, and learn together. Enjoy the Team Crafter!",
       featuredPosts: "Featured Posts",
       examplePost: "Lorem ipsum dolor sit amet, consectetur adipiscing.",
     },
@@ -65,7 +65,7 @@ export default function ReglasForo() {
       </p>
 
       {/* 🌟 Publicaciones destacadas */}
-      <article className="flex flex-col gap-2">
+      {/* <article className="flex flex-col gap-2">
         <h3 className="text-lg text-[#68E1E0] font-semibold flex items-center gap-2">
           <Image
             className="text-xs"
@@ -80,7 +80,7 @@ export default function ReglasForo() {
         <ul className="list-disc pl-4 text-sm text-[#FC68B9] font-semibold flex flex-col gap-2">
           <li>{t.examplePost}</li>
         </ul>
-      </article>
+      </article> */}
     </section>
   );
 }
