@@ -17,28 +17,23 @@ export default function Footer() {
   const links = [
     {
       id: 1,
-      href: "https://www.facebook.com/TeamCrafter",
+      href: "https://www.facebook.com/glorialobatondiseno",
       icon: <FaFacebook />,
     },
     {
       id: 2,
-      href: "https://www.facebook.com/TeamCrafter",
+      href: "https://www.instagram.com/glorialobatondiseno/",
       icon: <FaInstagram />,
     },
     {
       id: 3,
-      href: "https://www.facebook.com/TeamCrafter",
+      href: "https://www.tiktok.com/@modocrafteroficial?_t=ZS-901XZlGWL5d&_r=1",
       icon: <FaTiktok />,
     },
     {
       id: 4,
-      href: "https://www.facebook.com/TeamCrafter",
+      href: "https://www.youtube.com/@modocrafteroficial",
       icon: <FaYoutube />,
-    },
-    {
-      id: 5,
-      href: "https://www.facebook.com/TeamCrafter",
-      icon: <FaWhatsapp />,
     },
   ];
 
