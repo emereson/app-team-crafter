@@ -28,6 +28,7 @@ export default function ForosPublicados({ foros }: Props) {
       ))}
       {selectForo && (
         <ModalForoSelect
+          key={selectForo.id}
           onOpenChange={onOpenChange}
           isOpen={isOpen}
           selectForo={selectForo}

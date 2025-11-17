@@ -141,7 +141,7 @@ export default function HeaderPlanes() {
                 Cerrar Sesión
               </span>
             </DropdownItem>
-            <DropdownItem
+            {/* <DropdownItem
               key="favoritos"
               className="px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
             >
@@ -154,7 +154,7 @@ export default function HeaderPlanes() {
               >
                 <SelectItem key="Español">Español</SelectItem>
               </Select>
-            </DropdownItem>
+            </DropdownItem> */}
           </DropdownMenu>
         </Dropdown>
       </div>

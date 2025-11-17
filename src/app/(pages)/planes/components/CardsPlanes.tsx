@@ -47,6 +47,9 @@ export default function CardsPlanes() {
             >
               {plan.descripcion}
             </p>
+            <button className="w-fit p-2 px-6 text-xl font-bold bg-[#FC68B9] rounded-full text-[#FFFFFF] mt-2 cursor-pointer hover:bg-[#ff85c4] duration-300">
+              suscribete
+            </button>
           </div>
           <div
             className={`relative ${

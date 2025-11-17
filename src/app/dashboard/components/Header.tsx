@@ -385,7 +385,7 @@ export default function Header() {
                 {t.logout}
               </span>
             </DropdownItem>
-            <DropdownItem
+            {/* <DropdownItem
               key="Idiomas"
               className="px-4 py-1 data-[hover=true]:bg-transparent rounded-lg mx-2 my-1 transition-all duration-200"
             >
@@ -406,7 +406,7 @@ export default function Header() {
                 />
                 <p>{language === "es" ? t.english : t.spanish}</p>
               </Button>
-            </DropdownItem>
+            </DropdownItem> */}
           </DropdownMenu>
              
         </Dropdown>

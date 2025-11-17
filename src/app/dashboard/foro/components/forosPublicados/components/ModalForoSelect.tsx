@@ -31,7 +31,6 @@ export default function ModalForoSelect({
   const [isLoadingLike, setIsLoadingLike] = useState(false);
   const [likesCount, setLikesCount] = useState<number>(selectForo.likes_foro);
   const [comentariosForo, setComentariosForo] = useState<ComentarioForo[]>([]);
-
   const tieneComentarios: boolean = selectForo.comentarios_foro?.length > 0;
 
   // 🌐 Traducciones

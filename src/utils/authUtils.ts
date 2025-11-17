@@ -4,7 +4,6 @@
 // Guardar el token en la cookie (solo en el cliente)
 export function setToken(token: string) {
   if (typeof window !== "undefined") {
-    console.log("Guardando token en cliente:", token);
     document.cookie = `token=${token}; path=/; max-age=864000`; // Establece el token en las cookies con duración de un día
   }
 }
@@ -29,5 +28,3 @@ export function removeToken() {
     document.cookie = "token=; path=/; max-age=0"; // Elimina el token de las cookies
   }
 }
-
-

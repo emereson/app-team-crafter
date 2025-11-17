@@ -129,6 +129,11 @@ export default function CardForo({
               className="opacity-80"
             />
           }
+          onPress={() => {
+            setSelectForo(foro);
+            onOpen();
+            setColorForo(bgColor);
+          }}
         >
           <span className="text-sm font-medium">
             {foro.comentarios_foro?.length}
