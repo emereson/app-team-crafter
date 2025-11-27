@@ -1,4 +1,5 @@
 import { planes } from "@/utils/planes";
+import { Button } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -47,9 +48,13 @@ export default function CardsPlanes() {
             >
               {plan.descripcion}
             </p>
-            <button className="w-fit p-2 px-6 text-xl font-bold bg-[#FC68B9] rounded-full text-[#FFFFFF] mt-2 cursor-pointer hover:bg-[#ff85c4] duration-300">
-              suscribete
-            </button>
+            <Button
+              className={`text-xl font-semibold px-8 py-5 border-3 duration-500 transition-all ${"bg-[#fc68b9] text-[#ffee97] border-[#FFEE97] hover:bg-[#fc68b9] hover:border-[#FFEE97] hover:text-[#ffee97] shadow-rigth-yellow cursor-pointer"}`}
+              radius="full"
+              type="submit"
+            >
+              Suscríbete
+            </Button>
           </div>
           <div
             className={`relative ${
