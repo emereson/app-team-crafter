@@ -60,12 +60,12 @@ export const CopyIcon = () => {
 
 export interface Descuento {
   id: number;
-  monto: number;
+  valor_descuento: number;
   tipo_descuento: string;
-  titulo: string;
-  descripcion: string;
+  titulo_descuento: string;
+  descripcion_descuento: string;
   fecha_expiracion: string;
-  codigo: string;
+  codigo_descuento: string;
 }
 
 interface Props {
@@ -105,8 +105,8 @@ export default function CardDescuento({ descuento }: Props) {
         <span className="absolute -bottom-[18px] -right-[18px] w-[36px] h-[36px] rounded-full bg-white" />
         <h3 className="text-5xl font-bold">
           {descuento.tipo_descuento === "efectivo"
-            ? `$ ${descuento.monto}`
-            : `${descuento.monto}%`}
+            ? `$ ${descuento.valor_descuento}`
+            : `${descuento.valor_descuento}%`}
         </h3>
         <h5 className="text-2xl font-bold">{t.discountLabel}</h5>
       </div>
@@ -119,8 +119,8 @@ export default function CardDescuento({ descuento }: Props) {
         <span className="absolute -bottom-[18px] -right-[18px] w-[36px] h-[36px] rounded-full bg-white border-2 border-[#68E1E0]" />
 
         <article className="flex flex-col max-sm:text-center">
-          <h3 className="text-2xl font-bold">{descuento.titulo}</h3>
-          <p className="text-lg">{descuento.descripcion}</p>
+          <h3 className="text-2xl font-bold">{descuento.titulo_descuento}</h3>
+          <p className="text-lg">{descuento.descripcion_descuento}</p>
           <span className="text-[14px] font-bold mt-2">
             {t.expiration}: {descuento.fecha_expiracion}
           </span>
@@ -136,7 +136,7 @@ export default function CardDescuento({ descuento }: Props) {
             copyIcon={<CopyIcon />}
           >
             <p className="font-bold text-white tracking-wide">
-              {descuento.codigo}
+              {descuento.codigo_descuento}
             </p>
           </Snippet>
         </article>
